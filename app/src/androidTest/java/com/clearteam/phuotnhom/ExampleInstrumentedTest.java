@@ -1,4 +1,4 @@
-package com.clearteam.myapplication;
+package com.clearteam.phuotnhom;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.clearteam.myapplication", appContext.getPackageName());
+        assertEquals("com.clearteam.phuotnhom", appContext.getPackageName());
     }
 }
