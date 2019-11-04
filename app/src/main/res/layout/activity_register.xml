@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".ui.register.RegisterActivity">
+	<RelativeLayout
+		android:id="@+id/relay_1"
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintLeft_toLeftOf="parent"
+		android:background="@drawable/bg_header_detail">
+
+		<ImageButton
+			android:id="@+id/img_open_main"
+			android:layout_width="@dimen/dp_25"
+			android:layout_height="@dimen/dp_25"
+			android:layout_centerVertical="true"
+			android:layout_marginLeft="@dimen/dp_16"
+			android:background="@drawable/left_arrow" />
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerInParent="true"
+			android:text="@string/register"
+			android:textColor="@color/white"
+			android:textSize="@dimen/size_22"
+			android:textStyle="bold" />
+	</RelativeLayout>
+	<ImageView
+		android:layout_width="@dimen/dp_100"
+		android:layout_height="@dimen/dp_100"
+		android:src="@drawable/logo_phuot"
+		app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/relay_1" />
+
+	<LinearLayout
+		android:id="@+id/linearLayout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/relay_1"
+		android:layout_centerVertical="true"
+		android:layout_margin="20dp"
+		android:layout_marginTop="8dp"
+		android:orientation="vertical"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/relay_1">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/dp_10"
+			android:orientation="horizontal">
+
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/ed_name"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:background="@drawable/bg_edit_text"
+				android:cursorVisible="true"
+				android:hint="Full Name"
+				android:inputType="text"
+				android:drawableLeft="@drawable/ic_name"
+				android:drawablePadding="@dimen/dp_8"
+				android:maxLength="50"
+				android:padding="@dimen/dp_10"
+				android:paddingBottom="@dimen/dp_10"
+				android:textColor="@color/black"
+				android:textSize="@dimen/size_18" />
+
+
+		</LinearLayout>
+
+		<com.google.android.material.textfield.TextInputEditText
+			android:id="@+id/edEmail"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@drawable/bg_edit_text"
+			android:cursorVisible="true"
+			android:hint="Email"
+			android:inputType="textEmailAddress"
+			android:padding="@dimen/dp_10"
+			android:drawableLeft="@drawable/ic_email"
+			android:drawablePadding="@dimen/dp_8"
+			android:textColor="@color/black"
+			android:textSize="@dimen/size_18" />
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:layout_marginTop="10dp"
+			android:background="@drawable/bg_edit_text"
+			android:orientation="horizontal">
+
+			<androidx.appcompat.widget.AppCompatEditText
+				android:id="@+id/edPassword"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="3"
+				android:background="@null"
+				android:cursorVisible="true"
+				android:hint="Password"
+				android:drawableLeft="@drawable/ic_lock"
+				android:drawablePadding="@dimen/dp_8"
+				android:inputType="textPassword"
+				android:padding="@dimen/dp_10"
+				android:paddingBottom="@dimen/dp_10"
+				android:textColor="@color/black"
+				android:textSize="@dimen/size_18" />
+
+			<ToggleButton
+				android:id="@+id/toggle_pass"
+				android:layout_width="@dimen/dp_25"
+				android:layout_height="@dimen/dp_25"
+				android:layout_gravity="center"
+				android:layout_marginRight="@dimen/dp_10"
+				android:background="@drawable/icon_eye"
+				android:textOff=""
+				android:textOn="" />
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:layout_marginTop="10dp"
+			android:background="@drawable/bg_edit_text"
+			android:orientation="horizontal">
+
+			<androidx.appcompat.widget.AppCompatEditText
+				android:id="@+id/ed_confirm_password"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="3"
+				android:background="@null"
+				android:cursorVisible="true"
+				android:hint="Confirm Password"
+				android:inputType="textPassword"
+				android:drawableLeft="@drawable/ic_lock"
+				android:drawablePadding="@dimen/dp_8"
+				android:maxLength="50"
+				android:padding="10dp"
+				android:textColor="@color/black"
+				android:textSize="18sp" />
+
+			<ToggleButton
+				android:id="@+id/toggle_confi_pass"
+				android:layout_width="@dimen/dp_25"
+				android:layout_height="@dimen/dp_25"
+				android:layout_gravity="center"
+				android:layout_marginRight="@dimen/dp_10"
+				android:background="@drawable/icon_eye"
+				android:textOff=""
+				android:textOn="" />
+
+		</LinearLayout>
+
+		<Button
+			android:id="@+id/btnRegister"
+			android:layout_width="match_parent"
+			android:layout_height="40dp"
+			android:layout_gravity="center"
+			android:layout_marginTop="15dp"
+			android:background="@drawable/bg_btn_login"
+			android:text="@string/register"
+			android:textAllCaps="false"
+			android:textSize="@dimen/size_18" />
+	</LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

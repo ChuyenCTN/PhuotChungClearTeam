@@ -11,12 +11,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
+import android.view.View;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.clearteam.phuotnhom.MainActivity;
 import com.clearteam.phuotnhom.R;
+import com.clearteam.phuotnhom.ui.register.RegisterActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -47,10 +49,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         toggleButton = findViewById(R.id.toggle);
         auth = FirebaseAuth.getInstance();
 
-        tvRegister.setOnClickListener(this);
         btnLogin.setOnClickListener(this);
         btnLoginFB.setOnClickListener(this);
         toggleButton.setOnClickListener(this);
+        tvRegister.setOnClickListener(this);
     }
 
     @Override
@@ -92,7 +94,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                               // showActivity(MainActivity.class);
+                                // showActivity(MainActivity.class);
                                 Toast.makeText(LoginActivity.this, "Xin chào" + email, Toast.LENGTH_SHORT).show();
                                 finish();
                             } else {
