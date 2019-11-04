@@ -1,13 +1,13 @@
-package com.clearteam.phuotnhom.ui.splash;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.clearteam.myapplication.splash;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.clearteam.phuotnhom.R;
-import com.clearteam.phuotnhom.ui.login.LoginActivity;
-import com.clearteam.phuotnhom.util.Const;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.clearteam.myapplication.LoginActivity;
+import com.clearteam.myapplication.R;
+import com.clearteam.myapplication.util.Const;
 
 public class SplashActivity extends AppCompatActivity {
     @Override

@@ -1,10 +1,8 @@
-package com.clearteam.phuotnhom.ui.login;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.clearteam.myapplication;
 
 import android.os.Bundle;
 
-import com.clearteam.phuotnhom.R;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
