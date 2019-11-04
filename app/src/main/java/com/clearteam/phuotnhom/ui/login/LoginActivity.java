@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches());
     }
     private void login() {
-        String email = edEmail.getText().toString();
+        final String email = edEmail.getText().toString();
         String password = edPass.getText().toString();
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             Toast.makeText(this, "Điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                showActivity(MainActivity.class);
+                               // showActivity(MainActivity.class);
                                 Toast.makeText(LoginActivity.this, "Xin chào" + email, Toast.LENGTH_SHORT).show();
                                 finish();
                             } else {
@@ -102,16 +102,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     });
         }
 //
-        if (mLoginViewModel.isEmailAndPasswordValid(email, password)) {
-            SharedPreferences.Editor editor = mSharedPreferences.edit();
-            editor.putBoolean(Const.KEY_IS_LOGIN, true);
-            editor.putString(Const.KEY_EMAIL, email);
-            editor.putString(Const.KEY_PASSWORD, password);
-            editor.apply();
-            hideKeyboard();
-            mLoginViewModel.login(email, password);
-        } else {
-            Toast.makeText(this, "Email or password invalid", Toast.LENGTH_SHORT).show();
-        }
+//        if (mLoginViewModel.isEmailAndPasswordValid(email, password)) {
+//            SharedPreferences.Editor editor = mSharedPreferences.edit();
+//            editor.putBoolean(Const.KEY_IS_LOGIN, true);
+//            editor.putString(Const.KEY_EMAIL, email);
+//            editor.putString(Const.KEY_PASSWORD, password);
+//            editor.apply();
+//            hideKeyboard();
+//            mLoginViewModel.login(email, password);
+//        } else {
+//            Toast.makeText(this, "Email or password invalid", Toast.LENGTH_SHORT).show();
+//        }
     }
 }

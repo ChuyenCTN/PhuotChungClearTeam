@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "971710095879",
-    "firebase_url": "https://phuotnhom-47879.firebaseio.com",
-    "project_id": "phuotnhom-47879",
-    "storage_bucket": "phuotnhom-47879.appspot.com"
+    "project_number": "1061488721468",
+    "firebase_url": "https://phuotnhom-cace0.firebaseio.com",
+    "project_id": "phuotnhom-cace0",
+    "storage_bucket": "phuotnhom-cace0.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:971710095879:android:12df7c8029c9258ed940a2",
+        "mobilesdk_app_id": "1:1061488721468:android:c161b96345f02425d1cd39",
         "android_client_info": {
           "package_name": "com.clearteam.phuotnhom"
         }
       },
       "oauth_client": [
         {
-          "client_id": "971710095879-gma97m04ul502lcr4si19k5d8i73difi.apps.googleusercontent.com",
+          "client_id": "1061488721468-3t3rep636ul8a046qn5lag58dorujruj.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.clearteam.phuotnhom",
@@ -23,20 +23,20 @@
           }
         },
         {
-          "client_id": "971710095879-jdlkinu973rn7fqm36tvgh5r4h4itoja.apps.googleusercontent.com",
+          "client_id": "1061488721468-j9e0vhpg0lta5govlj0j0ok8be0j4g97.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCiJnq5YIUc1_Z2qVTPJrOyannnEhT77EE"
+          "current_key": "AIzaSyCUt52NJ3edhJQG9EpCJe-u8t7puXlsFOU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "971710095879-jdlkinu973rn7fqm36tvgh5r4h4itoja.apps.googleusercontent.com",
+              "client_id": "1061488721468-j9e0vhpg0lta5govlj0j0ok8be0j4g97.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
