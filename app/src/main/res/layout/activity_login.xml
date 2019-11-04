@@ -133,7 +133,7 @@
 					android:visibility="gone" />
 
 				<Button
-					android:id="@+id/fb"
+					android:id="@+id/btnLoginFB"
 					android:layout_width="fill_parent"
 					android:layout_height="@dimen/dp_45"
 					android:background="#416BC1"
