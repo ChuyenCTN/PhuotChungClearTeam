@@ -18,5 +18,6 @@
 	<string name="sign_in">Sign in</string>
 	<string name="register">Register</string>
 	<string name="register_here">Register here</string>
+	<string name="text_send_email">We have sent an email for resetting your password to your email address. Please check your email for next steps</string>
 
 </resources>

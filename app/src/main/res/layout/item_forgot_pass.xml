@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:id="@+id/ll"
+	android:background="@drawable/bg_forgot_pass"
+	android:layout_margin="@dimen/dp_20">
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="2"
+		android:orientation="vertical">
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/text_send_email"
+			android:paddingLeft="@dimen/dp_20"
+			android:paddingRight="@dimen/dp_20"
+			android:paddingTop="@dimen/dp_20"
+			android:textSize="@dimen/size_14"/>
+
+	</LinearLayout>
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:layout_marginTop="@dimen/dp_5"
+		android:background="#7E817F" />
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="0.3"
+		android:gravity="center">
+		<TextView
+			android:id="@+id/tv_login"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Login"
+			android:textStyle="bold"
+			android:textSize="@dimen/dp_16"
+			android:layout_gravity="center"/>
+	</LinearLayout>
+</LinearLayout>

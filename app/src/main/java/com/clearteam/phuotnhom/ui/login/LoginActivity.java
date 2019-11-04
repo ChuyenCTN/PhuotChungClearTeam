@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.clearteam.phuotnhom.MainActivity;
 import com.clearteam.phuotnhom.R;
+import com.clearteam.phuotnhom.ui.forgotpass.ForgotPasswordActivity;
 import com.clearteam.phuotnhom.ui.register.RegisterActivity;
 import com.clearteam.phuotnhom.util.Const;
 import com.facebook.AccessToken;
@@ -47,7 +48,7 @@ import org.json.JSONObject;
 import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    private TextView tvRegister;
+    private TextView tvRegister,tvForgotPass;
     private EditText edEmail, edPass;
     private Button btnLogin, btnLoginFB;
     private ToggleButton toggleButton;
@@ -67,6 +68,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void initView() {
         tvRegister = findViewById(R.id.tv_register);
+        tvRegister = findViewById(R.id.tv_forgot_pass);
         edEmail = findViewById(R.id.etEmail);
         edPass = findViewById(R.id.edPassword);
         btnLogin = findViewById(R.id.btnServerLogin);
@@ -99,7 +101,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_register:
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                break;
+            case R.id.tv_forgot_pass:
+                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
                 break;
             case R.id.btnLoginFB:
                 loginButton.performClick();
@@ -211,18 +216,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     });
         }
-//
-//        if (mLoginViewModel.isEmailAndPasswordValid(email, password)) {
-//            SharedPreferences.Editor editor = mSharedPreferences.edit();
-//            editor.putBoolean(Const.KEY_IS_LOGIN, true);
-//            editor.putString(Const.KEY_EMAIL, email);
-//            editor.putString(Const.KEY_PASSWORD, password);
-//            editor.apply();
-//            hideKeyboard();
-//            mLoginViewModel.login(email, password);
-//        } else {
-//            Toast.makeText(this, "Email or password invalid", Toast.LENGTH_SHORT).show();
-//        }
     }
 
     @Override
