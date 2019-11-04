@@ -13,7 +13,10 @@
 	<string name="menu_tools">Tools</string>
 	<string name="menu_share">Share</string>
 	<string name="menu_send">Send</string>
-	<string name="facebook_app_id">555229505241189</string> <string name="fb_login_protocol_scheme">fb555229505241189</string>
+	<string name="facebook_app_id">555229505241189</string>
+	<string name="fb_login_protocol_scheme">fb555229505241189</string>
 	<string name="sign_in">Sign in</string>
+	<string name="register">Register</string>
+	<string name="register_here">Register here</string>
 
 </resources>
