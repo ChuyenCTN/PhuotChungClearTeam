@@ -84,6 +84,7 @@ public class DialogServiceAround extends BottomSheetDialogFragment {
         //Set the coordinator layout behavior
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) contentView.getParent()).getLayoutParams();
         CoordinatorLayout.Behavior behavior = params.getBehavior();
+        ((View) contentView.getParent()).setBackgroundResource(R.drawable.bg_bottom_sheet);
 
         //Set callback
         if (behavior != null && behavior instanceof BottomSheetBehavior) {
