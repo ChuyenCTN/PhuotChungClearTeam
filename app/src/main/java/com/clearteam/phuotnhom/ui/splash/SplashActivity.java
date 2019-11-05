@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.clearteam.phuotnhom.ui.login.LoginActivity;
 import com.clearteam.phuotnhom.R;
-import com.clearteam.phuotnhom.util.Const;
+import com.clearteam.phuotnhom.utils.Const;
 
 public class SplashActivity extends AppCompatActivity {
     @Override

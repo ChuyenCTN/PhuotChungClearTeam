@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="@dimen/dp_100"
+	android:layout_height="@dimen/dp_100"
+	android:orientation="vertical"
+	app:cardCornerRadius="12dp">
+
+	<ImageView
+		android:id="@+id/img_view"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:src="@mipmap/ic_launcher" />
+
+	<TextView
+		android:id="@+id/tv_name_service"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="left|bottom"
+		android:layout_marginLeft="@dimen/dp_10"
+		android:layout_marginBottom="@dimen/dp_20"
+		android:text="Quán bar"
+		android:textColor="@color/white"
+		android:textSize="@dimen/size_14" />
+</androidx.cardview.widget.CardView>

@@ -19,5 +19,11 @@
 	<string name="register">Register</string>
 	<string name="register_here">Register here</string>
 	<string name="text_send_email">We have sent an email for resetting your password to your email address. Please check your email for next steps</string>
+	<string name="title_activity_maps">Map</string>
+	<string name="title_activity_main2">Main2Activity</string>
+	<string name="title_home">Dịch Vụ</string>
+	<string name="title_dashboard">Bạn bè</string>
+	<string name="title_notifications">Notifications</string>
+	<string name="dich_vu">Dịch vụ xung quanh</string>
 
 </resources>

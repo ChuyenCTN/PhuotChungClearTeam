@@ -1,4 +1,4 @@
-package com.clearteam.phuotnhom.util;
+package com.clearteam.phuotnhom.utils;
 
 public class Const {
     public static final int SPLASH_TIME = 800;
