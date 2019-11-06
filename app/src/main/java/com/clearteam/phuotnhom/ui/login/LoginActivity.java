@@ -41,7 +41,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    private TextView tvRegister,tvForgotPass;
+    private TextView tvRegister, tvForgotPass;
     private EditText edEmail, edPass;
     private Button btnLogin, btnLoginFB;
     private ToggleButton toggleButton;
@@ -183,6 +183,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void login() {
+/*
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        Toast.makeText(LoginActivity.this, "Xin chào" , Toast.LENGTH_SHORT).show();
+        finish();
+*/
+
         final String email = edEmail.getText().toString();
         String password = edPass.getText().toString();
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
