@@ -1,11 +1,14 @@
 package com.clearteam.phuotnhom;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 
 import com.clearteam.phuotnhom.adapter.ServiceAroundAdapter;
+import com.clearteam.phuotnhom.fragment.ProfileFragment;
 import com.clearteam.phuotnhom.model.ServiceAround;
+import com.clearteam.phuotnhom.ui.login.LoginActivity;
 import com.clearteam.phuotnhom.utils.DialogServiceAround;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,18 +41,24 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private List<ServiceAround> mServiceAroundList = new ArrayList<>();
     private ServiceAroundAdapter adapter;
     private RecyclerView mRecyclerView;
+    private FrameLayout frameLayout;
+    private FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        frameLayout = findViewById(R.id.contentContainer);
+        mFragmentManager = getSupportFragmentManager();
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -197,6 +210,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        Fragment selectedFragment = null;
         switch (item.getItemId()) {
             case R.id.nav_home:
                 break;
@@ -205,6 +219,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.nav_schedule:
                 break;
             case R.id.nav_user:
+                Toast.makeText(this, "dsfsdf", Toast.LENGTH_SHORT).show();
+                setTitle("Thông tin cá nhân");
+//                selectedFragment = new ProfileFragment();
+//                getSupportFragmentManager().beginTransaction().replace(R.id.contentContainer, selectedFragment).commit();
+//                return true;
+                replaceFragment(ProfileFragment.getInstance(), mFragmentManager);
                 break;
             case R.id.nav_setting:
                 break;
@@ -213,6 +233,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.nav_introduction:
                 break;
             case R.id.nav_out:
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
 
         }
@@ -221,6 +243,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public void replaceFragment(Fragment fragment, FragmentManager fragmentManager) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(frameLayout.getId(), fragment);
+        fragmentTransaction.commit();
+    }
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -235,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         }
                     });
-                    dialogServiceAround.show(getSupportFragmentManager(),"ADAS");
+                    dialogServiceAround.show(getSupportFragmentManager(), "ADAS");
 
                     return true;
                 case R.id.navigation_dashboard:
