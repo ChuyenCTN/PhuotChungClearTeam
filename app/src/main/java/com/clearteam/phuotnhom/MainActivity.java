@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.nav_home:
                 break;
             case R.id.nav_group:
@@ -216,21 +216,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 break;
 
         }
-//        int id = item.getItemId();
-//
-//        if (id == R.id.nav_home) {
-//            // Handle the camera action
-//        } else if (id == R.id.nav_group) {
-//
-//        } else if (id == R.id.nav_schedule) {
-//
-//        } else if (id == R.id.nav_schedule) {
-//
-//        } else if (id == R.id.na) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

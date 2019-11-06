@@ -6,4 +6,5 @@ public class Const {
     public static  String KEY_EMAIL = "email";
     public static  String KEY_PASSWORD = "password";
     public static final String KEY_IS_LOGIN = "is_login";
+    public static final int IMAGE_REQUSET = 1;
 }
