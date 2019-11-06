@@ -197,21 +197,40 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_home) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_tools) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        switch (item.getItemId()){
+            case R.id.nav_home:
+                break;
+            case R.id.nav_group:
+                break;
+            case R.id.nav_schedule:
+                break;
+            case R.id.nav_user:
+                break;
+            case R.id.nav_setting:
+                break;
+            case R.id.nav_notifi:
+                break;
+            case R.id.nav_introduction:
+                break;
+            case R.id.nav_out:
+                break;
 
         }
+//        int id = item.getItemId();
+//
+//        if (id == R.id.nav_home) {
+//            // Handle the camera action
+//        } else if (id == R.id.nav_group) {
+//
+//        } else if (id == R.id.nav_schedule) {
+//
+//        } else if (id == R.id.nav_schedule) {
+//
+//        } else if (id == R.id.na) {
+//
+//        } else if (id == R.id.nav_send) {
+//
+//        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

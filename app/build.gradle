@@ -42,4 +42,6 @@ dependencies {
     // fb
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
     implementation 'com.github.bumptech.glide:glide:4.9.0'
+    // imgview
+    implementation 'de.hdodenhof:circleimageview:3.0.1'
 }

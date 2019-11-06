@@ -7,12 +7,14 @@
 	<string name="nav_header_desc">Navigation header</string>
 	<string name="action_settings">Settings</string>
 
-	<string name="menu_home">Home</string>
-	<string name="menu_gallery">Gallery</string>
-	<string name="menu_slideshow">Slideshow</string>
-	<string name="menu_tools">Tools</string>
-	<string name="menu_share">Share</string>
-	<string name="menu_send">Send</string>
+	<string name="menu_home">Trang chủ</string>
+	<string name="menu_group">Nhóm tour</string>
+	<string name="menu_schedule">Lịch trình</string>
+	<string name="menu_setting">Cài đặt</string>
+	<string name="menu_introduction">Giới thiệu</string>
+	<string name="menu_user">Thông tin cá nhân</string>
+	<string name="menu_notifi">Thông báo</string>
+	<string name="menu_out">Đăng xuất</string>
 	<string name="facebook_app_id">555229505241189</string>
 	<string name="fb_login_protocol_scheme">fb555229505241189</string>
 	<string name="sign_in">Sign in</string>

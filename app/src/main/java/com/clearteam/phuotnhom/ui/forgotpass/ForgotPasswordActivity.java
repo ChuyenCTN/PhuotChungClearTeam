@@ -36,6 +36,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         edEmail = findViewById(R.id.edEmail);
         btnSendEmail = findViewById(R.id.btn_send_email);
         imageButton = findViewById(R.id.img_open_main);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         auth = FirebaseAuth.getInstance();
         btnSendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
