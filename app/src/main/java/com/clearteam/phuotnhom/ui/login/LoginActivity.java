@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_register:
-                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
                 break;
             case R.id.tv_forgot_pass:
                 startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
@@ -184,14 +184,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void login() {
-/*
+
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-        Toast.makeText(LoginActivity.this, "Xin chào" , Toast.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, "Xin chào", Toast.LENGTH_SHORT).show();
         finish();
-*/
 
+/*
         final String email = edEmail.getText().toString();
         String password = edPass.getText().toString();
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
@@ -217,7 +217,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             }
                         }
                     });
-        }
+        }*/
     }
 
     @Override
