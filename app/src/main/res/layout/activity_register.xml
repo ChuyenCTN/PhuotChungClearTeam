@@ -5,16 +5,17 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	tools:context=".ui.register.RegisterActivity">
+
 	<RelativeLayout
 		android:id="@+id/relay_1"
 		android:layout_width="match_parent"
 		android:layout_height="?attr/actionBarSize"
-		app:layout_constraintTop_toTopOf="parent"
+		android:background="@color/bg_toolbar"
 		app:layout_constraintLeft_toLeftOf="parent"
-		android:background="@drawable/bg_header_detail">
+		app:layout_constraintTop_toTopOf="parent">
 
 		<ImageButton
-			android:id="@+id/img_open_main"
+			android:id="@+id/img_open_main1"
 			android:layout_width="@dimen/dp_25"
 			android:layout_height="@dimen/dp_25"
 			android:layout_centerVertical="true"
@@ -30,14 +31,6 @@
 			android:textSize="@dimen/size_22"
 			android:textStyle="bold" />
 	</RelativeLayout>
-	<ImageView
-		android:layout_width="@dimen/dp_100"
-		android:layout_height="@dimen/dp_100"
-		android:src="@drawable/logo_phuot"
-		app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/relay_1" />
 
 	<LinearLayout
 		android:id="@+id/linearLayout"
@@ -65,10 +58,10 @@
 				android:layout_weight="1"
 				android:background="@drawable/bg_edit_text"
 				android:cursorVisible="true"
-				android:hint="Full Name"
-				android:inputType="text"
 				android:drawableLeft="@drawable/ic_name"
 				android:drawablePadding="@dimen/dp_8"
+				android:hint="Full Name"
+				android:inputType="text"
 				android:maxLength="50"
 				android:padding="@dimen/dp_10"
 				android:paddingBottom="@dimen/dp_10"
@@ -84,11 +77,11 @@
 			android:layout_height="wrap_content"
 			android:background="@drawable/bg_edit_text"
 			android:cursorVisible="true"
+			android:drawableLeft="@drawable/ic_email"
+			android:drawablePadding="@dimen/dp_8"
 			android:hint="Email"
 			android:inputType="textEmailAddress"
 			android:padding="@dimen/dp_10"
-			android:drawableLeft="@drawable/ic_email"
-			android:drawablePadding="@dimen/dp_8"
 			android:textColor="@color/black"
 			android:textSize="@dimen/size_18" />
 
@@ -107,9 +100,9 @@
 				android:layout_weight="3"
 				android:background="@null"
 				android:cursorVisible="true"
-				android:hint="Password"
 				android:drawableLeft="@drawable/ic_lock"
 				android:drawablePadding="@dimen/dp_8"
+				android:hint="Password"
 				android:inputType="textPassword"
 				android:padding="@dimen/dp_10"
 				android:paddingBottom="@dimen/dp_10"
@@ -142,10 +135,10 @@
 				android:layout_weight="3"
 				android:background="@null"
 				android:cursorVisible="true"
-				android:hint="Confirm Password"
-				android:inputType="textPassword"
 				android:drawableLeft="@drawable/ic_lock"
 				android:drawablePadding="@dimen/dp_8"
+				android:hint="Confirm Password"
+				android:inputType="textPassword"
 				android:maxLength="50"
 				android:padding="10dp"
 				android:textColor="@color/black"

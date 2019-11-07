@@ -1,59 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:orientation="vertical"
 	tools:context=".MainActivity">
 
-	<fragment
-		android:id="@+id/map"
-		android:name="com.google.android.gms.maps.SupportMapFragment"
+	<com.google.android.material.appbar.AppBarLayout
 		android:layout_width="match_parent"
-		android:layout_height="match_parent" />
+		android:layout_height="wrap_content"
+		android:theme="@style/AppTheme.AppBarOverlay">
 
-	<androidx.appcompat.widget.Toolbar
-		android:id="@+id/toolbar"
-		android:layout_width="match_parent"
-		android:layout_height="?attr/actionBarSize"
-		android:background="@drawable/bg_header_detail">
-
-		<FrameLayout
+		<androidx.appcompat.widget.Toolbar
+			android:id="@+id/toolbar"
 			android:layout_width="match_parent"
-			android:layout_height="@dimen/dp_32"
-			android:layout_centerInParent="true"
-			android:layout_marginLeft="@dimen/dp_40"
-			android:layout_marginRight="@dimen/dp_40"
-			android:background="@drawable/bg_seach">
+			android:layout_height="?attr/actionBarSize"
+			android:background="@color/bg_toolbar">
 
-
-			<EditText
-				android:id="@+id/edSeach"
+			<FrameLayout
+				android:id="@+id/frame"
 				android:layout_width="match_parent"
 				android:layout_height="@dimen/dp_32"
-				android:drawableLeft="@drawable/ic_seach_map"
-				android:drawablePadding="@dimen/dp_10"
-				android:hint="Tìm kiếm theo tên"
-				android:imeOptions="actionSearch"
-				android:inputType="text"
-				android:paddingLeft="@dimen/dp_10"
-				android:textColor="@color/white"
-				android:textSize="@dimen/size_14"
-				android:visibility="gone" />
+				android:layout_centerInParent="true"
+				android:layout_marginLeft="@dimen/dp_40"
+				android:layout_marginRight="@dimen/dp_40"
+				android:background="@drawable/bg_seach">
 
-			<fragment
-				android:id="@+id/autocomplate"
-				android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent" />
+				<EditText
+					android:id="@+id/edSeach"
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/dp_32"
+					android:drawableLeft="@drawable/ic_seach_map"
+					android:drawablePadding="@dimen/dp_10"
+					android:hint="Tìm kiếm theo tên"
+					android:imeOptions="actionSearch"
+					android:inputType="text"
+					android:paddingLeft="@dimen/dp_10"
+					android:textColor="@color/white"
+					android:textSize="@dimen/size_14"
+					android:visibility="gone" />
 
-		</FrameLayout>
+				<fragment
+					android:id="@+id/autocomplate"
+					android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent" />
 
-	</androidx.appcompat.widget.Toolbar>
+			</FrameLayout>
+		</androidx.appcompat.widget.Toolbar>
+	</com.google.android.material.appbar.AppBarLayout>
 
 
+	<include layout="@layout/content_main" />
 
-	<!--<include layout="@layout/content_main" />-->
 
-
-</RelativeLayout>
+</LinearLayout>
