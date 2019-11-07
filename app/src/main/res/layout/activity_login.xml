@@ -17,7 +17,7 @@
 			android:id="@+id/relay_1"
 			android:layout_width="match_parent"
 			android:layout_height="?attr/actionBarSize"
-			android:background="@drawable/bg_header_detail">
+			android:background="@color/bg_toolbar">
 
 			<TextView
 				android:layout_width="wrap_content"
@@ -141,7 +141,7 @@
 					android:drawableLeft="@drawable/icon_facebook"
 					android:paddingLeft="@dimen/dp_20"
 					android:paddingRight="@dimen/dp_20"
-					android:text="FaceBook Login"
+					android:text="Login With Facebook"
 					android:textAllCaps="false"
 					android:textColor="#ffffff"
 					android:textSize="@dimen/size_18"

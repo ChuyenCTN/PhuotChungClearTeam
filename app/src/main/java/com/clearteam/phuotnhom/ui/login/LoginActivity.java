@@ -2,12 +2,15 @@ package com.clearteam.phuotnhom.ui.login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,6 +20,7 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.clearteam.phuotnhom.MainActivity;
 import com.clearteam.phuotnhom.R;
@@ -41,7 +45,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    private TextView tvRegister,tvForgotPass;
+    private TextView tvRegister, tvForgotPass;
     private EditText edEmail, edPass;
     private Button btnLogin, btnLoginFB;
     private ToggleButton toggleButton;
@@ -60,6 +64,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initView() {
+
+        changeStatustBar();
+
         tvRegister = findViewById(R.id.tv_register);
         tvForgotPass = findViewById(R.id.tv_forgot_pass);
         edEmail = findViewById(R.id.etEmail);
@@ -89,13 +96,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         loginFB();
 
+
+    }
+
+    private void changeStatustBar() {
+        Window window = this.getWindow();
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+// finally change the color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.setStatusBarColor(ContextCompat.getColor(LoginActivity.this, R.color.colorPrimaryDark));
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_register:
-                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
                 break;
             case R.id.tv_forgot_pass:
                 startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));

@@ -2,19 +2,24 @@ package com.clearteam.phuotnhom.ui.register;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -23,6 +28,7 @@ import com.bumptech.glide.Glide;
 import com.clearteam.phuotnhom.MainActivity;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.model.User;
+import com.clearteam.phuotnhom.ui.login.LoginActivity;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -48,6 +54,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText edName, edEmail, edNumberPhone, edPass, edConfiPass;
     private ToggleButton togglePass, toggleConfiPass;
     private Button btnRegister;
+    private ImageButton btnRow;
     private FirebaseAuth auth;
     private DatabaseReference mReference;
     private StorageReference mStorageReference;
@@ -60,7 +67,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
+        changeStatustBar();
         initView();
     }
 
@@ -72,6 +79,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         togglePass = findViewById(R.id.toggle_pass);
         toggleConfiPass = findViewById(R.id.toggle_confi_pass);
         btnRegister = findViewById(R.id.btnRegister);
+        btnRow = findViewById(R.id.img_open_main1);
 
         auth = FirebaseAuth.getInstance();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -80,8 +88,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         togglePass.setOnClickListener(this);
         toggleConfiPass.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
-        imgAvata.setOnClickListener(this);
+        btnRow.setOnClickListener(this);
+//        imgAvata.setOnClickListener(this);
 
+    }
+
+    private void changeStatustBar() {
+        Window window = this.getWindow();
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+// finally change the color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.setStatusBarColor(ContextCompat.getColor(RegisterActivity.this, R.color.colorPrimaryDark));
+        }
     }
 
     @Override
@@ -107,7 +128,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     edConfiPass.setSelection(edConfiPass.getText().length());
                 }
                 break;
-
+            case R.id.img_open_main1:
+                finish();
+                break;
             case R.id.btnRegister:
 
                 String txt_name = edName.getText().toString().trim();
@@ -146,6 +169,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             HashMap<String, String> hashMap = new HashMap<>();
                             hashMap.put("id", userId);
                             hashMap.put("username", username);
+                            hashMap.put("email", email);
                             hashMap.put("imageURL", "default");
                             hashMap.put("status", "offline");
                             hashMap.put("search", username.toLowerCase());

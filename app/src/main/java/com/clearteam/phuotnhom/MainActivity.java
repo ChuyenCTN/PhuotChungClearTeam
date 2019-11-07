@@ -5,36 +5,16 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 
-import com.clearteam.phuotnhom.adapter.ServiceAroundAdapter;
+import com.clearteam.phuotnhom.fragment.MapFragment;
 import com.clearteam.phuotnhom.fragment.ProfileFragment;
-import com.clearteam.phuotnhom.model.ServiceAround;
+import com.clearteam.phuotnhom.ui.infomation.EditInformationActivity;
 import com.clearteam.phuotnhom.ui.login.LoginActivity;
-import com.clearteam.phuotnhom.utils.DialogServiceAround;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.TypeFilter;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import android.util.Log;
+import com.facebook.login.LoginManager;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
@@ -46,32 +26,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
-    private GoogleMap mMap;
-    private BottomNavigationView bottomNavigationView;
-    private List<ServiceAround> mServiceAroundList = new ArrayList<>();
-    private ServiceAroundAdapter adapter;
-    private RecyclerView mRecyclerView;
-    private FrameLayout frameLayout;
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private FrameLayout frameLayout,fameToolBar;
     private FragmentManager mFragmentManager;
 
     @Override
@@ -84,6 +45,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void initView() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        fameToolBar = findViewById(R.id.frame);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -94,89 +58,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mFragmentManager = getSupportFragmentManager();
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        replaceFragment(MapFragment.getInstance(), mFragmentManager);
 
-        bottomNavigationView = findViewById(R.id.bottom_navi);
-        bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        getAutocompletePlace();
-    }
-
-    private void getAutocompletePlace() {
-
-        if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), "AIzaSyB9Mwrx_epCW0QxkxQHwrnaute8g8SZRwY");
-        }
-        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.autocomplate);
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-        autocompleteFragment.setCountry("VN");
-        autocompleteFragment.setTypeFilter(TypeFilter.ADDRESS);
-
-        ImageView searchIcon = (ImageView) ((LinearLayout) autocompleteFragment.getView()).getChildAt(0);
-        EditText edSeach = (EditText) ((LinearLayout) autocompleteFragment.getView()).getChildAt(1);
-        TextView tvSeach = (TextView) ((LinearLayout) autocompleteFragment.getView()).getChildAt(1);
-        searchIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_seach_map));
-        searchIcon.setPadding(50, 0, 0, 0);
-        edSeach.setTextSize(14);
-        tvSeach.setTextSize(14);
-        //   tvSeach.getResources().getColor(R.color.text_seach);
-
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                // AddPlace(place,1);
-                String location = place.getName();
-                String address = place.getAddress();
-
-
-                List<Address> addressList = null;
-                MarkerOptions markerOptions = new MarkerOptions();
-
-                if (!location.equals("")) {
-                    Geocoder geocoder = new Geocoder(MainActivity.this);
-                    try {
-                        addressList = geocoder.getFromLocationName(location, 5);
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (addressList != null) {
-                        for (int i = 0; i < addressList.size(); i++) {
-                            Address myAddress = addressList.get(i);
-                            LatLng latLng = new LatLng(myAddress.getLatitude(), myAddress.getLongitude());
-                            markerOptions.position(latLng);
-                            markerOptions.title(location);
-                            markerOptions.draggable(true);
-                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_map));
-                            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-                            mMap.addMarker(markerOptions);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onError(Status status) {
-                Log.i("AAA", "An error occurred: " + status);
-            }
-        });
-
-    }
-
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     @Override
@@ -198,9 +81,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+//        int id = item.getItemId();
+//        if (id == R.id.action_settings) {
+//
+//            return true;
+//        }
+        switch (item.getItemId()){
+            case R.id.edit_user:
+                startActivity(new Intent(MainActivity.this, EditInformationActivity.class));
+                break;
+            case R.id.change_pass:
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -209,21 +100,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         Fragment selectedFragment = null;
         switch (item.getItemId()) {
             case R.id.nav_home:
+                fameToolBar.setVisibility(View.VISIBLE);
+                replaceFragment(MapFragment.getInstance(), mFragmentManager);
                 break;
             case R.id.nav_group:
                 break;
             case R.id.nav_schedule:
                 break;
             case R.id.nav_user:
-                Toast.makeText(this, "dsfsdf", Toast.LENGTH_SHORT).show();
+                fameToolBar.setVisibility(View.GONE);
                 setTitle("Thông tin cá nhân");
-//                selectedFragment = new ProfileFragment();
-//                getSupportFragmentManager().beginTransaction().replace(R.id.contentContainer, selectedFragment).commit();
-//                return true;
                 replaceFragment(ProfileFragment.getInstance(), mFragmentManager);
                 break;
             case R.id.nav_setting:
@@ -234,9 +123,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 break;
             case R.id.nav_out:
                 FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
                 startActivity(new Intent(MainActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 break;
-
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -250,28 +139,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         fragmentTransaction.commit();
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    //mTextMessage.setText(R.string.title_home);
-                    DialogServiceAround dialogServiceAround = new DialogServiceAround(mServiceAroundList, new DialogServiceAround.IChoose() {
-                        @Override
-                        public void onChoose(ServiceAround serviceAround) {
 
-                        }
-                    });
-                    dialogServiceAround.show(getSupportFragmentManager(), "ADAS");
 
-                    return true;
-                case R.id.navigation_dashboard:
-                    //mTextMessage.setText(R.string.title_dashboard);
-                    return true;
-            }
-            return false;
-        }
-    };
 }

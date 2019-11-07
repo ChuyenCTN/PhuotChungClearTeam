@@ -1,10 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="#123123"
+	android:background="@color/white"
 	tools:context=".fragment.ProfileFragment">
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:layout_marginTop="@dimen/dp_100"
+		android:gravity="center">
+		<de.hdodenhof.circleimageview.CircleImageView
+			android:id="@+id/img_avata"
+			android:layout_width="@dimen/dp_100"
+			android:layout_height="@dimen/dp_100"
+			android:src="@drawable/avatar"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Lê Văn Hoàng"
+			android:layout_marginTop="@dimen/dp_10"
+			android:id="@+id/tv_name"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="levanhoang0699@gmail.com"
+			android:layout_marginTop="@dimen/dp_10"
+			android:id="@+id/tv_email"/>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="0971066376"
+			android:layout_marginTop="@dimen/dp_10"
+			android:id="@+id/tv_number_phone"/>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="433 Hoàng Quốc Việt"
+			android:layout_marginTop="@dimen/dp_10"
+			android:id="@+id/tv_address"/>
+	</LinearLayout>
 
 
-</FrameLayout>
+</RelativeLayout>
