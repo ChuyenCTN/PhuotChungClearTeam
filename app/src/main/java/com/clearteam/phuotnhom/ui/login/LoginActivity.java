@@ -181,6 +181,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Log.d("AAA", "signInWithCredential:success");
                             FirebaseUser user = auth.getCurrentUser();
                             updateUI();
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("AAA", "signInWithCredential:failure", task.getException());
@@ -190,13 +191,33 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     }
                 });
+
     }
 
     private void updateUI() {
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
     }
-
+    private void data(){
+        auth.signInAnonymously()
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("AAA", "signInAnonymously:success");
+                            FirebaseUser user = auth.getCurrentUser();
+                            updateUI();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("AAA", "signInAnonymously:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI();
+                        }
+                    }
+                });
+    }
 
     boolean isEmail(EditText text) {
         CharSequence email = text.getText().toString();

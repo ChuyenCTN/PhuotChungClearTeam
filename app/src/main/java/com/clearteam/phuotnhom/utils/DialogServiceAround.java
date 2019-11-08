@@ -51,27 +51,6 @@ public class DialogServiceAround extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        View dialogView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
-//        BottomSheetDialog dialog = new BottomSheetDialog(this);
-//        dialog.setContentView(dialogView);
-//       // dialog.show();
-//        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) dialogView.getParent())
-//                .getLayoutParams();
-//        CoordinatorLayout.Behavior behavior = params.getBehavior();
-//        ((View) dialogView.getParent()).setBackgroundResource(R.drawable.bg_bottom_sheet);
-//
-//        if (behavior !=null && behavior instanceof BottomSheetBehavior){
-//            ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetCallback);
-//        }
-//        mRecyclerView = view.findViewById(R.id.rcv_service_around);
-//
-//        initData();
-//        adapter = new ServiceAroundAdapter(getContext(),mServiceAroundList);
-//
-//        LinearLayoutManager manager = new LinearLayoutManager(getContext());
-//        manager.setOrientation(RecyclerView.HORIZONTAL);
-//        mRecyclerView.setLayoutManager(manager);
-//        mRecyclerView.setAdapter(adapter);
     }
     @SuppressLint("RestrictedApi")
     @Override
@@ -91,8 +70,6 @@ public class DialogServiceAround extends BottomSheetDialogFragment {
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetCallback);
         }
 
-//        TextView tvTitle = contentView.findViewById(R.id.tv_name_service);
-//        tvTitle.setText("Hotel");
         initData();
         RecyclerView recyclerView = contentView.findViewById(R.id.rcv_service_around);
         LinearLayoutManager layoutManager = new LinearLayoutManager(contentView.getContext());

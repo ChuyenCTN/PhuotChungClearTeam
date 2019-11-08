@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.clearteam.phuotnhom.fragment.MapFragment;
 import com.clearteam.phuotnhom.fragment.ProfileFragment;
+import com.clearteam.phuotnhom.ui.changepass.ChangepassActivity;
 import com.clearteam.phuotnhom.ui.infomation.EditInformationActivity;
 import com.clearteam.phuotnhom.ui.login.LoginActivity;
 import com.facebook.login.LoginManager;
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(MainActivity.this, EditInformationActivity.class));
                 break;
             case R.id.change_pass:
+                startActivity(new Intent(MainActivity.this, ChangepassActivity.class));
                 break;
         }
 
