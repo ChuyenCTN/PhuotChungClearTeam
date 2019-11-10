@@ -1,38 +1,32 @@
 package com.clearteam.phuotnhom;
 
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.clearteam.phuotnhom.fragment.MapFragment;
 import com.clearteam.phuotnhom.fragment.ProfileFragment;
 import com.clearteam.phuotnhom.ui.infomation.EditInformationActivity;
 import com.clearteam.phuotnhom.ui.login.LoginActivity;
+import com.clearteam.phuotnhom.ui.tourgroup.TourGroupFragment;
 import com.facebook.login.LoginManager;
-import android.view.View;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-
-import android.view.MenuItem;
-
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.view.Menu;
-import android.widget.FrameLayout;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private FrameLayout frameLayout,fameToolBar;
+    private FrameLayout frameLayout, fameToolBar;
     private FragmentManager mFragmentManager;
 
     @Override
@@ -86,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //
 //            return true;
 //        }
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.edit_user:
                 startActivity(new Intent(MainActivity.this, EditInformationActivity.class));
                 break;
@@ -107,6 +101,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 replaceFragment(MapFragment.getInstance(), mFragmentManager);
                 break;
             case R.id.nav_group:
+                frameLayout.setVisibility(View.VISIBLE);
+                replaceFragment(TourGroupFragment.getInstance(), mFragmentManager);
+                setTitle(getResources().getString(R.string.txt_title_tour_group));
                 break;
             case R.id.nav_schedule:
                 break;
@@ -138,8 +135,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.replace(frameLayout.getId(), fragment);
         fragmentTransaction.commit();
     }
-
-
 
 
 }
