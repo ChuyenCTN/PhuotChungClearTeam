@@ -18,32 +18,15 @@
 	<!--android:layout_height="?attr/actionBarSize"-->
 	<!--android:background="@drawable/bg_header_detail">-->
 
-<LinearLayout
-	android:layout_width="match_parent"
-	android:layout_height="@dimen/dp_45"
-	android:layout_marginTop="@dimen/dp_30"
-	android:orientation="vertical">
 	<FrameLayout
 		android:layout_width="match_parent"
-		android:layout_height="@dimen/dp_32"
-		android:layout_centerInParent="true"
-		android:layout_marginLeft="@dimen/dp_40"
-		android:layout_marginRight="@dimen/dp_40"
-		android:background="@drawable/bg_seach">
+		android:layout_height="@dimen/dp_45"
+		android:layout_alignParentTop="true"
+		android:layout_marginTop="@dimen/dp_20"
+		android:layout_marginLeft="@dimen/dp_30"
+		android:layout_marginRight="@dimen/dp_30"
+		android:background="@drawable/bg_seach_map">
 
-		<EditText
-			android:id="@+id/edSeach"
-			android:layout_width="match_parent"
-			android:layout_height="@dimen/dp_32"
-			android:drawableLeft="@drawable/ic_seach_map"
-			android:drawablePadding="@dimen/dp_10"
-			android:hint="Tìm kiếm theo tên"
-			android:imeOptions="actionSearch"
-			android:inputType="text"
-			android:paddingLeft="@dimen/dp_10"
-			android:textColor="@color/white"
-			android:textSize="@dimen/size_14"
-			android:visibility="gone" />
 
 		<fragment
 			android:id="@+id/autocomplate"
@@ -52,7 +35,7 @@
 			android:layout_height="match_parent" />
 
 	</FrameLayout>
-</LinearLayout>
+
 
 	<!--</androidx.appcompat.widget.Toolbar>-->
 	<LinearLayout
@@ -60,7 +43,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/dp_50"
 		android:layout_alignParentBottom="true"
-		android:background="@color/white"
+		android:background="@color/bg_toolbar"
 		android:gravity="center"
 		android:orientation="horizontal">
 
@@ -82,6 +65,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="1dp"
 				android:text="@string/title_home"
+				android:textColor="@color/white"
 				android:textSize="@dimen/size_12" />
 		</LinearLayout>
 
@@ -89,7 +73,7 @@
 			android:id="@+id/line_friend"
 			android:layout_width="wrap_content"
 			android:layout_height="@dimen/dp_45"
-			android:layout_marginLeft="@dimen/dp_35"
+			android:layout_marginLeft="@dimen/dp_70"
 			android:gravity="center"
 			android:orientation="vertical">
 
@@ -103,6 +87,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="1dp"
 				android:text="@string/title_dashboard"
+				android:textColor="@color/white"
 				android:textSize="@dimen/size_12" />
 		</LinearLayout>
 	</LinearLayout>

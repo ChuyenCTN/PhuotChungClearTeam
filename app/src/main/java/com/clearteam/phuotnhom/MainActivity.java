@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         replaceFragment(MapFragment.getInstance(), mFragmentManager);
-
     }
 
     @Override
@@ -71,31 +70,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//        if (id == R.id.action_settings) {
-//
-//            return true;
-//        }
-        switch (item.getItemId()){
-            case R.id.edit_user:
-                startActivity(new Intent(MainActivity.this, EditInformationActivity.class));
-                break;
-            case R.id.change_pass:
-                startActivity(new Intent(MainActivity.this, ChangepassActivity.class));
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

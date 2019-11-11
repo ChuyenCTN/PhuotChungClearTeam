@@ -10,6 +10,9 @@ import androidx.fragment.app.Fragment;
 
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,6 +22,8 @@ import com.bumptech.glide.Glide;
 import com.clearteam.phuotnhom.MainActivity;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.model.User;
+import com.clearteam.phuotnhom.ui.changepass.ChangepassActivity;
+import com.clearteam.phuotnhom.ui.infomation.EditInformationActivity;
 import com.clearteam.phuotnhom.ui.login.LoginActivity;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.firebase.auth.FirebaseAuth;
@@ -60,7 +65,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -117,6 +122,26 @@ public class ProfileFragment extends Fragment {
 //            };
 //        }
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.edit_user:
+                startActivity(new Intent(getActivity(), EditInformationActivity.class));
+                break;
+            case R.id.change_pass:
+                startActivity(new Intent(getActivity(), ChangepassActivity.class));
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 //    @Override

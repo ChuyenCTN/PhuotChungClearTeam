@@ -104,8 +104,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         TextView tvSeach = (TextView) ((LinearLayout) autocompleteFragment.getView()).getChildAt(1);
         searchIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_seach_map));
         searchIcon.setPadding(50, 0, 0, 0);
-        edSeach.setTextSize(14);
-        tvSeach.setTextSize(14);
+        edSeach.setTextSize(18);
+        tvSeach.setTextSize(18);
         //   tvSeach.getResources().getColor(R.color.text_seach);
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
