@@ -33,7 +33,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.Menu;
 import android.widget.FrameLayout;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private FrameLayout frameLayout,fameToolBar;
+    private FrameLayout frameLayout;
     private FragmentManager mFragmentManager;
 
     @Override
@@ -46,9 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void initView() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-        fameToolBar = findViewById(R.id.frame);
+        setTitle("Home");
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -105,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment selectedFragment = null;
         switch (item.getItemId()) {
             case R.id.nav_home:
-                fameToolBar.setVisibility(View.VISIBLE);
+                setTitle("Home");
                 replaceFragment(MapFragment.getInstance(), mFragmentManager);
                 break;
             case R.id.nav_group:
@@ -113,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_schedule:
                 break;
             case R.id.nav_user:
-                fameToolBar.setVisibility(View.GONE);
                 setTitle("Thông tin cá nhân");
                 replaceFragment(ProfileFragment.getInstance(), mFragmentManager);
                 break;
