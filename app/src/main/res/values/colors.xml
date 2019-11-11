@@ -7,5 +7,7 @@
 	<color name="bg_header">#620594</color>
 	<color name="gray">#CCCCCC</color>
 	<color name="black">#000000</color>
-	<color name="bg_toolbar">#6667DC</color>
+	<color name="bg_toolbar">#6F91F1</color>
+	<color name="bg_tab">#3F51B5</color>
 </resources>
+ 
