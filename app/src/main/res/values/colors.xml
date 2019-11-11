@@ -9,5 +9,6 @@
 	<color name="black">#000000</color>
 	<color name="bg_toolbar">#6F91F1</color>
 	<color name="bg_tab">#3F51B5</color>
+	<color name="text">#2B2A28</color>
 </resources>
  

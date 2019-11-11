@@ -54,7 +54,7 @@ public class ProfileFragment extends Fragment {
     private SharedPreferences mSharedPreferences;
 
 
-    public static ProfileFragment getInstance() {
+      public static ProfileFragment getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new ProfileFragment();
         }

@@ -5,6 +5,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 
+import com.clearteam.phuotnhom.fragment.IntroductFragment;
 import com.clearteam.phuotnhom.fragment.MapFragment;
 import com.clearteam.phuotnhom.fragment.ProfileFragment;
 import com.clearteam.phuotnhom.ui.changepass.ChangepassActivity;
@@ -93,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_notifi:
                 break;
             case R.id.nav_introduction:
+                setTitle("Giới thiệu");
+                replaceFragment(IntroductFragment.getInstance(), mFragmentManager);
                 break;
             case R.id.nav_out:
                 FirebaseAuth.getInstance().signOut();
