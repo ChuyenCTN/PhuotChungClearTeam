@@ -16,5 +16,8 @@ public class Const {
     public static  String KEY_PASSWORD = "password";
     public static final String KEY_IS_LOGIN = "is_login";
     public static final int IMAGE_REQUSET = 1;
+    public static String IS_LOGIN_FACEBOOK = "is_loginfb";
+    public static String IS_LOGIN_TK = "is_logintk";
+
 
 }

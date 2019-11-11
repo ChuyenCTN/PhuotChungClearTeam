@@ -145,6 +145,7 @@
 					android:textAllCaps="false"
 					android:textColor="#ffffff"
 					android:textSize="@dimen/size_18"
+					android:visibility="gone"
 					android:textStyle="bold" />
 			</FrameLayout>
 

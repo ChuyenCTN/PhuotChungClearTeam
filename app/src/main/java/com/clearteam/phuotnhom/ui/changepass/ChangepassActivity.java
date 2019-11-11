@@ -99,7 +99,6 @@ public class ChangepassActivity extends AppCompatActivity implements View.OnClic
                 }
             }
 
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -161,13 +160,13 @@ public class ChangepassActivity extends AppCompatActivity implements View.OnClic
     private void changePassword() {
         String password = edPassOld.getText().toString();
         final String passwordNew = edPassNew.getText().toString();
-        String passwordConfirm = edPassConfi.getText().toString();
+        final String passwordConfirm = edPassConfi.getText().toString();
 
         if (password.isEmpty() || passwordConfirm.isEmpty() || passwordNew.isEmpty()) {
             Toast.makeText(this, "Không được bỏ trống", Toast.LENGTH_SHORT).show();
         } else if (password.length() < 6 || passwordConfirm.length() < 6 || passwordNew.length() < 6) {
             Toast.makeText(this, "Pass phải trên 6 ký tự", Toast.LENGTH_SHORT).show();
-        } else if (passwordConfirm.equals(passwordNew)) {
+        } else if (!passwordConfirm.equals(passwordNew)) {
             Toast.makeText(this, "Không trùng mật khẩu mới", Toast.LENGTH_SHORT).show();
         } else {
             final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

@@ -1,9 +1,11 @@
 package com.clearteam.phuotnhom.ui.login;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,6 +33,10 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.internal.ImageRequest;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -41,6 +47,9 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 
@@ -121,7 +130,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
                 break;
             case R.id.btnLoginFB:
-                loginButton.performClick();
+                //loginButton.performClick();
                 break;
             case R.id.btnServerLogin:
                 login();
@@ -142,7 +151,38 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                // Log.v("LoginActivity", response.toString());
+                                String id = null;
+                                try {
+                                    id = object.getString("id");
+                                    String first_name = object.getString("first_name");
+                                    String last_name = object.getString("last_name");
+                                    String gender = object.getString("gender");
+                                    String birthday = object.getString("birthday");
+                                    //   String image_url = "http://graph.facebook.com/" + id + "/picture?type=large";
+                                    String profileURL = "";
+                                    if (Profile.getCurrentProfile() != null) {
+                                        profileURL = ImageRequest.getProfilePictureUri(Profile.getCurrentProfile().getId(), 400, 400).toString();
+                                    }
+                                    Log.d("first_name", last_name);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender,birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
                 handleFacebookAccessToken(loginResult.getAccessToken());
+
+
             }
 
             @Override
@@ -179,8 +219,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("AAA", "signInWithCredential:success");
-                            FirebaseUser user = auth.getCurrentUser();
+                            //FirebaseUser user = auth.getCurrentUser();
+                            SharedPreferences.Editor editor = mSharedPreferences.edit();
+                            editor.putBoolean(Const.IS_LOGIN_FACEBOOK,true);
+                            editor.apply();
+
                             updateUI();
+
+
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -191,32 +237,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     }
                 });
-
     }
 
     private void updateUI() {
-        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
         finish();
-    }
-    private void data(){
-        auth.signInAnonymously()
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("AAA", "signInAnonymously:success");
-                            FirebaseUser user = auth.getCurrentUser();
-                            updateUI();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("AAA", "signInAnonymously:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI();
-                        }
-                    }
-                });
     }
 
     boolean isEmail(EditText text) {
@@ -240,17 +267,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                                Toast.makeText(LoginActivity.this, "Xin chào" + email, Toast.LENGTH_SHORT).show();
-                                finish();
+                                SharedPreferences.Editor editor = mSharedPreferences.edit();
+                                editor.putBoolean(Const.IS_LOGIN_TK,true);
+                                editor.apply();
+                                updateUI();
+
                             } else {
                                 Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không chính xác", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
         }
+
     }
 
     @Override
