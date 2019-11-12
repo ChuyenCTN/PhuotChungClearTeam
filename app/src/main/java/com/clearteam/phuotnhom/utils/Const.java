@@ -11,9 +11,13 @@ import com.clearteam.phuotnhom.ui.changepass.ChangepassActivity;
 
 public class Const {
     public static final int SPLASH_TIME = 800;
+    public static final String KEY_ADDRESS = "address" ;
+    public static final String KEY_NUMBER = "number";
     public static  String KEY_IS_PRER = "login";
     public static  String KEY_EMAIL = "email";
     public static  String KEY_PASSWORD = "password";
+    public static  String KEY_NAME = "name";
+    public static  String KEY_IMAGER = "image";
     public static final String KEY_IS_LOGIN = "is_login";
     public static final int IMAGE_REQUSET = 1;
     public static String IS_LOGIN_FACEBOOK = "is_loginfb";

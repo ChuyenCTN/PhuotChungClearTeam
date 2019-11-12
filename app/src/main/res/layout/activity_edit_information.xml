@@ -4,6 +4,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:orientation="vertical"
 	tools:context=".ui.infomation.EditInformationActivity">
 
 	<RelativeLayout
@@ -18,15 +19,54 @@
 			android:layout_centerVertical="true"
 			android:layout_marginLeft="@dimen/dp_10"
 			android:background="@drawable/left_arrow" />
+
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_centerInParent="true"
 			android:text="@string/title_sua_tt"
 			android:textColor="@color/white"
 			android:textSize="@dimen/size_18"
-			android:textStyle="bold"
-			android:layout_centerInParent="true"/>
+			android:textStyle="bold" />
 	</RelativeLayout>
+
+	<de.hdodenhof.circleimageview.CircleImageView
+		android:id="@+id/img_avata"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginTop="@dimen/dp_20"
+		android:src="@drawable/avatar"
+		android:layout_width="@dimen/dp_100"
+		android:layout_height="@dimen/dp_100" />
+
+	<EditText
+		android:id="@+id/name"
+		android:layout_marginTop="@dimen/dp_20"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:hint="name" />
+
+	<EditText
+		android:id="@+id/email"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:hint="email" />
+
+	<EditText
+		android:id="@+id/number_phone"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:hint="number phone" />
+
+	<EditText
+		android:id="@+id/address"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:hint="address" />
+	<Button
+		android:id="@+id/btnLuu"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Lưu"/>
 
 
 </LinearLayout>
