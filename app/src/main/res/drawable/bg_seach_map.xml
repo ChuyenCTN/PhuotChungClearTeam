@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape android:shape="rectangle" xmlns:android="http://schemas.android.com/apk/res/android">
+	<size android:width="370dp"
+		android:height="@dimen/dp_45"/>
+	<solid android:color="@color/bg_toolbar"></solid>
+	<corners android:topLeftRadius="@dimen/dp_30"
+		android:bottomLeftRadius="@dimen/dp_30"
+		android:topRightRadius="@dimen/dp_30"
+		android:bottomRightRadius="@dimen/dp_30"/>
+</shape>

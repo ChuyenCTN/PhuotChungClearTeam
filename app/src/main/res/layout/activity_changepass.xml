@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".ui.changepass.ChangepassActivity">
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="@color/bg_toolbar">
+
+		<ImageButton
+			android:id="@+id/img_back"
+			android:layout_width="@dimen/dp_24"
+			android:layout_height="@dimen/dp_24"
+			android:layout_centerVertical="true"
+			android:layout_marginLeft="@dimen/dp_10"
+			android:background="@drawable/left_arrow" />
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerInParent="true"
+			android:text="@string/title_doi_mk"
+			android:textColor="@color/white"
+			android:textSize="@dimen/size_18"
+			android:textStyle="bold" />
+	</RelativeLayout>
+
+	<LinearLayout
+		android:id="@+id/ll"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/dp_100"
+		android:gravity="center"
+		android:orientation="vertical">
+
+		<de.hdodenhof.circleimageview.CircleImageView
+			android:id="@+id/img_avata"
+			android:layout_width="@dimen/dp_100"
+			android:layout_height="@dimen/dp_100"
+			android:src="@drawable/avatar" />
+
+		<TextView
+			android:id="@+id/tv_name"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/dp_10"
+			android:text="Lê Văn Hoàng" />
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/ll"
+		android:orientation="vertical"
+		android:padding="@dimen/dp_15">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+
+			<com.google.android.material.textfield.TextInputLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_weight="3">
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/ed_pass_old"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:hint="Mật khẩu cũ"
+					android:inputType="textPassword" />
+
+			</com.google.android.material.textfield.TextInputLayout>
+
+			<ToggleButton
+				android:id="@+id/toggle"
+				android:layout_width="@dimen/dp_25"
+				android:layout_height="@dimen/dp_25"
+				android:layout_gravity="center"
+				android:layout_marginRight="@dimen/dp_10"
+				android:background="@drawable/icon_eye"
+				android:textOff=""
+				android:textOn="" />
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+
+			<com.google.android.material.textfield.TextInputLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_weight="3">
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/ed_pass_new"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:hint="Mật khẩu mới"
+					android:inputType="textPassword" />
+
+			</com.google.android.material.textfield.TextInputLayout>
+
+			<ToggleButton
+				android:id="@+id/toggle_new"
+				android:layout_width="@dimen/dp_25"
+				android:layout_height="@dimen/dp_25"
+				android:layout_gravity="center"
+				android:layout_marginRight="@dimen/dp_10"
+				android:background="@drawable/icon_eye"
+				android:textOff=""
+				android:textOn="" />
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+
+			<com.google.android.material.textfield.TextInputLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_weight="3">
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/ed_pass_confi"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:hint="Nhập lại mật khẩu"
+					android:inputType="textPassword" />
+
+			</com.google.android.material.textfield.TextInputLayout>
+
+			<ToggleButton
+				android:id="@+id/toggle_confi"
+				android:layout_width="@dimen/dp_25"
+				android:layout_height="@dimen/dp_25"
+				android:layout_gravity="center"
+				android:layout_marginRight="@dimen/dp_10"
+				android:background="@drawable/icon_eye"
+				android:textOff=""
+				android:textOn="" />
+		</LinearLayout>
+
+	<Button
+		android:id="@+id/btn_confirm"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Xác nhận"
+		android:layout_marginTop="@dimen/dp_10"
+		android:background="@drawable/bg_btn_login"/>
+	</LinearLayout>
+
+</RelativeLayout>

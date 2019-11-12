@@ -18,36 +18,36 @@
 			android:layout_height="?attr/actionBarSize"
 			android:background="@color/bg_toolbar">
 
-			<FrameLayout
-				android:id="@+id/frame"
-				android:layout_width="match_parent"
-				android:layout_height="@dimen/dp_32"
-				android:layout_centerInParent="true"
-				android:layout_marginLeft="@dimen/dp_40"
-				android:layout_marginRight="@dimen/dp_40"
-				android:background="@drawable/bg_seach">
+			<!--<FrameLayout-->
+				<!--android:id="@+id/frame"-->
+				<!--android:layout_width="match_parent"-->
+				<!--android:layout_height="@dimen/dp_32"-->
+				<!--android:layout_centerInParent="true"-->
+				<!--android:layout_marginLeft="@dimen/dp_40"-->
+				<!--android:layout_marginRight="@dimen/dp_40"-->
+				<!--android:background="@drawable/bg_seach">-->
 
-				<EditText
-					android:id="@+id/edSeach"
-					android:layout_width="match_parent"
-					android:layout_height="@dimen/dp_32"
-					android:drawableLeft="@drawable/ic_seach_map"
-					android:drawablePadding="@dimen/dp_10"
-					android:hint="Tìm kiếm theo tên"
-					android:imeOptions="actionSearch"
-					android:inputType="text"
-					android:paddingLeft="@dimen/dp_10"
-					android:textColor="@color/white"
-					android:textSize="@dimen/size_14"
-					android:visibility="gone" />
+				<!--<EditText-->
+					<!--android:id="@+id/edSeach"-->
+					<!--android:layout_width="match_parent"-->
+					<!--android:layout_height="@dimen/dp_32"-->
+					<!--android:drawableLeft="@drawable/ic_seach_map"-->
+					<!--android:drawablePadding="@dimen/dp_10"-->
+					<!--android:hint="Tìm kiếm theo tên"-->
+					<!--android:imeOptions="actionSearch"-->
+					<!--android:inputType="text"-->
+					<!--android:paddingLeft="@dimen/dp_10"-->
+					<!--android:textColor="@color/white"-->
+					<!--android:textSize="@dimen/size_14"-->
+					<!--android:visibility="gone" />-->
 
-				<fragment
-					android:id="@+id/autocomplate"
-					android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-					android:layout_width="match_parent"
-					android:layout_height="match_parent" />
+				<!--<fragment-->
+					<!--android:id="@+id/autocomplate"-->
+					<!--android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"-->
+					<!--android:layout_width="match_parent"-->
+					<!--android:layout_height="match_parent" />-->
 
-			</FrameLayout>
+			<!--</FrameLayout>-->
 		</androidx.appcompat.widget.Toolbar>
 	</com.google.android.material.appbar.AppBarLayout>
 

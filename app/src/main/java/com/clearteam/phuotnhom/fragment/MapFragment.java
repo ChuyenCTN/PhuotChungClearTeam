@@ -84,73 +84,73 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         mapFragment.getMapAsync(this);
 
 
-       //getAutocompletePlace();
+       getAutocompletePlace();
         return view;
     }
 
-//    public void getAutocompletePlace() {
-//
-//        if (!Places.isInitialized()) {
-//            Places.initialize(getApplicationContext(), "AIzaSyB9Mwrx_epCW0QxkxQHwrnaute8g8SZRwY");
-//        }
-//        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-//                getChildFragmentManager().findFragmentById(R.id.autocomplate);
-//        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-//        autocompleteFragment.setCountry("VN");
-//        autocompleteFragment.setTypeFilter(TypeFilter.ADDRESS);
-//
-//        ImageView searchIcon = (ImageView) ((LinearLayout) autocompleteFragment.getView()).getChildAt(0);
-//        EditText edSeach = (EditText) ((LinearLayout) autocompleteFragment.getView()).getChildAt(1);
-//        TextView tvSeach = (TextView) ((LinearLayout) autocompleteFragment.getView()).getChildAt(1);
-//        searchIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_seach_map));
-//        searchIcon.setPadding(50, 0, 0, 0);
-//        edSeach.setTextSize(14);
-//        tvSeach.setTextSize(14);
-//        //   tvSeach.getResources().getColor(R.color.text_seach);
-//
-//        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-//            @Override
-//            public void onPlaceSelected(Place place) {
-//                // TODO: Get info about the selected place.
-//                // AddPlace(place,1);
-//                String location = place.getName();
-//                String address = place.getAddress();
-//
-//
-//                List<Address> addressList = null;
-//                MarkerOptions markerOptions = new MarkerOptions();
-//
-//                if (!location.equals("")) {
-//                    Geocoder geocoder = new Geocoder(getContext());
-//                    try {
-//                        addressList = geocoder.getFromLocationName(location, 5);
-//
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                    if (addressList != null) {
-//                        for (int i = 0; i < addressList.size(); i++) {
-//                            Address myAddress = addressList.get(i);
-//                            LatLng latLng = new LatLng(myAddress.getLatitude(), myAddress.getLongitude());
-//                            markerOptions.position(latLng);
-//                            markerOptions.title(location);
-//                            markerOptions.draggable(true);
-//                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_map));
-//                            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-//                            mMap.addMarker(markerOptions);
-//                        }
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onError(Status status) {
-//                Log.i("AAA", "An error occurred: " + status);
-//            }
-//        });
-//
-//    }
+    public void getAutocompletePlace() {
+
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), "AIzaSyB9Mwrx_epCW0QxkxQHwrnaute8g8SZRwY");
+        }
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getChildFragmentManager().findFragmentById(R.id.autocomplate);
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+        autocompleteFragment.setCountry("VN");
+        autocompleteFragment.setTypeFilter(TypeFilter.ADDRESS);
+
+        ImageView searchIcon = (ImageView) ((LinearLayout) autocompleteFragment.getView()).getChildAt(0);
+        EditText edSeach = (EditText) ((LinearLayout) autocompleteFragment.getView()).getChildAt(1);
+        TextView tvSeach = (TextView) ((LinearLayout) autocompleteFragment.getView()).getChildAt(1);
+        searchIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_seach_map));
+        searchIcon.setPadding(50, 0, 0, 0);
+        edSeach.setTextSize(18);
+        tvSeach.setTextSize(18);
+        //   tvSeach.getResources().getColor(R.color.text_seach);
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                // AddPlace(place,1);
+                String location = place.getName();
+                String address = place.getAddress();
+
+
+                List<Address> addressList = null;
+                MarkerOptions markerOptions = new MarkerOptions();
+
+                if (!location.equals("")) {
+                    Geocoder geocoder = new Geocoder(getContext());
+                    try {
+                        addressList = geocoder.getFromLocationName(location, 5);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (addressList != null) {
+                        for (int i = 0; i < addressList.size(); i++) {
+                            Address myAddress = addressList.get(i);
+                            LatLng latLng = new LatLng(myAddress.getLatitude(), myAddress.getLongitude());
+                            markerOptions.position(latLng);
+                            markerOptions.title(location);
+                            markerOptions.draggable(true);
+                            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_map));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                            mMap.addMarker(markerOptions);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.i("AAA", "An error occurred: " + status);
+            }
+        });
+
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;

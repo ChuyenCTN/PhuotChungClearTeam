@@ -16,8 +16,11 @@
 		android:roundIcon="@mipmap/ic_launcher_round"
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme">
-		<activity android:name=".ui.infomation.EditInformationActivity"
+		<activity android:name=".ui.changepass.ChangepassActivity"
 			android:theme="@style/AppTheme.NoActionBar"/>
+		<activity
+			android:name=".ui.infomation.EditInformationActivity"
+			android:theme="@style/AppTheme.NoActionBar" />
 
 		<meta-data
 			android:name="com.google.android.geo.API_KEY"

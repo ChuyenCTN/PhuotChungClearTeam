@@ -4,18 +4,25 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:background="@drawable/bg_splash"
 	tools:context=".ui.splash.SplashActivity">
 
 	<ImageView
-		android:layout_width="200dp"
-		android:layout_height="200dp"
-		android:layout_marginStart="8dp"
-		android:layout_marginTop="8dp"
-		android:layout_marginEnd="8dp"
-		android:layout_marginBottom="8dp"
-		android:src="@drawable/logo_phuot"
+		android:id="@+id/imageView"
+		android:layout_width="@dimen/dp_150"
+		android:layout_height="@dimen/dp_150"
+		android:src="@drawable/logo"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
+
+	<ImageView
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/dp_150"
+		android:layout_marginBottom="8dp"
+		android:src="@drawable/bg_bottom_splash"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

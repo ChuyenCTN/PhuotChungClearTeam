@@ -2,8 +2,19 @@ package com.clearteam.phuotnhom;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import android.view.Menu;
 import android.view.MenuItem;
+
+
+import com.clearteam.phuotnhom.fragment.IntroductFragment;
+import com.clearteam.phuotnhom.fragment.MapFragment;
+import com.clearteam.phuotnhom.fragment.ProfileFragment;
+import com.clearteam.phuotnhom.ui.changepass.ChangepassActivity;
+import com.clearteam.phuotnhom.ui.infomation.EditInformationActivity;
+import com.clearteam.phuotnhom.ui.login.LoginActivity;
+import com.facebook.login.LoginManager;
+
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -26,7 +37,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     private FrameLayout frameLayout, fameToolBar;
+
     private FragmentManager mFragmentManager;
 
     @Override
@@ -39,9 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void initView() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-        fameToolBar = findViewById(R.id.frame);
+        setTitle("Home");
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -53,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         replaceFragment(MapFragment.getInstance(), mFragmentManager);
-
     }
 
     @Override
@@ -65,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -91,13 +102,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         Fragment selectedFragment = null;
         switch (item.getItemId()) {
             case R.id.nav_home:
-                fameToolBar.setVisibility(View.VISIBLE);
+                setTitle("Home");
                 replaceFragment(MapFragment.getInstance(), mFragmentManager);
                 break;
             case R.id.nav_group:
@@ -108,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_schedule:
                 break;
             case R.id.nav_user:
-                fameToolBar.setVisibility(View.GONE);
                 setTitle("Thông tin cá nhân");
                 replaceFragment(ProfileFragment.getInstance(), mFragmentManager);
                 break;
@@ -117,6 +128,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_notifi:
                 break;
             case R.id.nav_introduction:
+                setTitle("Giới thiệu");
+                replaceFragment(IntroductFragment.getInstance(), mFragmentManager);
                 break;
             case R.id.nav_out:
                 FirebaseAuth.getInstance().signOut();

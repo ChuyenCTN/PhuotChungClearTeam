@@ -1,85 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	tools:context=".ui.login.LoginActivity">
 
-	<RelativeLayout
+	<androidx.constraintlayout.widget.ConstraintLayout
 
 		android:id="@+id/activityMain"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:background="@color/white">
+		android:background="@drawable/bg_splash">
 
-		<RelativeLayout
-			android:id="@+id/relay_1"
-			android:layout_width="match_parent"
-			android:layout_height="?attr/actionBarSize"
-			android:background="@color/bg_toolbar">
+		<!--<RelativeLayout-->
+			<!--android:id="@+id/relay_1"-->
+			<!--android:layout_width="match_parent"-->
+			<!--android:layout_height="?attr/actionBarSize"-->
+			<!--android:background="@color/bg_toolbar">-->
 
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_centerInParent="true"
-				android:text="@string/sign_in"
-				android:textColor="@color/white"
-				android:textSize="22sp"
-				android:textStyle="bold" />
-		</RelativeLayout>
+			<!--<TextView-->
+				<!--android:layout_width="wrap_content"-->
+				<!--android:layout_height="wrap_content"-->
+				<!--android:layout_centerInParent="true"-->
+				<!--android:text="@string/sign_in"-->
+				<!--android:textColor="@color/white"-->
+				<!--android:textSize="22sp"-->
+				<!--android:textStyle="bold" />-->
+		<!--</RelativeLayout>-->
 
 
 		<ImageView
-			android:layout_width="@dimen/dp_100"
-			android:layout_height="@dimen/dp_100"
+			android:id="@+id/imageView2"
+			android:layout_width="@dimen/dp_150"
+			android:layout_height="@dimen/dp_150"
 			android:layout_centerHorizontal="true"
-			android:layout_marginTop="@dimen/dp_90"
-			android:src="@drawable/logo_phuot" />
+			android:layout_marginStart="8dp"
+			android:layout_marginTop="@dimen/dp_30"
+			android:layout_marginEnd="8dp"
+			android:src="@drawable/logo"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<TextView
+			android:id="@+id/tv_1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="8dp"
+			android:text="Sign In"
+			android:textColor="@color/white"
+			android:textSize="@dimen/size_22"
+			app:layout_constraintEnd_toEndOf="@+id/imageView2"
+			app:layout_constraintStart_toStartOf="@+id/imageView2"
+			app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
 		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_centerInParent="true"
-			android:layout_margin="20dp"
-			android:orientation="vertical">
+			android:layout_margin="@dimen/dp_40"
+			android:layout_marginTop="@dimen/dp_10"
+			android:orientation="vertical"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/tv_1">
 
 
 			<com.google.android.material.textfield.TextInputEditText
 				android:id="@+id/etEmail"
 				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:background="@drawable/bg_edit_text"
-				android:cursorVisible="true"
-				android:hint="Email"
+				android:layout_height="51dp"
+				android:background="@drawable/bg_editext"
+				android:drawableLeft="@drawable/ic_person"
+				android:drawablePadding="@dimen/dp_8"
+				android:hint="Username or Email"
 				android:inputType="textEmailAddress"
 				android:maxLength="50"
-				android:padding="10dp"
-				android:paddingBottom="10dp"
-				android:textColor="@color/black"
-				android:textSize="18sp" />
+				android:paddingLeft="@dimen/dp_15"
+				android:paddingTop="@dimen/dp_8"
+				android:paddingBottom="@dimen/dp_8"
+				android:textColor="@color/white"
+				android:textColorHint="@color/white"
+				android:textSize="@dimen/size_16" />
 
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center"
 				android:layout_marginTop="10dp"
-				android:background="@drawable/bg_edit_text"
+				android:background="@drawable/bg_editext"
+				android:paddingRight="@dimen/dp_10"
 				android:orientation="horizontal">
 
 				<androidx.appcompat.widget.AppCompatEditText
 					android:id="@+id/edPassword"
 					android:layout_width="0dp"
-					android:layout_height="wrap_content"
+					android:layout_height="51dp"
 					android:layout_weight="3"
 					android:background="@null"
 					android:cursorVisible="true"
+					android:drawableLeft="@drawable/ic_lock"
+					android:drawablePadding="@dimen/dp_8"
 					android:hint="Password"
 					android:inputType="textPassword"
 					android:maxLength="50"
-					android:padding="10dp"
-					android:textColor="@color/black"
-					android:textSize="18sp" />
+					android:paddingLeft="@dimen/dp_15"
+					android:paddingTop="@dimen/dp_8"
+					android:paddingBottom="@dimen/dp_8"
+					android:textColor="@color/white"
+					android:textColorHint="@color/white"
+					android:textSize="@dimen/size_16" />
 
 				<ToggleButton
 					android:id="@+id/toggle"
@@ -104,20 +135,22 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_alignParentRight="true"
-					android:layout_centerVertical="true"
-					android:text="Forgot Password" />
+					android:layout_marginRight="4dp"
+					android:text="Forgot Password"
+					android:textColor="@color/white" />
 
 			</RelativeLayout>
 
 			<Button
 				android:id="@+id/btnServerLogin"
 				android:layout_width="match_parent"
-				android:layout_height="@dimen/dp_45"
+				android:layout_height="51dp"
 				android:layout_gravity="center"
 				android:layout_marginTop="15dp"
-				android:background="@drawable/bg_btn_login"
+				android:background="@drawable/bg_editext"
 				android:text="Login"
 				android:textAllCaps="false"
+				android:textColor="@color/white"
 				android:textSize="@dimen/size_18"
 				android:textStyle="bold" />
 
@@ -145,33 +178,45 @@
 					android:textAllCaps="false"
 					android:textColor="#ffffff"
 					android:textSize="@dimen/size_18"
-					android:textStyle="bold" />
+					android:textStyle="bold"
+					android:visibility="gone" />
 			</FrameLayout>
 
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_below="@+id/login_button"
+				android:layout_marginBottom="@dimen/dp_10"
+				android:gravity="center_horizontal"
+				android:orientation="horizontal">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Don't have an account? "
+					android:textColor="@color/white" />
+
+				<TextView
+					android:id="@+id/tv_register"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/register_here"
+					android:textColor="@color/white"
+					android:textSize="@dimen/size_16"
+					android:textStyle="bold" />
+			</LinearLayout>
 
 		</LinearLayout>
 
-		<LinearLayout
+		<ImageView
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_alignParentBottom="true"
-			android:layout_marginBottom="@dimen/dp_10"
-			android:gravity="center_horizontal"
-			android:orientation="vertical">
+			android:layout_height="@dimen/dp_150"
+			android:layout_marginBottom="8dp"
+			android:src="@drawable/bg_bottom_splash"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintBottom_toBottomOf="parent" />
 
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="Have not an account? " />
+	</androidx.constraintlayout.widget.ConstraintLayout>
 
-			<TextView
-				android:id="@+id/tv_register"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="@string/register_here"
-				android:textSize="@dimen/size_16"
-				android:textStyle="bold" />
-		</LinearLayout>
-	</RelativeLayout>
-
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
