@@ -221,11 +221,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Log.d("AAA", "signInWithCredential:success");
                             //FirebaseUser user = auth.getCurrentUser();
                             SharedPreferences.Editor editor = mSharedPreferences.edit();
-                            editor.putBoolean(Const.IS_LOGIN_FACEBOOK,true);
+                            editor.putBoolean(Const.IS_LOGIN_FACEBOOK, true);
                             editor.apply();
 
                             updateUI();
-
 
 
                         } else {
@@ -252,40 +251,48 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void login() {
-        final String email = edEmail.getText().toString();
-        String password = edPass.getText().toString();
-        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "Điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-        } else if (isEmail(edEmail) == false) {
-            edEmail.setError("Chưa đúng định dạng");
-        } else if (password.length() < 6) {
-            edPass.setError("password trên 6 ký tự");
-            Toast.makeText(LoginActivity.this, "password trên 6 ký tự", Toast.LENGTH_SHORT).show();
-        } else {
-            auth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                SharedPreferences.Editor editor = mSharedPreferences.edit();
-                                editor.putBoolean(Const.IS_LOGIN_TK,true);
-                                editor.apply();
-                                updateUI();
 
-                            } else {
-                                Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không chính xác", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        }
-
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        Toast.makeText(LoginActivity.this, "Xin chào", Toast.LENGTH_SHORT).show();
+        finish();
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-
 }
+
+///*
+//        final String email = edEmail.getText().toString();
+//        String password = edPass.getText().toString();
+//        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+//            Toast.makeText(this, "Điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+//        } else if (isEmail(edEmail) == false) {
+//            edEmail.setError("Chưa đúng định dạng");
+//        } else if (password.length() < 6) {
+//            edPass.setError("password trên 6 ký tự");
+//            Toast.makeText(LoginActivity.this, "password trên 6 ký tự", Toast.LENGTH_SHORT).show();
+//        } else {
+//            auth.signInWithEmailAndPassword(email, password)
+//                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<AuthResult> task) {
+//                            if (task.isSuccessful()) {
+//                                SharedPreferences.Editor editor = mSharedPreferences.edit();
+//                                editor.putBoolean(Const.IS_LOGIN_TK,true);
+//                                editor.apply();
+//                                updateUI();
+//
+//                            } else {
+//                                Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không chính xác", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    });
+//    }
+//
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+//        super.onActivityResult(requestCode, resultCode, data);
+//    }
+
+
+
