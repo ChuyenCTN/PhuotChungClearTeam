@@ -36,7 +36,6 @@
 	<string name="title_doi_mk">Đổi mật khẩu</string>
     <!-- TODO: Remove or change this placeholder text -->
 
-
     <!--	Tour Group-->
     <string name="txt_no_data_tour_group">Bạn chưa có nhóm. Hãy tạo nhóm mới</string>
     <string name="txt_warning_no_tour_group">Bạn chưa có nhóm. Bạn có muốn tạo nhóm mới không?</string>
@@ -47,5 +46,10 @@
     <string name="txt_alert_notifi">Thông báo</string>
     <string name="txt_alert_warning">Cảnh báo</string>
     <string name="txt_alert_close">Đóng</string>
+    <string name="txt_label_add_new">Thêm</string>
+    <string name="txt_label_new">Thêm mới</string>
+    <string name="txt_title_new_group">Thêm nhóm</string>
+    <!-- TODO: Remove or change this placeholder text -->
+
 
 </resources>

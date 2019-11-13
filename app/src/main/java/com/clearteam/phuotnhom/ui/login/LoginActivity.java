@@ -293,6 +293,37 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //        mCallbackManager.onActivityResult(requestCode, resultCode, data);
 //        super.onActivityResult(requestCode, resultCode, data);
 //    }
+/*
+        final String email = edEmail.getText().toString();
+        String password = edPass.getText().toString();
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "Điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+        } else if (isEmail(edEmail) == false) {
+            edEmail.setError("Chưa đúng định dạng");
+        } else if (password.length() < 6) {
+            edPass.setError("password trên 6 ký tự");
+            Toast.makeText(LoginActivity.this, "password trên 6 ký tự", Toast.LENGTH_SHORT).show();
+        } else {
+            auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                SharedPreferences.Editor editor = mSharedPreferences.edit();
+                                editor.putBoolean(Const.IS_LOGIN_TK,true);
+                                editor.apply();
+                                updateUI();
+
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không chính xác", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+<<<<<<< HEAD
+        }*/
+
+
+
 
 
 
