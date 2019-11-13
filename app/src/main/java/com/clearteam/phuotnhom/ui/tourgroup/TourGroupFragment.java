@@ -1,7 +1,11 @@
 package com.clearteam.phuotnhom.ui.tourgroup;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -18,6 +22,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.ui.tourgroup.adapter.AdapterTourGroup;
 import com.clearteam.phuotnhom.ui.tourgroup.model.TourGroupResponse;
+import com.clearteam.phuotnhom.ui.tourgroup.newgroup.NewGroupActivity;
 import com.clearteam.phuotnhom.utils.CommonUtils;
 
 public class TourGroupFragment extends Fragment {
@@ -82,7 +87,7 @@ public class TourGroupFragment extends Fragment {
     private void checkGroup() {
         if (checkNew) {
             MaterialDialog.SingleButtonCallback handleOK = ((dialog, which) -> {
-
+                startActivity(new Intent(getContext(), NewGroupActivity.class));
             });
 
             MaterialDialog.SingleButtonCallback handleCancel = (dialog, which) -> {
@@ -92,4 +97,26 @@ public class TourGroupFragment extends Fragment {
             CommonUtils.showDialog(getContext(), getString(R.string.txt_alert_notifi), getString(R.string.txt_warning_no_tour_group), handleOK, handleCancel);
         }
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Do something that differs the Activity's menu here
+        inflater.inflate(R.menu.menu_new, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_new:
+
+                return false;
+            default:
+                break;
+        }
+
+        return false;
+    }
+
 }
