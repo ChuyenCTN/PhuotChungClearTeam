@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.ui.tourgroup.adapter.AdapterTourGroup;
 import com.clearteam.phuotnhom.ui.tourgroup.model.TourGroupResponse;
@@ -45,7 +44,7 @@ public class TourGroupFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tour_group, container, false);
         mapping(view);
         initRecyclerView();
-        checkGroup();
+       // checkGroup();
         return view;
     }
 
@@ -79,17 +78,17 @@ public class TourGroupFragment extends Fragment {
         });
     }
 
-    private void checkGroup() {
-        if (checkNew) {
-            MaterialDialog.SingleButtonCallback handleOK = ((dialog, which) -> {
-
-            });
-
-            MaterialDialog.SingleButtonCallback handleCancel = (dialog, which) -> {
-                dialog.dismiss();
-            };
-
-            CommonUtils.showDialog(getContext(), getString(R.string.txt_alert_notifi), getString(R.string.txt_warning_no_tour_group), handleOK, handleCancel);
-        }
-    }
+//    private void checkGroup() {
+//        if (checkNew) {
+//            MaterialDialog.SingleButtonCallback handleOK = ((dialog, which) -> {
+//
+//            });
+//
+//            MaterialDialog.SingleButtonCallback handleCancel = (dialog, which) -> {
+//                dialog.dismiss();
+//            };
+//
+//            CommonUtils.showDialog(getContext(), getString(R.string.txt_alert_notifi), getString(R.string.txt_warning_no_tour_group), handleOK, handleCancel);
+//        }
+//    }
 }
