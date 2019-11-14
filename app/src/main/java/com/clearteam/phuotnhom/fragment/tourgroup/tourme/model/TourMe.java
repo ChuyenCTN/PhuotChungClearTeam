@@ -1,4 +1,4 @@
-package com.clearteam.phuotnhom.fragment.tourme.model;
+package com.clearteam.phuotnhom.fragment.tourgroup.tourme.model;
 
 public class TourMe {
 

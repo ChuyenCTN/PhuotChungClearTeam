@@ -1,53 +1,55 @@
 package com.clearteam.phuotnhom.fragment.tourgroup.tourall;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.clearteam.phuotnhom.R;
+import com.clearteam.phuotnhom.fragment.tourgroup.tourme.TourMeFragment;
+import com.clearteam.phuotnhom.fragment.tourgroup.tourme.adapter.TourMeAdapter;
+import com.clearteam.phuotnhom.fragment.tourgroup.tourme.model.TourMe;
+import com.clearteam.phuotnhom.utils.Const;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link TourAllFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link TourAllFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class TourAllFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private RecyclerView rcvTourMe;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private List<TourMe> list;
+    private TourMeAdapter tourMeAdapter;
+    private FirebaseAuth auth;
+    private DatabaseReference reference;
+    private static TourAllFragment INSTANCE;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TourAllFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static TourAllFragment newInstance(String param1, String param2) {
-        TourAllFragment fragment = new TourAllFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static TourAllFragment getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new TourAllFragment();
+        }
+        return INSTANCE;
     }
+
     public TourAllFragment() {
         // Required empty public constructor
     }
@@ -55,55 +57,75 @@ public class TourAllFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tour_all, container, false);
+        View view = inflater.inflate(R.layout.fragment_tour_all, container, false);
+        auth = FirebaseAuth.getInstance();
+
+        mapping(view);
+        initRecyclerView();
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    private void mapping(View view) {
+        rcvTourMe = view.findViewById(R.id.rcvTourAll);
+        //tvCheck = view.findViewById(R.id.tv_check);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+    private void initRecyclerView() {
+      //  SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+      //  id1 = sharedPref.getString(Const.KEY_ID, "");
+
+        tourMeAdapter = new TourMeAdapter(list, getActivity());
+        initData();
+
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        manager.setOrientation(RecyclerView.VERTICAL);
+        rcvTourMe.setLayoutManager(manager);
+        rcvTourMe.setAdapter(tourMeAdapter);
+        tourMeAdapter.setClickDetailTourGroup(new TourMeAdapter.clickDetailTourGroup() {
+            @Override
+            public void onClickDetail(int position, TourMe response) {
+                Toast.makeText(getContext(), "ôjojjsnadf", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onLongClick(int adapterPosition, TourMe response) {
+
+            }
+        });
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    private void initData() {
+        list = new ArrayList<>();
+        reference = database.getReference(Const.KEY_TOUR);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                list.clear();
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    TourMe response = dataSnapshot1.getValue(TourMe.class);
+                    list.add(response);
+                }
+//                if (list.size() == 0) {
+//                    tvCheck.setVisibility(View.VISIBLE);
+//                } else {
+//                    tvCheck.setVisibility(View.GONE);
+//                }
+                tourMeAdapter.setData(list);
+                tourMeAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

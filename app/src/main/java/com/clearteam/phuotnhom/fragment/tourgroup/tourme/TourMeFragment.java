@@ -1,9 +1,10 @@
-package com.clearteam.phuotnhom.fragment.tourme;
+package com.clearteam.phuotnhom.fragment.tourgroup.tourme;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,8 +28,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.clearteam.phuotnhom.R;
-import com.clearteam.phuotnhom.fragment.tourme.adapter.AdapterTourMe;
-import com.clearteam.phuotnhom.fragment.tourme.model.TourMe;
+import com.clearteam.phuotnhom.fragment.tourgroup.tourme.adapter.TourMeAdapter;
+import com.clearteam.phuotnhom.fragment.tourgroup.tourme.model.TourMe;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -49,18 +50,19 @@ import java.util.List;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
-    private static TourMeFragment INSTANCE;
+
     private static DatePickerDialog.OnDateSetListener onDateSetListener1;
-    private RecyclerView rcvTourGroup;
+    private RecyclerView rcvTourMe;
+    private FirebaseAuth auth;
     private DatabaseReference reference;
     EditText edName, edAddressStart, edAddressEnd, edDateStart;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     private String id, time, id1;
-    private FirebaseAuth auth;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private List<TourMe> list;
-    private AdapterTourMe adapterTourMe;
+    private TourMeAdapter tourMeAdapter;
     private TextView tvCheck;
+    private static TourMeFragment INSTANCE;
 
     public static TourMeFragment getInstance() {
         if (INSTANCE == null) {
@@ -82,6 +84,10 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
         View view = inflater.inflate(R.layout.fragment_tour_me, container, false);
         onDateSetListener1 = this;
         auth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = auth.getCurrentUser();
+        assert firebaseUser != null;
+
+        id = firebaseUser.getUid();
 
         mapping(view);
         initRecyclerView();
@@ -89,23 +95,22 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
     }
 
     private void mapping(View view) {
-        rcvTourGroup = view.findViewById(R.id.rcv_tour_group);
+        rcvTourMe = view.findViewById(R.id.rcv_tour_me);
         tvCheck = view.findViewById(R.id.tv_check);
     }
 
     private void initRecyclerView() {
-
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         id1 = sharedPref.getString(Const.KEY_ID, "");
 
-        adapterTourMe = new AdapterTourMe(list, getActivity());
+        tourMeAdapter = new TourMeAdapter(list, getActivity());
         initData();
 
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(RecyclerView.VERTICAL);
-        rcvTourGroup.setLayoutManager(manager);
-        rcvTourGroup.setAdapter(adapterTourMe);
-        adapterTourMe.setClickDetailTourGroup(new AdapterTourMe.clickDetailTourGroup() {
+        rcvTourMe.setLayoutManager(manager);
+        rcvTourMe.setAdapter(tourMeAdapter);
+        tourMeAdapter.setClickDetailTourGroup(new TourMeAdapter.clickDetailTourGroup() {
             @Override
             public void onClickDetail(int position, TourMe response) {
                 Toast.makeText(getContext(), "ôjojjsnadf", Toast.LENGTH_SHORT).show();
@@ -114,16 +119,32 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
 
             @Override
             public void onLongClick(int adapterPosition, TourMe response) {
-                reference.child(response.getId()).removeValue();
-                adapterTourMe.notifyDataSetChanged();
-                Toast.makeText(getActivity(), "Xóa thành công", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Xóa nhóm");
+                builder.setMessage("Bạn có muốn xóa không ?");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        reference.child(response.getId()).removeValue();
+                        tourMeAdapter.notifyDataSetChanged();
+                        Toast.makeText(getActivity(), "Xóa thành công", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.show();
+
             }
 
         });
     }
 
     private void initData() {
-        reference = database.getReference().child("Groups").child(id1);
+        reference = database.getReference(Const.KEY_TOUR).child(id);
         list = new ArrayList<>();
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -138,9 +159,8 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
                 } else {
                     tvCheck.setVisibility(View.GONE);
                 }
-                adapterTourMe.setData(list);
-                adapterTourMe.notifyDataSetChanged();
-
+                tourMeAdapter.setData(list);
+                tourMeAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -234,14 +254,11 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
         tourMe.setAddressEnd(addressEnd);
         tourMe.setDate(dateStart);
         reference = FirebaseDatabase.getInstance().getReference();
-        FirebaseUser firebaseUser = auth.getCurrentUser();
-        assert firebaseUser != null;
 
-        id = firebaseUser.getUid();
-        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(Const.KEY_ID, id);
-        editor.commit();
+//        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPref.edit();
+//        editor.putString(Const.KEY_ID, id);
+//        editor.commit();
 
         reference.child("Groups").child(id).child(time).setValue(tourMe).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

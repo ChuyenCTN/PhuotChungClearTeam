@@ -14,19 +14,19 @@ import com.clearteam.phuotnhom.fragment.tourgroup.tourme.model.TourMe;
 
 import java.util.List;
 
-public class AdapterTourMe extends RecyclerView.Adapter<AdapterTourMe.ViewHolder> {
+public class TourMeAdapter extends RecyclerView.Adapter<TourMeAdapter.ViewHolder> {
 
     private List<TourMe> mGroupResponseList;
     private Context mContext;
 
     private clickDetailTourGroup clickDetailTourGroup;
 
-    public AdapterTourMe(List<TourMe> mGroupResponseList, Context mContext) {
+    public TourMeAdapter(List<TourMe> mGroupResponseList, Context mContext) {
         this.mGroupResponseList = mGroupResponseList;
         this.mContext = mContext;
     }
 
-    public void setClickDetailTourGroup(AdapterTourMe.clickDetailTourGroup clickDetailTourGroup) {
+    public void setClickDetailTourGroup(TourMeAdapter.clickDetailTourGroup clickDetailTourGroup) {
         this.clickDetailTourGroup = clickDetailTourGroup;
     }
 

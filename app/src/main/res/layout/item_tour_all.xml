@@ -84,6 +84,16 @@
 					android:textStyle="bold" />
 
 			</LinearLayout>
+			<TextView
+				android:id="@+id/tv_add"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Tham gia"
+				android:padding="@dimen/dp_3"
+				android:layout_marginTop="@dimen/dp_15"
+				android:textSize="@dimen/size_16"
+				android:textColor="#FFFFFF"
+				android:background="#0BB468"/>
 		</LinearLayout>
 	</LinearLayout>
 

@@ -11,9 +11,11 @@ import com.clearteam.phuotnhom.ui.changepass.ChangepassActivity;
 
 public class Const {
     public static final int SPLASH_TIME = 800;
+    public static  String KEY_TOUR = "Groups";
     public static final String KEY_ADDRESS = "address" ;
     public static final String KEY_NUMBER = "number";
     public static  String KEY_IS_PRER = "login";
+    public static  String KEY_ID = "id";
     public static  String KEY_EMAIL = "email";
     public static  String KEY_PASSWORD = "password";
     public static  String KEY_NAME = "name";
