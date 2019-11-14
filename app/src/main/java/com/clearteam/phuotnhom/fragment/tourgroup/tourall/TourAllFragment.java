@@ -42,12 +42,12 @@ public class TourAllFragment extends Fragment {
     private FirebaseAuth auth;
     private DatabaseReference reference;
     private static TourAllFragment INSTANCE;
+    private  View view;
 
     public static TourAllFragment getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new TourAllFragment();
         }
-        return INSTANCE;
+        return  new TourAllFragment();
     }
 
     public TourAllFragment() {
@@ -63,11 +63,13 @@ public class TourAllFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tour_all, container, false);
-        auth = FirebaseAuth.getInstance();
+        if (view == null){
+            view = inflater.inflate(R.layout.fragment_tour_all, container, false);
+            auth = FirebaseAuth.getInstance();
 
-        mapping(view);
-        initRecyclerView();
+            mapping(view);
+            initRecyclerView();
+        }
         return view;
     }
 

@@ -63,12 +63,12 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
     private TourMeAdapter tourMeAdapter;
     private TextView tvCheck;
     private static TourMeFragment INSTANCE;
+    private  View view;
 
     public static TourMeFragment getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new TourMeFragment();
         }
-        return INSTANCE;
+        return new TourMeFragment();
     }
 
 
@@ -81,16 +81,18 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tour_me, container, false);
-        onDateSetListener1 = this;
-        auth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = auth.getCurrentUser();
-        assert firebaseUser != null;
+        if (view == null){
+            view = inflater.inflate(R.layout.fragment_tour_me, container, false);
+            onDateSetListener1 = this;
+            auth = FirebaseAuth.getInstance();
+            FirebaseUser firebaseUser = auth.getCurrentUser();
+            assert firebaseUser != null;
 
-        id = firebaseUser.getUid();
+            id = firebaseUser.getUid();
 
-        mapping(view);
-        initRecyclerView();
+            mapping(view);
+            initRecyclerView();
+        }
         return view;
     }
 

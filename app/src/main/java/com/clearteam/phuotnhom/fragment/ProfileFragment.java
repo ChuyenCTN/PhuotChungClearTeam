@@ -57,9 +57,8 @@ public class ProfileFragment extends Fragment {
 
     public static ProfileFragment getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new ProfileFragment();
         }
-        return INSTANCE;
+        return new ProfileFragment();
     }
 
 
