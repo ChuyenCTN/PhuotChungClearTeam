@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.adapter.TourMeAdapter;
 import com.clearteam.phuotnhom.model.TourMe;
+import com.clearteam.phuotnhom.ui.detailtourgroup.TourGroupDetailActivity;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -122,7 +123,14 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
                 String addressEnd = list.get(position).getAddressEnd();
                 String date = list.get(position).getDate();
 
-                Intent intent = new Intent(getActivity(),)
+                Intent intent = new Intent(getActivity(), TourGroupDetailActivity.class);
+                intent.putExtra(Const.KEY_NAME_GROUP,name);
+                intent.putExtra(Const.KEY_IMAGE_GROUP,img);
+                intent.putExtra(Const.KEY_ADDRESS_START_GROUP,addressStart);
+                intent.putExtra(Const.KEY_ADDRESS_END_GROUP,addressEnd);
+                intent.putExtra(Const.KEY_DATE_GROUP,date);
+
+                startActivity(intent);
             }
 
             @Override

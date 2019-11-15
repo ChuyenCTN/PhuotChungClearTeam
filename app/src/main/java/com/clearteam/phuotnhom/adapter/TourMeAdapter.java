@@ -94,8 +94,6 @@ public class TourMeAdapter extends RecyclerView.Adapter<TourMeAdapter.ViewHolder
                 }
             });
         }
-
-
     }
 
     public void setData(List<TourMe> data) {

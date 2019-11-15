@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+	<item
+		android:id="@+id/add_user"
+		android:orderInCategory="100"
+		android:title="Thêm thành viên"
+		app:showAsAction="never" />
+	<item
+		android:id="@+id/delete_group"
+		android:orderInCategory="100"
+		android:title="Xóa nhóm"
+		app:showAsAction="never" />
+	<item
+		android:id="@+id/edit_group"
+		android:orderInCategory="100"
+		android:title="Thay đổi thông tin nhóm"
+		app:showAsAction="never" />
+</menu>

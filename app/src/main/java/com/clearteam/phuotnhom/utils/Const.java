@@ -24,6 +24,11 @@ public class Const {
     public static final int IMAGE_REQUSET = 1;
     public static String IS_LOGIN_FACEBOOK = "is_loginfb";
     public static String IS_LOGIN_TK = "is_logintk";
+    public static  String KEY_NAME_GROUP = "name_group";
+    public static  String KEY_IMAGE_GROUP = "image_group";
+    public static  String KEY_ADDRESS_START_GROUP = "address_start_group";
+    public static  String KEY_ADDRESS_END_GROUP = "address_end_group";
+    public static  String KEY_DATE_GROUP = "date_group";
 
 
 }
