@@ -1,10 +1,6 @@
-package com.clearteam.phuotnhom.fragment.tourgroup.tourall;
+package com.clearteam.phuotnhom.fragment;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,14 +12,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.clearteam.phuotnhom.R;
-import com.clearteam.phuotnhom.fragment.tourgroup.tourme.TourMeFragment;
-import com.clearteam.phuotnhom.fragment.tourgroup.tourme.adapter.TourMeAdapter;
-import com.clearteam.phuotnhom.fragment.tourgroup.tourme.model.TourMe;
+import com.clearteam.phuotnhom.adapter.TourAllAdapter;
+import com.clearteam.phuotnhom.model.TourMe;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,19 +32,22 @@ import java.util.List;
 
 
 public class TourAllFragment extends Fragment {
-    private RecyclerView rcvTourMe;
+    private RecyclerView rcvTourAll;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private List<TourMe> list;
-    private TourMeAdapter tourMeAdapter;
+    private TourAllAdapter mTourAllAdapter;
     private FirebaseAuth auth;
     private DatabaseReference reference;
     private static TourAllFragment INSTANCE;
-    private  View view;
+    private View view;
+    private String userId;
+    private TourMe mTourMe;
 
     public static TourAllFragment getInstance() {
         if (INSTANCE == null) {
+            INSTANCE = new TourAllFragment();
         }
-        return  new TourAllFragment();
+        return INSTANCE;
     }
 
     public TourAllFragment() {
@@ -63,64 +63,69 @@ public class TourAllFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if (view == null){
-            view = inflater.inflate(R.layout.fragment_tour_all, container, false);
-            auth = FirebaseAuth.getInstance();
 
-            mapping(view);
-            initRecyclerView();
-        }
+        view = inflater.inflate(R.layout.fragment_tour_all, container, false);
+        auth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = auth.getCurrentUser();
+        assert firebaseUser != null;
+        userId = firebaseUser.getUid();
+        mapping(view);
+        initRecyclerView();
         return view;
     }
 
     private void mapping(View view) {
-        rcvTourMe = view.findViewById(R.id.rcvTourAll);
+        rcvTourAll = view.findViewById(R.id.rcvTourAll);
+        TextView tvadd = view.findViewById(R.id.tv_add);
         //tvCheck = view.findViewById(R.id.tv_check);
     }
 
     private void initRecyclerView() {
-      //  SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-      //  id1 = sharedPref.getString(Const.KEY_ID, "");
+        //  SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        //  id1 = sharedPref.getString(Const.KEY_ID, "");
 
-        tourMeAdapter = new TourMeAdapter(list, getActivity());
-        initData();
-
+        mTourAllAdapter = new TourAllAdapter(list, getActivity());
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(RecyclerView.VERTICAL);
-        rcvTourMe.setLayoutManager(manager);
-        rcvTourMe.setAdapter(tourMeAdapter);
-        tourMeAdapter.setClickDetailTourGroup(new TourMeAdapter.clickDetailTourGroup() {
+        rcvTourAll.setLayoutManager(manager);
+        rcvTourAll.setAdapter(mTourAllAdapter);
+        initData();
+        mTourAllAdapter.setClickDetailTourGroup(new TourAllAdapter.clickDetailTourGroup() {
             @Override
             public void onClickDetail(int position, TourMe response) {
-                Toast.makeText(getContext(), "ôjojjsnadf", Toast.LENGTH_SHORT).show();
+                if (response.getTvAdd().equals("Nhóm của bạn")){
 
-            }
-
-            @Override
-            public void onLongClick(int adapterPosition, TourMe response) {
-
+                    Toast.makeText(getActivity(), "nhóm của bạn", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getActivity(), "Đợi phê duyệt", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
     private void initData() {
         list = new ArrayList<>();
-        reference = database.getReference(Const.KEY_TOUR);
+        reference = database.getReference().child(Const.KEY_TOUR);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 list.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    TourMe response = dataSnapshot1.getValue(TourMe.class);
-                    list.add(response);
+                    for (DataSnapshot dta1 : dataSnapshot1.getChildren()) {
+                        mTourMe = dta1.getValue(TourMe.class);
+                        list.add(mTourMe);
+                        if (dataSnapshot1.getKey().equals(userId)) {
+                            mTourMe.setTvAdd("Nhóm của bạn");
+                            mTourMe.setMyTour(false);
+                        }else {
+                            mTourMe.setTvAdd("Đăng ký tham gia");
+                            mTourMe.setMyTour(true);
+                        }
+                    }
                 }
-//                if (list.size() == 0) {
-//                    tvCheck.setVisibility(View.VISIBLE);
-//                } else {
-//                    tvCheck.setVisibility(View.GONE);
-//                }
-                tourMeAdapter.setData(list);
-                tourMeAdapter.notifyDataSetChanged();
+
+                mTourAllAdapter.setData(list);
+                mTourAllAdapter.notifyDataSetChanged();
             }
 
             @Override

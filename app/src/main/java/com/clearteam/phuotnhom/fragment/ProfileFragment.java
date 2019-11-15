@@ -85,9 +85,6 @@ public class ProfileFragment extends Fragment {
 
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
-//        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-//         boolean isLogin = mSharedPreferences.getBoolean(Const.IS_LOGIN_TK, false);
-//        if (isLogin == true) {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -104,6 +101,7 @@ public class ProfileFragment extends Fragment {
 //                    }else{
                         tvAddress.setText(user.getAddress());
                         tvNumberPhone.setText(user.getNumberPhone());
+
 //                    }
                     if (user.getImageURL().equals("default")) {
                         imgAvata.setImageResource(R.drawable.avatar);

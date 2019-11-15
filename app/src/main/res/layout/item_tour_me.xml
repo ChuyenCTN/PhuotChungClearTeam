@@ -21,6 +21,7 @@
 		android:padding="@dimen/dp_5">
 
 		<ImageView
+			android:id="@+id/imgAvataGroup"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:src="@drawable/ic_launcher_background" />

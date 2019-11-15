@@ -1,4 +1,4 @@
-package com.clearteam.phuotnhom.fragment.tourgroup.tourme.adapter;
+package com.clearteam.phuotnhom.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,23 +10,26 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.clearteam.phuotnhom.R;
-import com.clearteam.phuotnhom.fragment.tourgroup.tourme.model.TourMe;
+import com.clearteam.phuotnhom.model.TourMe;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
-public class TourMeAdapter extends RecyclerView.Adapter<TourMeAdapter.ViewHolder> {
+public class TourAllAdapter extends RecyclerView.Adapter<TourAllAdapter.ViewHolder> {
 
     private List<TourMe> mGroupResponseList;
     private Context mContext;
 
+
     private clickDetailTourGroup clickDetailTourGroup;
 
-    public TourMeAdapter(List<TourMe> mGroupResponseList, Context mContext) {
+    public TourAllAdapter(List<TourMe> mGroupResponseList, Context mContext) {
         this.mGroupResponseList = mGroupResponseList;
         this.mContext = mContext;
     }
 
-    public void setClickDetailTourGroup(TourMeAdapter.clickDetailTourGroup clickDetailTourGroup) {
+    public void setClickDetailTourGroup(TourAllAdapter.clickDetailTourGroup clickDetailTourGroup) {
         this.clickDetailTourGroup = clickDetailTourGroup;
     }
 
@@ -34,7 +37,7 @@ public class TourMeAdapter extends RecyclerView.Adapter<TourMeAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tour_me, parent, false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tour_all, parent, false));
     }
 
     @Override
@@ -54,6 +57,7 @@ public class TourMeAdapter extends RecyclerView.Adapter<TourMeAdapter.ViewHolder
         private TextView tvAddressStart;
         private TextView tvAddressEnd;
         private TextView tvDateStart;
+        private TextView tvAdd;
 //        private ImageView imgMoreItemTourGroup;
 
         public ViewHolder(@NonNull View itemView) {
@@ -62,7 +66,7 @@ public class TourMeAdapter extends RecyclerView.Adapter<TourMeAdapter.ViewHolder
             tvAddressStart = itemView.findViewById(R.id.tv_address_start);
             tvAddressEnd = itemView.findViewById(R.id.tv_address_end);
             tvDateStart = itemView.findViewById(R.id.tv_date);
-
+            tvAdd = itemView.findViewById(R.id.tv_add);
         }
 
         void bindData(final TourMe response) {
@@ -70,24 +74,20 @@ public class TourMeAdapter extends RecyclerView.Adapter<TourMeAdapter.ViewHolder
             tvAddressStart.setText(response.getAddressStart());
             tvAddressEnd.setText(response.getAddressEnd());
             tvDateStart.setText(response.getDate());
+            tvAdd.setText(response.getTvAdd());
+            if (response.isMyTour()){
+                tvAdd.setBackgroundColor(mContext.getResources().getColor(R.color.bg_tab));
+               // tvAdd.setBackgroundColor(R.color.bg_tab);
+            }
 
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            tvAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     clickDetailTourGroup.onClickDetail(getAdapterPosition(), response);
                 }
             });
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    clickDetailTourGroup.onLongClick(getAdapterPosition(), response);
-                    return true;
-                }
-            });
         }
-
-
     }
 
     public void setData(List<TourMe> data) {
@@ -102,8 +102,6 @@ public class TourMeAdapter extends RecyclerView.Adapter<TourMeAdapter.ViewHolder
 
     public interface clickDetailTourGroup {
         void onClickDetail(int position, TourMe response);
-
-        void onLongClick(int adapterPosition, TourMe response);
     }
 
 

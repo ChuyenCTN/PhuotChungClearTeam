@@ -1,12 +1,14 @@
-package com.clearteam.phuotnhom.fragment.tourgroup.tourme;
+package com.clearteam.phuotnhom.fragment;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,8 +30,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.clearteam.phuotnhom.R;
-import com.clearteam.phuotnhom.fragment.tourgroup.tourme.adapter.TourMeAdapter;
-import com.clearteam.phuotnhom.fragment.tourgroup.tourme.model.TourMe;
+import com.clearteam.phuotnhom.adapter.TourMeAdapter;
+import com.clearteam.phuotnhom.model.TourMe;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -56,18 +58,17 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
     private FirebaseAuth auth;
     private DatabaseReference reference;
     EditText edName, edAddressStart, edAddressEnd, edDateStart;
+
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     private String id, time, id1;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private List<TourMe> list;
+    private  TourMe mTourMe;
     private TourMeAdapter tourMeAdapter;
     private TextView tvCheck;
-    private static TourMeFragment INSTANCE;
     private  View view;
 
     public static TourMeFragment getInstance() {
-        if (INSTANCE == null) {
-        }
         return new TourMeFragment();
     }
 
@@ -114,9 +115,14 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
         rcvTourMe.setAdapter(tourMeAdapter);
         tourMeAdapter.setClickDetailTourGroup(new TourMeAdapter.clickDetailTourGroup() {
             @Override
-            public void onClickDetail(int position, TourMe response) {
-                Toast.makeText(getContext(), "ôjojjsnadf", Toast.LENGTH_SHORT).show();
+            public void onClickDetail(int position, TourMe nameGroup) {
+                String name = list.get(position).getName();
+                String img = list.get(position).getAvataGroup();
+                String addressStart = list.get(position).getAddressStart();
+                String addressEnd = list.get(position).getAddressEnd();
+                String date = list.get(position).getDate();
 
+                Intent intent = new Intent(getActivity(),)
             }
 
             @Override
@@ -139,7 +145,6 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
                     }
                 });
                 builder.show();
-
             }
 
         });
@@ -153,8 +158,8 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 list.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    TourMe response = dataSnapshot1.getValue(TourMe.class);
-                    list.add(response);
+                    mTourMe = dataSnapshot1.getValue(TourMe.class);
+                    list.add(mTourMe);
                 }
                 if (list.size()==0){
                     tvCheck.setVisibility(View.VISIBLE);
@@ -196,7 +201,6 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
         final View dialogView = layoutInflater.inflate(R.layout.item_dialog_add_tour_me, null);
         builder.setView(dialogView);
 
-        // khoi tap view
         edName = dialogView.findViewById(R.id.edNameGroup);
         edAddressStart = dialogView.findViewById(R.id.edStart);
         edAddressEnd = dialogView.findViewById(R.id.edEnd);
@@ -225,6 +229,7 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
                 String addressStart = edAddressStart.getText().toString().trim();
                 String addressEnd = edAddressEnd.getText().toString().trim();
                 String dateStart = edDateStart.getText().toString().trim();
+
                 Calendar c = Calendar.getInstance();
                 String year = String.valueOf(c.get(Calendar.YEAR));
                 String month = String.valueOf(c.get(Calendar.MONTH + 1));
@@ -301,6 +306,5 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
                     onDateSetListener1, year, month, day);
         }
     }
-
 
 }

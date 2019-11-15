@@ -59,8 +59,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
     public static MapFragment getInstance() {
         if (INSTANCE == null) {
+            INSTANCE = new MapFragment();
         }
-        return new MapFragment();
+        return INSTANCE;
     }
 
     @Override

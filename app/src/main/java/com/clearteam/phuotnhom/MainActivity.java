@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import com.clearteam.phuotnhom.fragment.IntroductFragment;
 import com.clearteam.phuotnhom.fragment.MapFragment;
 import com.clearteam.phuotnhom.fragment.ProfileFragment;
-import com.clearteam.phuotnhom.fragment.tourgroup.TourGroupFragment;
+import com.clearteam.phuotnhom.fragment.TourGroupFragment;
 import com.clearteam.phuotnhom.ui.login.LoginActivity;
 import com.facebook.login.LoginManager;
 
@@ -23,7 +23,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.clearteam.phuotnhom.fragment.tourgroup.tourme.TourMeFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FrameLayout frameLayout, fameToolBar;
 
     private FragmentManager mFragmentManager;
-
+    private TourGroupFragment mtourGroupFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +104,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_group:
                 setTitle("Nhóm tour");
-                replaceFragment(TourGroupFragment.getInstance(), mFragmentManager);
+                if (mtourGroupFragment == null){
+                    mtourGroupFragment = new TourGroupFragment();
+                }
+                replaceFragment(mtourGroupFragment, mFragmentManager);
                 break;
             case R.id.nav_schedule:
                 break;
