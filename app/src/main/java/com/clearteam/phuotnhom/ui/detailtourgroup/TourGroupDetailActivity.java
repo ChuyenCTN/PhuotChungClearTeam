@@ -31,6 +31,7 @@ import com.bumptech.glide.Glide;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.fragment.TourMeFragment;
 import com.clearteam.phuotnhom.model.TourMe;
+import com.clearteam.phuotnhom.ui.addmember.AddMemberActivity;
 import com.clearteam.phuotnhom.ui.infomation.EditInformationActivity;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.firebase.auth.FirebaseAuth;
@@ -127,7 +128,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_user:
-                Toast.makeText(this, "adđ", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(TourGroupDetailActivity.this, AddMemberActivity.class));
                 break;
             case R.id.edit_group:
                 updateGroup();

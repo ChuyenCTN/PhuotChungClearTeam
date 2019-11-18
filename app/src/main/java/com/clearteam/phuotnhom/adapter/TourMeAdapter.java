@@ -64,7 +64,7 @@ public class TourMeAdapter extends RecyclerView.Adapter<TourMeAdapter.ViewHolder
             tvAddressStart = itemView.findViewById(R.id.tv_address_start);
             tvAddressEnd = itemView.findViewById(R.id.tv_address_end);
             tvDateStart = itemView.findViewById(R.id.tv_date);
-            imgAvataGroup = itemView.findViewById(R.id.imgAvataGroup);
+           // imgAvataGroup = itemView.findViewById(R.id.imgAvataGroup);
 
         }
 
@@ -73,12 +73,12 @@ public class TourMeAdapter extends RecyclerView.Adapter<TourMeAdapter.ViewHolder
             tvAddressStart.setText(response.getAddressStart());
             tvAddressEnd.setText(response.getAddressEnd());
             tvDateStart.setText(response.getDate());
-            String url = response.getAvataGroup();
-            Glide.with(mContext)
-                    .load(url)
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .error(R.mipmap.ic_launcher)
-                    .into(imgAvataGroup);
+          //  String url = response.getAvataGroup();
+//            Glide.with(mContext)
+//                    .load(url)
+//                    .placeholder(R.drawable.ic_launcher_background)
+//                    .error(R.mipmap.ic_launcher)
+//                    .into(imgAvataGroup);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

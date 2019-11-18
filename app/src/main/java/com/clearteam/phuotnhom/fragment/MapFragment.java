@@ -91,7 +91,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     public void getAutocompletePlace() {
 
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), "AIzaSyB9Mwrx_epCW0QxkxQHwrnaute8g8SZRwY");
+            Places.initialize(getApplicationContext(), "AIzaSyAtpPlLN4Y-NrUsrg48F9_oAJnbL1B0tF4");
         }
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 getChildFragmentManager().findFragmentById(R.id.autocomplate);
