@@ -54,23 +54,28 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
-    private static DatePickerDialog.OnDateSetListener onDateSetListener1;
+
     private RecyclerView rcvTourMe;
     private FirebaseAuth auth;
     private DatabaseReference reference;
     EditText edName, edAddressStart, edAddressEnd, edDateStart;
-
+    private static DatePickerDialog.OnDateSetListener onDateSetListener1;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-    private String id, time, id1;
+    private String id, time;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private List<TourMe> list;
     private  TourMe mTourMe;
     private TourMeAdapter tourMeAdapter;
     private TextView tvCheck;
     private  View view;
+    private static TourMeFragment INSTANCE;
+
 
     public static TourMeFragment getInstance() {
-        return new TourMeFragment();
+        if (INSTANCE == null){
+            INSTANCE = new TourMeFragment();
+        }
+        return INSTANCE;
     }
 
 
@@ -86,12 +91,11 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
         if (view == null){
             view = inflater.inflate(R.layout.fragment_tour_me, container, false);
             onDateSetListener1 = this;
+
             auth = FirebaseAuth.getInstance();
             FirebaseUser firebaseUser = auth.getCurrentUser();
             assert firebaseUser != null;
-
             id = firebaseUser.getUid();
-
             mapping(view);
             initRecyclerView();
         }
@@ -104,26 +108,26 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
     }
 
     private void initRecyclerView() {
-        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        id1 = sharedPref.getString(Const.KEY_ID, "");
-
         tourMeAdapter = new TourMeAdapter(list, getActivity());
         initData();
 
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(RecyclerView.VERTICAL);
         rcvTourMe.setLayoutManager(manager);
+        rcvTourMe.setHasFixedSize(true);
         rcvTourMe.setAdapter(tourMeAdapter);
         tourMeAdapter.setClickDetailTourGroup(new TourMeAdapter.clickDetailTourGroup() {
             @Override
-            public void onClickDetail(int position, TourMe nameGroup) {
+            public void onClickDetail(int position, TourMe tourMe) {
                 String name = list.get(position).getName();
+                String id = list.get(position).getId();
                 String img = list.get(position).getAvataGroup();
                 String addressStart = list.get(position).getAddressStart();
                 String addressEnd = list.get(position).getAddressEnd();
                 String date = list.get(position).getDate();
 
                 Intent intent = new Intent(getActivity(), TourGroupDetailActivity.class);
+                intent.putExtra(Const.KEY_ID,id);
                 intent.putExtra(Const.KEY_NAME_GROUP,name);
                 intent.putExtra(Const.KEY_IMAGE_GROUP,img);
                 intent.putExtra(Const.KEY_ADDRESS_START_GROUP,addressStart);
@@ -194,6 +198,7 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
             case R.id.add_group:
                 showDialogCreat();
                 break;
@@ -279,13 +284,10 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-
                     Toast.makeText(getActivity(), "Thêm thành công", Toast.LENGTH_SHORT).show();
-
                 }
             }
         });
-
     }
 
     @Override
