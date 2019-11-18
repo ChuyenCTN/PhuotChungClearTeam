@@ -50,7 +50,8 @@ public class TourGroupFragment extends Fragment {
             adapter = new TourGroupAdapter(getActivity().getSupportFragmentManager());
             mViewPager.setAdapter(adapter);
             tabLayout.setupWithViewPager(mViewPager);
-            mViewPager.setCurrentItem(0);
+
+           // mViewPager.setCurrentItem(0);
 
         }
         return view;

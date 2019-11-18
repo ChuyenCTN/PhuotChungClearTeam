@@ -16,8 +16,9 @@ public class IntroductFragment extends Fragment {
     private static IntroductFragment INSTANCE;
     public static IntroductFragment getInstance() {
         if (INSTANCE == null) {
+            INSTANCE = new IntroductFragment();
         }
-        return new IntroductFragment();
+        return INSTANCE;
     }
 
     @Override

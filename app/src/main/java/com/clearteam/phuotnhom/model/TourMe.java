@@ -11,8 +11,14 @@ public class TourMe {
     private boolean isMyTour;
     private String avataGroup;
 
-
     public TourMe() {
+    }
+
+    public TourMe(String name, String addressStart, String addressEnd, String date) {
+        this.name = name;
+        this.addressStart = addressStart;
+        this.addressEnd = addressEnd;
+        this.date = date;
     }
 
     public TourMe(String id, String name, String addressStart, String addressEnd, String date, String tvAdd, boolean isMyTour,String avataGroup) {

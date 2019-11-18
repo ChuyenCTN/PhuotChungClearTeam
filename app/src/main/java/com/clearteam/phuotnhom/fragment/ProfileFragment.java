@@ -1,6 +1,5 @@
 package com.clearteam.phuotnhom.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,7 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.clearteam.phuotnhom.MainActivity;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.model.User;
 import com.clearteam.phuotnhom.ui.changepass.ChangepassActivity;
@@ -57,8 +54,9 @@ public class ProfileFragment extends Fragment {
 
     public static ProfileFragment getInstance() {
         if (INSTANCE == null) {
+            INSTANCE = new ProfileFragment();
         }
-        return new ProfileFragment();
+        return INSTANCE;
     }
 
 
@@ -81,7 +79,6 @@ public class ProfileFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
 
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
@@ -120,7 +117,6 @@ public class ProfileFragment extends Fragment {
                     intent.putExtra(Const.KEY_ADDRESS, address);
                     intent.putExtra(Const.KEY_NUMBER, number);
                     intent.putExtra(Const.KEY_IMAGER, img);
-
 
                 }
             }
@@ -170,7 +166,6 @@ public class ProfileFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.edit_user:
                 startActivity(intent);
-//                startActivity(new Intent(getActivity(), EditInformationActivity.class));
                 break;
             case R.id.change_pass:
                 startActivity(new Intent(getActivity(), ChangepassActivity.class));
