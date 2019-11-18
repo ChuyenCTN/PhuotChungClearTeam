@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -19,9 +18,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.clearteam.phuotnhom.fragment.IntroductFragment;
 import com.clearteam.phuotnhom.fragment.MapFragment;
 import com.clearteam.phuotnhom.fragment.ProfileFragment;
-import com.clearteam.phuotnhom.ui.infomation.EditInformationActivity;
+import com.clearteam.phuotnhom.fragment.TourGroupFragment;
 import com.clearteam.phuotnhom.ui.login.LoginActivity;
-import com.clearteam.phuotnhom.ui.tourgroup.TourGroupFragment;
 import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FrameLayout frameLayout, fameToolBar;
 
     private FragmentManager mFragmentManager;
+    private TourGroupFragment mtourGroupFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -79,17 +79,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        if (id == R.id.action_settings) {
 //
 //            return true;
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+////        int id = item.getItemId();
+////        if (id == R.id.action_settings) {
+////
+////            return true;
+////        }
+//        switch (item.getItemId()) {
+//            case R.id.edit_user:
+//                startActivity(new Intent(MainActivity.this, EditInformationActivity.class));
+//                break;
+//            case R.id.change_pass:
+//                break;
 //        }
-        switch (item.getItemId()) {
-            case R.id.edit_user:
-                startActivity(new Intent(MainActivity.this, EditInformationActivity.class));
-                break;
-            case R.id.change_pass:
-                break;
-        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
+
 
         return super.onOptionsItemSelected(item);
     }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -101,9 +120,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 replaceFragment(MapFragment.getInstance(), mFragmentManager);
                 break;
             case R.id.nav_group:
-                frameLayout.setVisibility(View.VISIBLE);
-                replaceFragment(TourGroupFragment.getInstance(), mFragmentManager);
-                setTitle(getResources().getString(R.string.txt_title_tour_group));
+                setTitle("Nhóm tour");
+                if (mtourGroupFragment == null) {
+                    mtourGroupFragment = new TourGroupFragment();
+                }
+                replaceFragment(mtourGroupFragment, mFragmentManager);
                 break;
             case R.id.nav_schedule:
                 break;
