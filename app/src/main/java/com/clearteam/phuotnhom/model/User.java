@@ -3,22 +3,36 @@ package com.clearteam.phuotnhom.model;
 public class User {
     private String id;
     private String username;
-    private String imageURL;
-    private String status;
-    private String search;
     private String email;
+    private String address;
+    private String numberPhone;
+    private String status;
+    private String imageURL;
+    private String search;
+
 
 
     public User() {
     }
 
-    public User(String id, String username, String imageURL, String status, String search, String email) {
-        this.id = id;
+    public User(String username, String address, String numberPhone, String status, String imageURL, String search, String email) {
+
         this.username = username;
-        this.imageURL = imageURL;
+        this.address = address;
+        this.numberPhone = numberPhone;
         this.status = status;
+        this.imageURL = imageURL;
         this.search = search;
         this.email = email;
+    }
+
+    public User(String mName, String mEmail, String mAddress, String mNumberPhone, String toString, String search) {
+        this.username = mName;
+        this.address = mAddress;
+        this.numberPhone = mNumberPhone;
+        this.imageURL = toString;
+        this.search = search;
+        this.email = mEmail;
     }
 
     public String getId() {
@@ -37,12 +51,20 @@ public class User {
         this.username = username;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public String getAddress() {
+        return address;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getNumberPhone() {
+        return numberPhone;
+    }
+
+    public void setNumberPhone(String numberPhone) {
+        this.numberPhone = numberPhone;
     }
 
     public String getStatus() {
@@ -51,6 +73,14 @@ public class User {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
     public String getSearch() {

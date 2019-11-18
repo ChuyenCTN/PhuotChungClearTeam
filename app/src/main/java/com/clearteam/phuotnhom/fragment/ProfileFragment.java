@@ -52,9 +52,10 @@ public class ProfileFragment extends Fragment {
     private TextView tvAddress;
     private ImageView imgAvata;
     private SharedPreferences mSharedPreferences;
+    public Intent intent;
 
 
-      public static ProfileFragment getInstance() {
+    public static ProfileFragment getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new ProfileFragment();
         }
@@ -66,6 +67,7 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
     }
 
     @Override
@@ -87,27 +89,50 @@ public class ProfileFragment extends Fragment {
 //        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 //         boolean isLogin = mSharedPreferences.getBoolean(Const.IS_LOGIN_TK, false);
 //        if (isLogin == true) {
-            reference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (isAdded()) {
-                        User user = dataSnapshot.getValue(User.class);
-
-                        tvName.setText(user.getUsername());
-                        tvEmail.setText(user.getEmail());
-                        if (user.getImageURL().equals("default")) {
-                            imgAvata.setImageResource(R.drawable.avatar);
-                        } else {
-                            Glide.with(getContext()).load(user.getImageURL()).into(imgAvata);
-                        }
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (isAdded()) {
+                    User user = dataSnapshot.getValue(User.class);
+                    intent = new Intent(getActivity(), EditInformationActivity.class);
+                    tvName.setText(user.getUsername());
+                    tvEmail.setText(user.getEmail());
+//                    tvAddress.setText(user.getAddress());
+//                    tvNumberPhone.setText(user.getNumberPhone());
+//                    if (user.getAddress().equals("chưa có thông tin")||user.getNumberPhone().equals("chưa có thông tin")){
+//                        tvAddress.setText("");
+//                        tvNumberPhone.setText("");
+//                    }else{
+                        tvAddress.setText(user.getAddress());
+                        tvNumberPhone.setText(user.getNumberPhone());
+//                    }
+                    if (user.getImageURL().equals("default")) {
+                        imgAvata.setImageResource(R.drawable.avatar);
+                    } else {
+                        Glide.with(getContext()).load(user.getImageURL()).into(imgAvata);
                     }
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    String name = tvName.getText().toString();
+                    String email = tvEmail.getText().toString();
+                    String address = tvAddress.getText().toString();
+                    String number = tvNumberPhone.getText().toString();
+                    String img = user.getImageURL();
+
+                    intent.putExtra(Const.KEY_NAME, name);
+                    intent.putExtra(Const.KEY_EMAIL, email);
+                    intent.putExtra(Const.KEY_ADDRESS, address);
+                    intent.putExtra(Const.KEY_NUMBER, number);
+                    intent.putExtra(Const.KEY_IMAGER, img);
+
 
                 }
-            });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 //        } else {
 //           mAuthStateListener = new FirebaseAuth.AuthStateListener() {
 //                @Override
@@ -124,6 +149,19 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
+//    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//        property.clear();
+//        List<String> propertyKeys = new ArrayList<>();
+//        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()){
+//            for (DataSnapshot propertySnapshot : userSnapshot.getChildren()){
+//                propertyKeys.add(propertySnapshot.getKey());
+//                Advertise advertise = propertySnapshot.getValue(Advertise.class);
+//                property.add(advertise);
+//            }
+//        }
+//        dataStatus.DataIsLoaded(property, propertyKeys);
+//    }
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.main, menu);
@@ -132,9 +170,10 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.edit_user:
-                startActivity(new Intent(getActivity(), EditInformationActivity.class));
+                startActivity(intent);
+//                startActivity(new Intent(getActivity(), EditInformationActivity.class));
                 break;
             case R.id.change_pass:
                 startActivity(new Intent(getActivity(), ChangepassActivity.class));

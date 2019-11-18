@@ -171,6 +171,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             hashMap.put("username", username);
                             hashMap.put("email", email);
                             hashMap.put("imageURL", "default");
+                            hashMap.put("address", "chưa có thông tin");
+                            hashMap.put("numberPhone", "chưa có thông tin");
                             hashMap.put("status", "offline");
                             hashMap.put("search", username.toLowerCase());
 

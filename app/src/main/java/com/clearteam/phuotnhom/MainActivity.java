@@ -2,19 +2,8 @@ package com.clearteam.phuotnhom;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.view.Menu;
 import android.view.MenuItem;
-
-
-import com.clearteam.phuotnhom.fragment.IntroductFragment;
-import com.clearteam.phuotnhom.fragment.MapFragment;
-import com.clearteam.phuotnhom.fragment.ProfileFragment;
-import com.clearteam.phuotnhom.ui.changepass.ChangepassActivity;
-import com.clearteam.phuotnhom.ui.infomation.EditInformationActivity;
-import com.clearteam.phuotnhom.ui.login.LoginActivity;
-import com.facebook.login.LoginManager;
-
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -27,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.clearteam.phuotnhom.fragment.IntroductFragment;
 import com.clearteam.phuotnhom.fragment.MapFragment;
 import com.clearteam.phuotnhom.fragment.ProfileFragment;
 import com.clearteam.phuotnhom.ui.infomation.EditInformationActivity;
@@ -76,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -101,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         return super.onOptionsItemSelected(item);
     }
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
