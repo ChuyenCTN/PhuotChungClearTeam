@@ -15,6 +15,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -23,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.clearteam.phuotnhom.MainActivity;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.model.User;
 import com.clearteam.phuotnhom.utils.Const;

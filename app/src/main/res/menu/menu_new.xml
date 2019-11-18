@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_new"
-        android:icon="@drawable/ic_add_white_24dp"
+        android:id="@+id/add_group"
         android:orderInCategory="100"
-        android:title="@string/txt_label_new"
+        android:title="@string/add_group"
+        android:icon="@drawable/ic_add_white_24dp"
         app:showAsAction="always" />
 </menu>

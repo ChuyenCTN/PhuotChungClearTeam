@@ -1,0 +1,92 @@
+package com.clearteam.phuotnhom.model;
+
+public class TourMe {
+
+    private String id;
+    private String name;
+    private String addressStart;
+    private String addressEnd;
+    private String date;
+    private String tvAdd;
+    private boolean isMyTour;
+    private String avataGroup;
+
+
+    public TourMe() {
+    }
+
+    public TourMe(String id, String name, String addressStart, String addressEnd, String date, String tvAdd, boolean isMyTour,String avataGroup) {
+        this.id = id;
+        this.name = name;
+        this.addressStart = addressStart;
+        this.addressEnd = addressEnd;
+        this.date = date;
+        this.tvAdd = tvAdd;
+        this.isMyTour = isMyTour;
+        this.avataGroup = avataGroup;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddressStart() {
+        return addressStart;
+    }
+
+    public void setAddressStart(String addressStart) {
+        this.addressStart = addressStart;
+    }
+
+    public String getAddressEnd() {
+        return addressEnd;
+    }
+
+    public void setAddressEnd(String addressEnd) {
+        this.addressEnd = addressEnd;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTvAdd() {
+        return tvAdd;
+    }
+
+    public void setTvAdd(String tvAdd) {
+        this.tvAdd = tvAdd;
+    }
+
+    public boolean isMyTour() {
+        return isMyTour;
+    }
+
+    public void setMyTour(boolean myTour) {
+        isMyTour = myTour;
+    }
+
+    public String getAvataGroup() {
+        return avataGroup;
+    }
+
+    public void setAvataGroup(String avataGroup) {
+        this.avataGroup = avataGroup;
+    }
+}
