@@ -19,9 +19,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.model.User;
-import com.clearteam.phuotnhom.ui.changepass.ChangepassActivity;
-import com.clearteam.phuotnhom.ui.infomation.EditInformationActivity;
-import com.clearteam.phuotnhom.ui.login.LoginActivity;
+import com.clearteam.phuotnhom.ui.ChangepassActivity;
+import com.clearteam.phuotnhom.ui.EditInformationActivity;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,8 +31,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
-
-import static android.content.Context.MODE_PRIVATE;
 
 
 public class ProfileFragment extends Fragment {

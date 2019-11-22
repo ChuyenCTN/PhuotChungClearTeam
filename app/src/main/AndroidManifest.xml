@@ -1,30 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.clearteam.phuotnhom">
-	<!--
-         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
-         Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the 'MyLocation' functionality.
-    -->
+
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.INTERNET" />
 
 	<application
+		android:name=".MyApplication"
 		android:allowBackup="true"
 		android:icon="@mipmap/ic_launcher"
 		android:label="@string/app_name"
 		android:roundIcon="@mipmap/ic_launcher_round"
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme">
-		<activity android:name=".ui.addmember.AddMemberActivity"></activity>
+		<activity android:name=".ui.InformationMemberActivity"
+			android:theme="@style/AppTheme.NoActionBar"/>
+
+
+
 		<activity
-			android:name=".ui.detailtourgroup.TourGroupDetailActivity"
+			android:name=".ui.AddMemberActivity"
 			android:theme="@style/AppTheme.NoActionBar" />
 		<activity
-			android:name=".ui.changepass.ChangepassActivity"
+			android:name=".ui.TourGroupDetailActivity"
 			android:theme="@style/AppTheme.NoActionBar" />
 		<activity
-			android:name=".ui.infomation.EditInformationActivity"
+			android:name=".ui.ChangepassActivity"
+			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
+			android:name=".ui.EditInformationActivity"
 			android:theme="@style/AppTheme.NoActionBar" />
 
 		<meta-data
@@ -32,17 +36,17 @@
 			android:value="@string/google_maps_key" />
 
 		<activity
-			android:name=".ui.forgotpass.ForgotPasswordActivity"
+			android:name=".ui.ForgotPasswordActivity"
 			android:theme="@style/AppTheme.NoActionBar" />
 		<activity
-			android:name=".ui.register.RegisterActivity"
+			android:name=".ui.RegisterActivity"
 			android:theme="@style/AppTheme.NoActionBar" />
 		<activity
 			android:name=".MainActivity"
 			android:label="@string/app_name"
 			android:theme="@style/AppTheme.NoActionBar" />
 		<activity
-			android:name=".ui.splash.SplashActivity"
+			android:name=".ui.SplashActivity"
 			android:theme="@style/AppTheme.NoActionBar">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -51,7 +55,7 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".ui.login.LoginActivity"
+			android:name=".ui.LoginActivity"
 			android:theme="@style/AppTheme.NoActionBar" />
 
 		<meta-data
@@ -74,6 +78,17 @@
 				<data android:scheme="@string/fb_login_protocol_scheme" />
 			</intent-filter>
 		</activity>
+
+		<service android:name=".services.MyFirebaseMessagingService">
+			<intent-filter>
+				<action android:name="com.google.firebase.MESSAGING_EVENT" />
+			</intent-filter>
+		</service>
+		<service android:name=".services.FirebaseIDService">
+			<intent-filter>
+				<action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+			</intent-filter>
+		</service>
 	</application>
 
 </manifest>

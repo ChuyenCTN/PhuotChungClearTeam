@@ -8,8 +8,9 @@ public class TourMe {
     private String addressEnd;
     private String date;
     private String tvAdd;
-    private boolean isMyTour;
+    private boolean isMyTour = true;
     private String avataGroup;
+    private String keyId;
 
     public TourMe() {
     }
@@ -94,5 +95,13 @@ public class TourMe {
 
     public void setAvataGroup(String avataGroup) {
         this.avataGroup = avataGroup;
+    }
+
+    public String getKeyId() {
+        return keyId;
+    }
+
+    public void setKeyId(String keyId) {
+        this.keyId = keyId;
     }
 }

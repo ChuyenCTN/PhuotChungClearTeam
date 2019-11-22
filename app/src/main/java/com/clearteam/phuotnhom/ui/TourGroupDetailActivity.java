@@ -1,10 +1,4 @@
-package com.clearteam.phuotnhom.ui.detailtourgroup;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
+package com.clearteam.phuotnhom.ui;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -13,7 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,13 +21,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.clearteam.phuotnhom.R;
-import com.clearteam.phuotnhom.fragment.TourMeFragment;
-import com.clearteam.phuotnhom.model.TourMe;
-import com.clearteam.phuotnhom.ui.addmember.AddMemberActivity;
-import com.clearteam.phuotnhom.ui.infomation.EditInformationActivity;
+import com.clearteam.phuotnhom.adapter.ListUserAdapter;
+import com.clearteam.phuotnhom.listener.ClickDetailMember;
+import com.clearteam.phuotnhom.model.User;
 import com.clearteam.phuotnhom.utils.Const;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -44,15 +48,19 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
-public class TourGroupDetailActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, DatePickerDialog.OnDateSetListener {
+public class TourGroupDetailActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, DatePickerDialog.OnDateSetListener, ClickDetailMember, View.OnClickListener {
 
-    private ImageButton imgBack;
+
+
     private TextView tvNameGroup;
-    private ImageView imgAvataGroup, imgMenu;
-    private String nameGroup, imageG, addressStart, addressEnd, dateStart;
+    private ImageView imgAvataGroup, imgMenu,imgBack,imgMessage;
+    private String nameGroup, imageG, addressStart, addressEnd, dateStart, keyID, keyRemove;
     private DatabaseReference reference;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseAuth auth;
@@ -61,6 +69,12 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
     private static DatePickerDialog.OnDateSetListener onDateSetListener1;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     private AlertDialog alertDialog;
+    private ListUserAdapter adapter;
+    private List<User> userList;
+    private RecyclerView mRecyclerView;
+    private List<String> keyRemoveMember = new ArrayList<>();
+    private List<String> myListMember = new ArrayList<>();
+    private List<String> userIds = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +82,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
         setContentView(R.layout.activity_tour_group_detail);
         changeStatustBar();
         initView();
+        initData();
         auth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = auth.getCurrentUser();
         assert firebaseUser != null;
@@ -75,23 +90,99 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
         reference = database.getReference(Const.KEY_TOUR).child(id);
     }
 
+    private void initData() {
+        mRecyclerView = findViewById(R.id.rcv_list_user);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(manager);
+        userList = new ArrayList<>();
+        mRecyclerView.setAdapter(adapter);
+
+    }
+
+    private void getData() {
+        Intent intent = getIntent();
+        nameGroup = intent.getStringExtra(Const.KEY_NAME_GROUP);
+        id2 = intent.getStringExtra(Const.KEY_ID);
+        keyID = intent.getStringExtra(Const.KEY_ID_1);
+        addressStart = intent.getStringExtra(Const.KEY_ADDRESS_START_GROUP);
+        addressEnd = intent.getStringExtra(Const.KEY_ADDRESS_END_GROUP);
+        dateStart = intent.getStringExtra(Const.KEY_DATE_GROUP);
+        imageG = intent.getStringExtra(Const.KEY_IMAGE_GROUP);
+
+
+        if (imageG == null) {
+            Glide.with(this).load(R.drawable.avatar).into(imgAvataGroup);
+        } else {
+            Glide.with(this).load(imageG).into(imgAvataGroup);
+        }
+        tvNameGroup.setText(nameGroup);
+        readUsers(keyID);
+    }
+
+    public void readUsers(String key) {
+        keyID = key;
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        myListMember = Arrays.asList(key.split(","));
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                userList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    User user = snapshot.getValue(User.class);
+                    assert user != null;
+                    assert firebaseUser != null;
+
+                    for (String temp : myListMember) {
+                        if (!user.getId().equals(firebaseUser.getUid()) && temp.equals(user.getId())) {
+                            userList.add(user);
+                        }
+                    }
+                }
+                adapter = new ListUserAdapter(TourGroupDetailActivity.this, userList, TourGroupDetailActivity.this);
+                mRecyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void initView() {
 
         imgBack = findViewById(R.id.img_back);
+        imgMessage = findViewById(R.id.img_message);
         tvNameGroup = findViewById(R.id.tv_name_group);
         imgAvataGroup = findViewById(R.id.img_avata_group);
         imgMenu = findViewById(R.id.img_menu_group);
+
         onDateSetListener1 = this;
-        imgMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        imgBack.setOnClickListener(this);
+        imgMessage.setOnClickListener(this);
+        imgMenu.setOnClickListener(this);
+
+        getData();
+    }
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.img_back:
+                finish();
+                break;
+            case R.id.img_message:
+                Toast.makeText(this, "show message", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.img_menu_group:
                 PopupMenu popupMenu = new PopupMenu(TourGroupDetailActivity.this, v);
                 popupMenu.setOnMenuItemClickListener(TourGroupDetailActivity.this);
                 popupMenu.inflate(R.menu.menu_tour_group);
                 popupMenu.show();
-            }
-        });
-        getData();
+                break;
+        }
     }
 
     private void changeStatustBar() {
@@ -106,29 +197,15 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
         }
     }
 
-    private void getData() {
-        Intent intent = getIntent();
-        nameGroup = intent.getStringExtra(Const.KEY_NAME_GROUP);
-        id2 = intent.getStringExtra(Const.KEY_ID);
-        addressStart = intent.getStringExtra(Const.KEY_ADDRESS_START_GROUP);
-        addressEnd = intent.getStringExtra(Const.KEY_ADDRESS_END_GROUP);
-        dateStart = intent.getStringExtra(Const.KEY_DATE_GROUP);
-        imageG = intent.getStringExtra(Const.KEY_IMAGE_GROUP);
-
-
-        if (imageG == null) {
-            Glide.with(this).load(R.drawable.avatar).into(imgAvataGroup);
-        } else {
-            Glide.with(this).load(imageG).into(imgAvataGroup);
-        }
-        tvNameGroup.setText(nameGroup);
-    }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_user:
-                startActivity(new Intent(TourGroupDetailActivity.this, AddMemberActivity.class));
+                Intent intent = new Intent(TourGroupDetailActivity.this, AddMemberActivity.class);
+                intent.putExtra(Const.KEY_ID, id2);
+                intent.putExtra(Const.KEY_ID_1, keyID);
+                startActivityForResult(intent, Const.REQUEST_CODE);
                 break;
             case R.id.edit_group:
                 updateGroup();
@@ -197,6 +274,48 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
         DatePickerFragment fragment1 = new DatePickerFragment();
         fragment1.show(getSupportFragmentManager(), "date");
     }
+
+    @Override
+    public void onClickDetail(int position, User user) {
+        String keyUserId = user.getId();
+        Intent intent = new Intent(TourGroupDetailActivity.this, InformationMemberActivity.class);
+        intent.putExtra(Const.KEY_USER_ID,keyUserId);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onLongClick(int adapterPosition, User user) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Xóa nhóm");
+        builder.setMessage("Bạn có muốn xóa không ?");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                keyRemoveMember = Arrays.asList(keyID.split(user.getId()));
+                keyRemove = TextUtils.join(",", keyRemoveMember);
+                reference = FirebaseDatabase.getInstance().getReference();
+                reference.child("Groups").child(id).child(id2).child("keyId").setValue(keyRemove).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            readUsers(keyRemove);
+                            Toast.makeText(TourGroupDetailActivity.this, "Xóa thành công", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.show();
+
+    }
+
 
     public static class DatePickerFragment extends DialogFragment {
         @Override
@@ -268,13 +387,26 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
         builder.show();
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Const.REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                String key = data.getData().toString();
+                readUsers(key);
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
-        if(isFinishing()){
-            if (alertDialog!= null) {
+        if (isFinishing()) {
+            if (alertDialog != null) {
                 alertDialog.dismiss();
-                alertDialog= null;
+                alertDialog = null;
             }
         }
     }

@@ -1,6 +1,8 @@
 package com.clearteam.phuotnhom.model;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private String id;
     private String username;
     private String email;
@@ -9,6 +11,8 @@ public class User {
     private String status;
     private String imageURL;
     private String search;
+    private boolean isSelected;
+    private String isMember;
 
 
 
@@ -97,5 +101,21 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    public String getIsMember() {
+        return isMember;
+    }
+
+    public void setIsMember(String isMember) {
+        this.isMember = isMember;
     }
 }

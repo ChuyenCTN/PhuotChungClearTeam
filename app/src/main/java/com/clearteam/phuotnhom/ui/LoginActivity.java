@@ -1,11 +1,9 @@
-package com.clearteam.phuotnhom.ui.login;
+package com.clearteam.phuotnhom.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,14 +18,11 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.clearteam.phuotnhom.MainActivity;
 import com.clearteam.phuotnhom.R;
-import com.clearteam.phuotnhom.ui.forgotpass.ForgotPasswordActivity;
-import com.clearteam.phuotnhom.ui.register.RegisterActivity;
 import com.clearteam.phuotnhom.utils.Const;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
