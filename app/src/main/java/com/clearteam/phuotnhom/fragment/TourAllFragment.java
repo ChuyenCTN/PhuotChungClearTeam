@@ -1,6 +1,6 @@
 package com.clearteam.phuotnhom.fragment;
 
-import android.opengl.Visibility;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import android.widget.Toast;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.adapter.TourAllAdapter;
 import com.clearteam.phuotnhom.model.TourMe;
+import com.clearteam.phuotnhom.ui.TourGroupDetailActivity;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -94,8 +94,8 @@ public class TourAllFragment extends Fragment {
             @Override
             public void onClickDetail(int position, TourMe response) {
                 if (response.getTvAdd().equals("Nhóm của bạn")){
-
-                    Toast.makeText(getActivity(), "nhóm của bạn", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getActivity(), TourGroupDetailActivity.class));
+                 //   Toast.makeText(getActivity(), "nhóm của bạn", Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(getActivity(), "Đợi phê duyệt", Toast.LENGTH_SHORT).show();
                 }
@@ -116,16 +116,15 @@ public class TourAllFragment extends Fragment {
                         list.add(mTourMe);
                         if (dataSnapshot1.getKey().equals(userId)) {
                             mTourMe.setTvAdd("Nhóm của bạn");
-                            mTourMe.setMyTour(false);
+                            mTourMe.setMyTour(true);
                         }else {
                             mTourMe.setTvAdd("Đăng ký tham gia");
-                            mTourMe.setMyTour(true);
+                            mTourMe.setMyTour(false);
                         }
                     }
                 }
 
                 mTourAllAdapter.setData(list);
-                mTourAllAdapter.notifyDataSetChanged();
             }
 
             @Override

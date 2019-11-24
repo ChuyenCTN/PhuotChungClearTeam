@@ -1,4 +1,4 @@
-package com.clearteam.phuotnhom.ui.forgotpass;
+package com.clearteam.phuotnhom.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -21,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.clearteam.phuotnhom.R;
-import com.clearteam.phuotnhom.ui.login.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;

@@ -75,7 +75,8 @@ public class TourAllAdapter extends RecyclerView.Adapter<TourAllAdapter.ViewHold
             tvAddressEnd.setText(response.getAddressEnd());
             tvDateStart.setText(response.getDate());
             tvAdd.setText(response.getTvAdd());
-            if (response.isMyTour()){
+            tvAdd.setBackgroundColor(mContext.getResources().getColor(R.color.green));
+            if (!response.isMyTour()){
                 tvAdd.setBackgroundColor(mContext.getResources().getColor(R.color.bg_tab));
                // tvAdd.setBackgroundColor(R.color.bg_tab);
             }

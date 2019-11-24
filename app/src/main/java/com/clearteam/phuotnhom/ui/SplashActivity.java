@@ -1,4 +1,4 @@
-package com.clearteam.phuotnhom.ui.splash;
+package com.clearteam.phuotnhom.ui;
 
 import android.content.Intent;
 import android.os.Build;
@@ -9,7 +9,6 @@ import android.view.WindowManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.clearteam.phuotnhom.ui.login.LoginActivity;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.utils.Const;
 

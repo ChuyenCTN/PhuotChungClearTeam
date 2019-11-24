@@ -3,12 +3,9 @@ package com.clearteam.phuotnhom.fragment;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,7 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.adapter.TourMeAdapter;
 import com.clearteam.phuotnhom.model.TourMe;
-import com.clearteam.phuotnhom.ui.detailtourgroup.TourGroupDetailActivity;
+import com.clearteam.phuotnhom.ui.TourGroupDetailActivity;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -125,9 +122,12 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
                 String addressStart = list.get(position).getAddressStart();
                 String addressEnd = list.get(position).getAddressEnd();
                 String date = list.get(position).getDate();
+                String keyId = list.get(position).getKeyId();
+
 
                 Intent intent = new Intent(getActivity(), TourGroupDetailActivity.class);
                 intent.putExtra(Const.KEY_ID,id);
+                intent.putExtra(Const.KEY_ID_1,keyId);
                 intent.putExtra(Const.KEY_NAME_GROUP,name);
                 intent.putExtra(Const.KEY_IMAGE_GROUP,img);
                 intent.putExtra(Const.KEY_ADDRESS_START_GROUP,addressStart);
@@ -273,6 +273,7 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
         tourMe.setAddressStart(addressStart);
         tourMe.setAddressEnd(addressEnd);
         tourMe.setDate(dateStart);
+        tourMe.setKeyId("");
         reference = FirebaseDatabase.getInstance().getReference();
 
 //        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);

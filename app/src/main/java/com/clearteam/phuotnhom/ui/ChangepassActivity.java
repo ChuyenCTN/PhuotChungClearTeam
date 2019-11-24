@@ -1,4 +1,4 @@
-package com.clearteam.phuotnhom.ui.changepass;
+package com.clearteam.phuotnhom.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,8 +21,6 @@ import android.widget.ToggleButton;
 import com.bumptech.glide.Glide;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.model.User;
-import com.clearteam.phuotnhom.ui.login.LoginActivity;
-import com.facebook.login.Login;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;

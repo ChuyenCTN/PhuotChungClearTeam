@@ -2,6 +2,15 @@ package com.clearteam.phuotnhom;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
+
+import com.clearteam.phuotnhom.fragment.IntroductFragment;
+import com.clearteam.phuotnhom.fragment.MapFragment;
+import com.clearteam.phuotnhom.fragment.ProfileFragment;
+import com.clearteam.phuotnhom.fragment.TourGroupFragment;
+import com.clearteam.phuotnhom.ui.LoginActivity;
+import com.facebook.login.LoginManager;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -19,7 +28,6 @@ import com.clearteam.phuotnhom.fragment.IntroductFragment;
 import com.clearteam.phuotnhom.fragment.MapFragment;
 import com.clearteam.phuotnhom.fragment.ProfileFragment;
 import com.clearteam.phuotnhom.fragment.TourGroupFragment;
-import com.clearteam.phuotnhom.ui.login.LoginActivity;
 import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
