@@ -25,7 +25,7 @@ import androidx.fragment.app.Fragment;
 
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.model.ServiceAround;
-import com.clearteam.phuotnhom.utils.DialogServiceAround;
+import com.clearteam.phuotnhom.parseplace.GetNearbyPlacesData;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
@@ -53,7 +53,7 @@ import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener,  GoogleApiClient.ConnectionCallbacks,
+public class MapFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
     private GoogleMap mMap;
@@ -69,6 +69,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     }
 
     //    place
+
+    private String key = "AIzaSyBDQ8nTYI2H6ds1tA66zBogO2FqhXwFFKE";
     private GoogleApiClient client;
     private LocationRequest locationRequest;
     private Location lastlocation;
@@ -186,13 +188,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.line_service_around:
-                DialogServiceAround dialogServiceAround = new DialogServiceAround(mServiceAroundList, new DialogServiceAround.IChoose() {
-                    @Override
-                    public void onChoose(ServiceAround serviceAround) {
+//                DialogServiceAround dialogServiceAround = new DialogServiceAround(mServiceAroundList, new DialogServiceAround.IChoose() {
+//                    @Override
+//                    public void onChoose(ServiceAround serviceAround) {
+//
+//                    }
+//                });
+//                dialogServiceAround.show(getChildFragmentManager(), "ADAS");
 
-                    }
-                });
-                dialogServiceAround.show(getChildFragmentManager(), "ADAS");
+                getRecentHospital();
                 break;
             case R.id.line_friend:
 
@@ -244,8 +248,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
-        if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED)
-        {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationServices.FusedLocationApi.requestLocationUpdates(client, locationRequest, this);
         }
     }
@@ -265,12 +268,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         latitude = location.getLatitude();
         longitude = location.getLongitude();
         lastlocation = location;
-        if(currentLocationmMarker != null)
-        {
+        if (currentLocationmMarker != null) {
             currentLocationmMarker.remove();
         }
-        Log.d("lat = ",""+latitude);
-        LatLng latLng = new LatLng(location.getLatitude() , location.getLongitude());
+        Log.d("lat = ", "" + latitude);
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Current Location");
@@ -279,9 +281,36 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomBy(10));
 
-        if(client != null)
-        {
-            LocationServices.FusedLocationApi.removeLocationUpdates(client,this);
+        if (client != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
         }
+    }
+
+    private void getRecentHospital() {
+        Object dataTransfer[] = new Object[2];
+        GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+        mMap.clear();
+        String hospital = "hospital";
+        String url = getUrl(latitude, longitude, hospital);
+        dataTransfer[0] = mMap;
+        dataTransfer[1] = url;
+
+        getNearbyPlacesData.execute(dataTransfer);
+        Toast.makeText(getContext(), "Showing Nearby Hospitals", Toast.LENGTH_SHORT).show();
+
+    }
+
+    private String getUrl(double latitude, double longitude, String nearbyPlace) {
+
+        StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+        googlePlaceUrl.append("location=" + "21.0245" + "," + "105.84117");
+        googlePlaceUrl.append("&radius=" + PROXIMITY_RADIUS);
+        googlePlaceUrl.append("&type=" + nearbyPlace);
+        googlePlaceUrl.append("&sensor=true");
+        googlePlaceUrl.append("&key=" + key);
+
+        Log.d("MapsActivity", "url = " + googlePlaceUrl.toString());
+
+        return googlePlaceUrl.toString();
     }
 }
