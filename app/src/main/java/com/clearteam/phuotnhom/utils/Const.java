@@ -28,4 +28,9 @@ public class Const {
     public static final String TOKEN_FIREBASE = "token_firebase";
 
 
+
+    public static final int LOCATION_REQUEST = 1000;
+    public static final int GPS_REQUEST = 1001;
+
+
 }
