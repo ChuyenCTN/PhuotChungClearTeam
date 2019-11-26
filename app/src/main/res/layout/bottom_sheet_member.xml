@@ -4,7 +4,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/bottom_sheet"
 	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
+	android:layout_height="250dp"
 	android:background="@drawable/bg_bottom_sheet"
 	android:orientation="vertical"
 	android:paddingTop="@dimen/dp_15"
@@ -37,8 +37,8 @@
 			android:clipToPadding="false"
 			android:paddingLeft="8dp"
 			android:paddingRight="8dp"
-			tools:listitem="@layout/item_user_status"
-			android:scrollbars="none" />
+			android:scrollbars="none"
+			tools:listitem="@layout/item_user_status" />
 	</RelativeLayout>
 
 </LinearLayout>

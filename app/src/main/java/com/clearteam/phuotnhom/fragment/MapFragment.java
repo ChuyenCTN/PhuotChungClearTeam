@@ -29,16 +29,13 @@ import androidx.fragment.app.Fragment;
 
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.model.ServiceAround;
-<<<<<<< HEAD
 import com.clearteam.phuotnhom.model.User;
 import com.clearteam.phuotnhom.utils.DialogServiceAround;
 import com.clearteam.phuotnhom.utils.DialogServiceAroundMemberOnline;
-=======
 import com.clearteam.phuotnhom.parseplace.GetNearbyPlacesData;
 import com.clearteam.phuotnhom.utils.Const;
 import com.clearteam.phuotnhom.utils.DialogServiceAround;
 import com.clearteam.phuotnhom.utils.GpsUtils;
->>>>>>> origin/Chuyen
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
@@ -436,7 +433,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             markerOptions.position(latLng);
             markerOptions.title(addresses.get(0).getAdminArea()).snippet(addresses.get(0).getAddressLine(0)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
             currentLocationmMarker = mMap.addMarker(markerOptions);
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f));
         } catch (IOException e) {
             e.printStackTrace();
         }
