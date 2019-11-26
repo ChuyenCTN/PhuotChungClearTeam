@@ -84,28 +84,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Token token1 = new Token(token);
         reference.child(firebaseUser.getUid()).setValue(token1);
     }
-
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        // Inflate the menu; this adds items to the action bar if it is present.
 //        getMenuInflater().inflate(R.menu.main, menu);
 //        return true;
 //    }
-
+//
 //    @Override
 //    public boolean onOptionsItemSelected(MenuItem item) {
 ////        int id = item.getItemId();
 ////        if (id == R.id.action_settings) {
 ////
 ////            return true;
+//
+////    @Override
+////    public boolean onCreateOptionsMenu(Menu menu) {
+////        // Inflate the menu; this adds items to the action bar if it is present.
+////        getMenuInflater().inflate(R.menu.main, menu);
+////        return true;
+////    }
+//
+////    @Override
+////    public boolean onOptionsItemSelected(MenuItem item) {
+//////        int id = item.getItemId();
+//////        if (id == R.id.action_settings) {
+//////
+//////            return true;
+//////        }
+////        switch (item.getItemId()) {
+////            case R.id.edit_user:
+////                startActivity(new Intent(MainActivity.this, EditInformationActivity.class));
+////                break;
+////            case R.id.change_pass:
+////                break;
 ////        }
-//        switch (item.getItemId()) {
-//            case R.id.edit_user:
-//                startActivity(new Intent(MainActivity.this, EditInformationActivity.class));
-//                break;
-//            case R.id.change_pass:
-//                break;
-//        }
+////
+////        return super.onOptionsItemSelected(item);
+////    }
+//
 //
 //        return super.onOptionsItemSelected(item);
 //    }

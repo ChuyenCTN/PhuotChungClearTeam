@@ -17,7 +17,7 @@ import java.util.List;
  * @author Priyanka
  */
 
-class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
+public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
 
     private String googlePlacesData;
     private GoogleMap mMap;

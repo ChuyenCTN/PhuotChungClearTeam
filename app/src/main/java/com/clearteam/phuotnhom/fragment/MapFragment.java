@@ -1,6 +1,7 @@
 package com.clearteam.phuotnhom.fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -9,6 +10,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -25,12 +29,21 @@ import androidx.fragment.app.Fragment;
 
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.model.ServiceAround;
+<<<<<<< HEAD
 import com.clearteam.phuotnhom.model.User;
 import com.clearteam.phuotnhom.utils.DialogServiceAround;
 import com.clearteam.phuotnhom.utils.DialogServiceAroundMemberOnline;
+=======
+import com.clearteam.phuotnhom.parseplace.GetNearbyPlacesData;
+import com.clearteam.phuotnhom.utils.Const;
+import com.clearteam.phuotnhom.utils.DialogServiceAround;
+import com.clearteam.phuotnhom.utils.GpsUtils;
+>>>>>>> origin/Chuyen
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -55,9 +68,13 @@ import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener,  GoogleApiClient.ConnectionCallbacks,
+public class MapFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
+
+    private ImageView imgCurentLocation;
+
+
     private GoogleMap mMap;
     private List<ServiceAround> mServiceAroundList = new ArrayList<>();
     private List<User> userList = new ArrayList<>();
@@ -74,13 +91,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     }
 
     //    place
+
     private GoogleApiClient client;
     private LocationRequest locationRequest;
     private Location lastlocation;
     private Marker currentLocationmMarker;
     public static final int REQUEST_LOCATION_CODE = 99;
     int PROXIMITY_RADIUS = 10000;
-    double latitude, longitude;
+
+
+    //    my
+    private double mLatitude = 0.0;
+
+    private double mLongitude = 0.0;
+
+    private Geocoder mGeocoder;
+
+    private FusedLocationProviderClient mFusedLocationClient;
+
+    private LocationCallback locationCallback;
+
+    private boolean isContinue = false;
+
+    private boolean isGPS = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,23 +125,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
+        setHasOptionsMenu(true);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
-
         }
 
-
+        imgCurentLocation = (ImageView) view.findViewById(R.id.img_curent_location);
         mLiServiceAround = view.findViewById(R.id.line_service_around);
         mLiFriend = view.findViewById(R.id.line_friend);
+
         mLiServiceAround.setOnClickListener(this);
         mLiFriend.setOnClickListener(this);
+        imgCurentLocation.setOnClickListener(this::onClick);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        initLocation();
 
         getAutocompletePlace();
+
         return view;
     }
 
@@ -181,10 +219,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search_location:
+
+                break;
+        }
+        return true;
     }
 
     @Override
@@ -194,10 +244,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                 DialogServiceAround dialogServiceAround = new DialogServiceAround(mServiceAroundList, new DialogServiceAround.IChoose() {
                     @Override
                     public void onChoose(ServiceAround serviceAround) {
+                        Toast.makeText(getContext(), serviceAround.getTvName() + "\n", Toast.LENGTH_SHORT).show();
+                    }
 
+                    @Override
+                    public void onClick(String nameService, String title) {
+                        getRecentNearby(nameService, title);
                     }
                 });
                 dialogServiceAround.show(getChildFragmentManager(), "ADAS");
+
                 break;
             case R.id.line_friend:
                DialogServiceAroundMemberOnline dialogServiceAroundMemberOnline = new DialogServiceAroundMemberOnline(userList, true, new DialogServiceAroundMemberOnline.IChoose() {
@@ -207,6 +263,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                    }
                });
                dialogServiceAroundMemberOnline.show(getChildFragmentManager(),"ADAD");
+                break;
+            case R.id.img_curent_location:
+                getCurrentLocation();
                 break;
         }
     }
@@ -225,22 +284,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             return true;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_LOCATION_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        if (client == null) {
-                            bulidGoogleApiClient();
-                        }
-                        mMap.setMyLocationEnabled(true);
-                    }
-                } else {
-                    Toast.makeText(getContext(), "Permission Denied", Toast.LENGTH_LONG).show();
-                }
-        }
-    }
 
     protected synchronized void bulidGoogleApiClient() {
         client = new GoogleApiClient.Builder(getContext()).addConnectionCallbacks((GoogleApiClient.ConnectionCallbacks) getContext()).addOnConnectionFailedListener((GoogleApiClient.OnConnectionFailedListener) getContext()).addApi(LocationServices.API).build();
@@ -255,8 +298,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
-        if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED)
-        {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationServices.FusedLocationApi.requestLocationUpdates(client, locationRequest, this);
         }
     }
@@ -273,26 +315,157 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
     @Override
     public void onLocationChanged(Location location) {
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
+        mLatitude = location.getLatitude();
+        mLongitude = location.getLongitude();
         lastlocation = location;
-        if(currentLocationmMarker != null)
-        {
-            currentLocationmMarker.remove();
-        }
-        Log.d("lat = ",""+latitude);
-        LatLng latLng = new LatLng(location.getLatitude() , location.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Location");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-        currentLocationmMarker = mMap.addMarker(markerOptions);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomBy(10));
+        showMarker(mLatitude, mLongitude);
 
-        if(client != null)
-        {
-            LocationServices.FusedLocationApi.removeLocationUpdates(client,this);
+        if (client != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
         }
     }
+
+
+    private void getCurrentLocation() {
+
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    Const.LOCATION_REQUEST);
+
+        } else {
+            if (isContinue) {
+                mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+            } else {
+                mFusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), location -> {
+                    if (location != null) {
+                        mLatitude = location.getLatitude();
+                        mLongitude = location.getLongitude();
+                        showMarker(mLatitude, mLongitude);
+
+                    } else {
+                        mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+                    }
+                });
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1000: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    if (isContinue) {
+                        mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+                    } else {
+                        mFusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), location -> {
+                            if (location != null) {
+                                mLatitude = location.getLatitude();
+                                mLongitude = location.getLongitude();
+
+                            } else {
+                                mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
+                            }
+                        });
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
+            case REQUEST_LOCATION_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        if (client == null) {
+                            bulidGoogleApiClient();
+                        }
+                        mMap.setMyLocationEnabled(true);
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Permission Denied", Toast.LENGTH_LONG).show();
+                }
+        }
+
+    }
+
+
+    //    nearby
+    private String getUrl(double latitude, double longitude, String nearbyPlace) {
+        String key = "AIzaSyAtpPlLN4Y-NrUsrg48F9_oAJnbL1B0tF4";
+        StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+        googlePlaceUrl.append("location=" + "21.0245" + "," + "105.84117");
+        googlePlaceUrl.append("&radius=" + PROXIMITY_RADIUS);
+        googlePlaceUrl.append("&type=" + nearbyPlace);
+        googlePlaceUrl.append("&sensor=true");
+//        googlePlaceUrl.append("&key=" + getContext().getResources().getString(R.string.google_api_key));
+        googlePlaceUrl.append("&key=" + key);
+
+        Log.d("MapsActivity", "url = " + googlePlaceUrl.toString());
+
+        return googlePlaceUrl.toString();
+    }
+
+
+    private void getRecentNearby(String data, String title) {
+        Object dataTransfer[] = new Object[2];
+        GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+        mMap.clear();
+        String url = getUrl(mLatitude, mLongitude, data);
+        dataTransfer[0] = mMap;
+        dataTransfer[1] = url;
+
+        getNearbyPlacesData.execute(dataTransfer);
+        Toast.makeText(getContext(), "Đang tìm " + title + " gần đây", Toast.LENGTH_SHORT).show();
+
+    }
+
+
+    public void showMarker(double latitude, double longitude) {
+        try {
+            LatLng latLng = new LatLng(latitude, longitude);
+            mGeocoder = new Geocoder(getContext());
+            List<Address> addresses = mGeocoder.getFromLocation(latitude, longitude, 1);
+
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+            markerOptions.title(addresses.get(0).getAdminArea()).snippet(addresses.get(0).getAddressLine(0)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            currentLocationmMarker = mMap.addMarker(markerOptions);
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+/*
+        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+        String city = addresses.get(0).getLocality();
+        String state = addresses.get(0).getAdminArea();
+        String country = addresses.get(0).getCountryName();
+        String postalCode = addresses.get(0).getPostalCode();
+        String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
+*/
+    }
+
+    private void initLocation() {
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(1 * 1000); // 10 seconds
+        locationRequest.setFastestInterval(5 * 200); // 5 seconds
+
+        new GpsUtils(getContext()).turnGPSOn(new GpsUtils.onGpsListener() {
+            @Override
+            public void gpsStatus(boolean isGPSEnable) {
+                // turn on GPS
+                isGPS = isGPSEnable;
+                getCurrentLocation();
+            }
+        });
+    }
+
 }

@@ -57,5 +57,16 @@
     <string name="txt_title_new_group">Thêm nhóm</string>
     <!-- TODO: Remove or change this placeholder text -->
 
+    <!--    bottom sheet-->
+
+    <string name="txt_label_restaurant">Nhà hàng, quán ăn</string>
+    <string name="txt_label_hotel">Khách sạn, nhà nghỉ</string>
+    <string name="txt_label_pharmacies">Hiệu thuốc</string>
+    <string name="txt_label_hospital">Bệnh viện</string>
+    <string name="txt_label_ATM">Cây ATM</string>
+    <string name="txt_label_petroleum">Trạm xăng, dầu</string>
+    <string name="txt_label_grocery">Cửa hàng tạp hóa</string>
+    <string name="txt_label_tourist_destination">Địa danh</string>
+
 
 </resources>
