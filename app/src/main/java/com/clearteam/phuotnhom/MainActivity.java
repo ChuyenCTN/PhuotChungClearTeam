@@ -8,6 +8,7 @@ import com.clearteam.phuotnhom.fragment.IntroductFragment;
 import com.clearteam.phuotnhom.fragment.MapFragment;
 import com.clearteam.phuotnhom.fragment.ProfileFragment;
 import com.clearteam.phuotnhom.fragment.TourGroupFragment;
+import com.clearteam.phuotnhom.notification.Token;
 import com.clearteam.phuotnhom.ui.LoginActivity;
 import com.facebook.login.LoginManager;
 
@@ -24,13 +25,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.clearteam.phuotnhom.fragment.IntroductFragment;
-import com.clearteam.phuotnhom.fragment.MapFragment;
-import com.clearteam.phuotnhom.fragment.ProfileFragment;
-import com.clearteam.phuotnhom.fragment.TourGroupFragment;
-import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -38,12 +40,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private FragmentManager mFragmentManager;
     private TourGroupFragment mtourGroupFragment;
+    private FirebaseUser firebaseUser;
+    private DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        updateToken(FirebaseInstanceId.getInstance().getToken());
     }
 
     private void initView() {
@@ -72,21 +79,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+    private void updateToken(String token) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
+        Token token1 = new Token(token);
+        reference.child(firebaseUser.getUid()).setValue(token1);
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//        if (id == R.id.action_settings) {
-//
-//            return true;
 
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
@@ -114,9 +111,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //    }
 
 
-        return super.onOptionsItemSelected(item);
-    }
+    private void status(String status) {
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("status", status);
+        reference.updateChildren(hashMap);
 
+    }
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -167,5 +168,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.commit();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status("online");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        status("offline");
+    }
 
 }

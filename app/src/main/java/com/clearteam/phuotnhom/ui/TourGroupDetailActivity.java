@@ -141,7 +141,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
                         }
                     }
                 }
-                adapter = new ListUserAdapter(TourGroupDetailActivity.this, userList, TourGroupDetailActivity.this);
+                adapter = new ListUserAdapter(TourGroupDetailActivity.this, userList, TourGroupDetailActivity.this,true);
                 mRecyclerView.setAdapter(adapter);
             }
 

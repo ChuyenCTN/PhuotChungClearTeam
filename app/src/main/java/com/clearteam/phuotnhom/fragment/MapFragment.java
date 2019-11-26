@@ -25,7 +25,9 @@ import androidx.fragment.app.Fragment;
 
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.model.ServiceAround;
+import com.clearteam.phuotnhom.model.User;
 import com.clearteam.phuotnhom.utils.DialogServiceAround;
+import com.clearteam.phuotnhom.utils.DialogServiceAroundMemberOnline;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
@@ -58,8 +60,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         LocationListener {
     private GoogleMap mMap;
     private List<ServiceAround> mServiceAroundList = new ArrayList<>();
+    private List<User> userList = new ArrayList<>();
+
     private static MapFragment INSTANCE;
     private LinearLayout mLiServiceAround, mLiFriend;
+
 
     public static MapFragment getInstance() {
         if (INSTANCE == null) {
@@ -195,7 +200,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                 dialogServiceAround.show(getChildFragmentManager(), "ADAS");
                 break;
             case R.id.line_friend:
+               DialogServiceAroundMemberOnline dialogServiceAroundMemberOnline = new DialogServiceAroundMemberOnline(userList, true, new DialogServiceAroundMemberOnline.IChoose() {
+                   @Override
+                   public void onChoose(User user) {
 
+                   }
+               });
+               dialogServiceAroundMemberOnline.show(getChildFragmentManager(),"ADAD");
                 break;
         }
     }

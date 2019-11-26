@@ -125,7 +125,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 finish();
                 break;
             case R.id.btnRegister:
-
                 String txt_name = edName.getText().toString().trim();
                 String txt_email = edEmail.getText().toString().trim();
                 String txt_password = edPass.getText().toString().trim();

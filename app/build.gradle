@@ -59,4 +59,7 @@ dependencies {
 
     // for android material dialog
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+
+    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
 }
