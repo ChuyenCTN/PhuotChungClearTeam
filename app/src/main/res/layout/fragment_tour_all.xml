@@ -10,7 +10,8 @@
 		android:id="@+id/rcvTourAll"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		tools:listitem="@layout/item_tour_all">
+		tools:listitem="@layout/item_tour_all"
+		android:layout_marginBottom="@dimen/dp_20">
 
 	</androidx.recyclerview.widget.RecyclerView>
 

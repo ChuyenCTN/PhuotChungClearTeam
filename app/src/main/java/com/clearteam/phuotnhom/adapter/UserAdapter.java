@@ -22,10 +22,12 @@ import java.util.List;
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHoder> {
     private Context mContext;
     private List<User> list;
+    private boolean isChat;
 
-    public UserAdapter(Context mContext, List<User> list) {
+    public UserAdapter(Context mContext, List<User> list , boolean isChat) {
         this.mContext = mContext;
         this.list = list;
+        this.isChat = isChat;
     }
 
     @NonNull
@@ -37,7 +39,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHoder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHoder holder, int position) {
-
         int pos = position;
         holder.tvName.setText(list.get(position).getUsername());
         String url = list.get(position).getImageURL();
@@ -46,7 +47,24 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHoder> {
                 .placeholder(R.drawable.ic_launcher_background)
                 .error(R.mipmap.ic_launcher)
                 .into(holder.imgAvata);
+//        if (isChat) {
+//            lastMessage(user.getId(), holder.last_msg);
+//        } else {
+//            holder.last_msg.setVisibility(View.GONE);
+//        }
 
+        if (isChat) {
+            if (list.get(position).getStatus().equals("online")) {
+                holder.img_on.setVisibility(View.VISIBLE);
+                holder.img_off.setVisibility(View.GONE);
+            } else {
+                holder.img_on.setVisibility(View.GONE);
+                holder.img_off.setVisibility(View.VISIBLE);
+            }
+        } else {
+            holder.img_on.setVisibility(View.GONE);
+            holder.img_off.setVisibility(View.GONE);
+        }
         holder.checkBox.setChecked(list.get(position).isSelected());
         holder.checkBox.setTag(list.get(position));
         holder.checkBox.setOnClickListener(new View.OnClickListener() {
@@ -70,15 +88,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHoder> {
     }
 
     public class ViewHoder extends RecyclerView.ViewHolder {
-        ImageView imgAvata;
-        TextView tvName;
-        CheckBox checkBox;
+        private ImageView imgAvata;
+        private TextView tvName;
+        private  CheckBox checkBox;
+        private ImageView img_on;
+        private ImageView img_off;
 
         public ViewHoder(@NonNull View itemView) {
             super(itemView);
             imgAvata = itemView.findViewById(R.id.img_avata);
             tvName = itemView.findViewById(R.id.tv_name);
             checkBox = itemView.findViewById(R.id.check);
+            img_on = itemView.findViewById(R.id.img_on);
+            img_off = itemView.findViewById(R.id.img_off);
 
         }
 

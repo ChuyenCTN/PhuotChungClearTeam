@@ -159,7 +159,7 @@ public class AddMemberActivity extends AppCompatActivity {
                         userList.add(user);
                     }
                 }
-                adapter = new UserAdapter(AddMemberActivity.this, userList);
+                adapter = new UserAdapter(AddMemberActivity.this, userList,true);
                 mRecyclerView.setAdapter(adapter);
             }
 
@@ -178,7 +178,7 @@ public class AddMemberActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 // finally change the color
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setStatusBarColor(ContextCompat.getColor(AddMemberActivity.this, R.color.colorPrimaryDark));
+            window.setStatusBarColor(ContextCompat.getColor(AddMemberActivity.this, R.color.bg_tab));
         }
     }
 
@@ -200,7 +200,7 @@ public class AddMemberActivity extends AppCompatActivity {
                             userList.add(user);
                         }
                     }
-                    adapter = new UserAdapter(AddMemberActivity.this, userList);
+                    adapter = new UserAdapter(AddMemberActivity.this, userList,true);
                     mRecyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }

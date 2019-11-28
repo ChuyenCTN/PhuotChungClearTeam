@@ -94,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 // finally change the color
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setStatusBarColor(ContextCompat.getColor(RegisterActivity.this, R.color.colorPrimaryDark));
+            window.setStatusBarColor(ContextCompat.getColor(RegisterActivity.this, R.color.bg_tab));
         }
     }
 
@@ -125,7 +125,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 finish();
                 break;
             case R.id.btnRegister:
-
                 String txt_name = edName.getText().toString().trim();
                 String txt_email = edEmail.getText().toString().trim();
                 String txt_password = edPass.getText().toString().trim();

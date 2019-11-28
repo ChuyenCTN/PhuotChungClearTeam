@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:paddingTop="@dimen/dp_10">
+
+	<RelativeLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentRight="true"
+		android:orientation="horizontal">
+
+		<LinearLayout
+			android:id="@+id/relay_1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="@dimen/dp_60"
+			android:layout_marginRight="10dp"
+			android:layout_alignParentRight="true"
+			android:orientation="vertical"
+			android:background="@drawable/bg_single_my_msg"
+			android:padding="10dp">
+
+			<TextView
+				android:id="@+id/show_message"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Hello"
+				android:textColor="#ffffff"
+				android:textSize="16sp" />
+
+			<TextView
+				android:id="@+id/tv_hour"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="right"
+				android:text="9:40" />
+		</LinearLayout>
+
+		<!--<RelativeLayout-->
+		<!--android:id="@+id/relay_1"-->
+		<!--android:layout_width="wrap_content"-->
+		<!--android:layout_height="wrap_content"-->
+		<!--android:layout_marginRight="10dp"-->
+		<!--android:layout_marginLeft="@dimen/dp_60"-->
+		<!--android:background="@drawable/bg_single_my_msg"-->
+		<!--android:padding="10dp">-->
+
+		<!--<TextView-->
+		<!--android:id="@+id/show_message"-->
+		<!--android:layout_width="wrap_content"-->
+		<!--android:layout_height="wrap_content"-->
+		<!--android:text="Hello"-->
+		<!--android:textColor="#ffffff"-->
+		<!--android:textSize="16sp" />-->
+
+		<!--<TextView-->
+		<!--android:id="@+id/tv_hour"-->
+		<!--android:layout_width="wrap_content"-->
+		<!--android:layout_height="wrap_content"-->
+		<!--android:layout_below="@+id/show_message"-->
+		<!--android:text="9:40"-->
+		<!--android:layout_toRightOf="@+id/show_message"/>-->
+		<!--</RelativeLayout>-->
+
+		<TextView
+			android:id="@+id/txt_seen"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/relay_1"
+			android:layout_alignParentEnd="true"
+			android:layout_alignParentRight="true" />
+	</RelativeLayout>
+
+</RelativeLayout>

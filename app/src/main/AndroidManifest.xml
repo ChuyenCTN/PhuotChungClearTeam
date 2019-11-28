@@ -3,10 +3,10 @@
 	package="com.clearteam.phuotnhom">
 
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-	<uses-permission android:name="android.permission.INTERNET"/>
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-	<uses-permission android:name="com.google.android.providers.gsf.permisson.READ_GSERVICES"/>
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="com.google.android.providers.gsf.permisson.READ_GSERVICES" />
 
 	<application
 		android:name=".MyApplication"
@@ -16,11 +16,11 @@
 		android:roundIcon="@mipmap/ic_launcher_round"
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme">
-		<activity android:name=".ui.InformationMemberActivity"
-			android:theme="@style/AppTheme.NoActionBar"/>
-
-
-
+		<activity android:name=".ui.ChatGroupActivity"
+			android:theme="@style/AppTheme.NoActionBar" />
+		<activity
+			android:name=".ui.InformationMemberActivity"
+			android:theme="@style/AppTheme.NoActionBar" />
 		<activity
 			android:name=".ui.AddMemberActivity"
 			android:theme="@style/AppTheme.NoActionBar" />
@@ -82,12 +82,18 @@
 			</intent-filter>
 		</activity>
 
-		<service android:name=".services.MyFirebaseMessagingService">
+		<service
+			android:name=".services.MyFirebaseMessagingService"
+			android:enabled="true"
+			android:exported="true">
 			<intent-filter>
 				<action android:name="com.google.firebase.MESSAGING_EVENT" />
 			</intent-filter>
 		</service>
-		<service android:name=".services.FirebaseIDService">
+		<service
+			android:name=".services.FirebaseIDService"
+			android:enabled="true"
+			android:exported="true">
 			<intent-filter>
 				<action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
 			</intent-filter>

@@ -24,10 +24,12 @@ public class ListUserAdapter extends RecyclerView.Adapter<ListUserAdapter.ViewHo
     private Context mContext;
     private List<User> userList;
     private ClickDetailMember mListener;
+    private boolean isChat;
 
-    public ListUserAdapter(Context mContext, List<User> userList, ClickDetailMember mListener) {
+    public ListUserAdapter(Context mContext, List<User> userList, ClickDetailMember mListener, boolean isChat) {
         this.mContext = mContext;
         this.userList = userList;
+        this.isChat = isChat;
         this.mListener = mListener;
     }
 
@@ -51,15 +53,19 @@ public class ListUserAdapter extends RecyclerView.Adapter<ListUserAdapter.ViewHo
     }
 
     public class ViewHoder extends RecyclerView.ViewHolder {
-        ImageView imgAvata;
-        TextView tvName;
-        TextView tvTV;
+        private ImageView imgAvata;
+        private TextView tvName;
+        private TextView tvTV;
+        private ImageView img_on;
+        private ImageView img_off;
 
         public ViewHoder(@NonNull View itemView) {
             super(itemView);
             imgAvata = itemView.findViewById(R.id.img_avata);
             tvName = itemView.findViewById(R.id.tv_name);
             tvTV = itemView.findViewById(R.id.tv_tv);
+            img_on = itemView.findViewById(R.id.img_on);
+            img_off = itemView.findViewById(R.id.img_off);
         }
 
         public void bindData(User user) {
@@ -70,7 +76,18 @@ public class ListUserAdapter extends RecyclerView.Adapter<ListUserAdapter.ViewHo
                     .placeholder(R.drawable.ic_launcher_background)
                     .error(R.mipmap.ic_launcher)
                     .into(imgAvata);
-
+            if (isChat) {
+                if (user.getStatus().equals("online")) {
+                    img_on.setVisibility(View.VISIBLE);
+                    img_off.setVisibility(View.GONE);
+                } else {
+                    img_on.setVisibility(View.GONE);
+                    img_off.setVisibility(View.VISIBLE);
+                }
+            } else {
+                img_on.setVisibility(View.GONE);
+                img_off.setVisibility(View.GONE);
+            }
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -15,6 +15,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,6 +31,9 @@ import androidx.fragment.app.Fragment;
 
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.model.ServiceAround;
+import com.clearteam.phuotnhom.model.User;
+import com.clearteam.phuotnhom.utils.DialogServiceAround;
+import com.clearteam.phuotnhom.utils.DialogServiceAroundMemberOnline;
 import com.clearteam.phuotnhom.parseplace.GetNearbyPlacesData;
 import com.clearteam.phuotnhom.utils.Const;
 import com.clearteam.phuotnhom.utils.DialogServiceAround;
@@ -70,8 +75,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
     private GoogleMap mMap;
     private List<ServiceAround> mServiceAroundList = new ArrayList<>();
+    private List<User> userList = new ArrayList<>();
+
     private static MapFragment INSTANCE;
     private LinearLayout mLiServiceAround, mLiFriend;
+
 
     public static MapFragment getInstance() {
         if (INSTANCE == null) {
@@ -108,6 +116,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        changeStatustBar();
     }
 
     @Override
@@ -212,22 +221,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.main, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.search_location:
-
-                break;
-        }
-        return true;
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.line_service_around:
@@ -246,7 +239,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
                 break;
             case R.id.line_friend:
+               DialogServiceAroundMemberOnline dialogServiceAroundMemberOnline = new DialogServiceAroundMemberOnline(userList, true, new DialogServiceAroundMemberOnline.IChoose() {
+                   @Override
+                   public void onChoose(User user) {
 
+                   }
+               });
+               dialogServiceAroundMemberOnline.show(getChildFragmentManager(),"ADAD");
                 break;
             case R.id.img_curent_location:
                 getCurrentLocation();
@@ -420,7 +419,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             markerOptions.position(latLng);
             markerOptions.title(addresses.get(0).getAdminArea()).snippet(addresses.get(0).getAddressLine(0)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
             currentLocationmMarker = mMap.addMarker(markerOptions);
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -452,7 +451,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
 */
     }
-
+    private void changeStatustBar() {
+        Window window = getActivity().getWindow();
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        // finally change the color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.setStatusBarColor(ContextCompat.getColor(getActivity(), R.color.bg_tab));
+        }
+    }
     private void initLocation() {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());

@@ -20,7 +20,7 @@
 			android:layout_height="@dimen/dp_25"
 			android:layout_centerVertical="true"
 			android:layout_marginLeft="@dimen/dp_16"
-			android:background="@drawable/left_arrow" />
+			android:background="@drawable/bg_back" />
 
 		<TextView
 			android:layout_width="wrap_content"
@@ -28,9 +28,22 @@
 			android:layout_centerInParent="true"
 			android:text="@string/register"
 			android:textColor="@color/white"
-			android:textSize="@dimen/size_22"
+			android:textSize="@dimen/size_20"
 			android:textStyle="bold" />
 	</RelativeLayout>
+
+	<ImageView
+		android:id="@+id/imageView2"
+		android:layout_width="@dimen/dp_150"
+		android:layout_height="@dimen/dp_150"
+		android:layout_centerHorizontal="true"
+		android:layout_marginStart="8dp"
+		android:layout_marginTop="@dimen/dp_40"
+		android:layout_marginEnd="8dp"
+		android:src="@drawable/logo"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/relay_1" />
 
 	<LinearLayout
 		android:id="@+id/linearLayout"
@@ -38,12 +51,12 @@
 		android:layout_height="wrap_content"
 		android:layout_below="@+id/relay_1"
 		android:layout_centerVertical="true"
-		android:layout_margin="20dp"
-		android:layout_marginTop="8dp"
+		android:layout_marginTop="@dimen/dp_30"
+		android:layout_marginLeft="@dimen/size_20"
+		android:layout_marginRight="@dimen/size_20"
 		android:orientation="vertical"
-		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/relay_1">
+		app:layout_constraintTop_toBottomOf="@+id/imageView2">
 
 		<LinearLayout
 			android:layout_width="match_parent"
@@ -58,14 +71,15 @@
 				android:layout_weight="1"
 				android:background="@drawable/bg_edit_text"
 				android:cursorVisible="true"
-				android:drawableLeft="@drawable/ic_name"
+				android:drawableLeft="@drawable/ic_person"
 				android:drawablePadding="@dimen/dp_8"
 				android:hint="Full Name"
 				android:inputType="text"
 				android:maxLength="50"
 				android:padding="@dimen/dp_10"
 				android:paddingBottom="@dimen/dp_10"
-				android:textColor="@color/black"
+				android:textColor="@color/text"
+				android:textColorHint="@color/text_hint"
 				android:textSize="@dimen/size_18" />
 
 
@@ -82,7 +96,8 @@
 			android:hint="Email"
 			android:inputType="textEmailAddress"
 			android:padding="@dimen/dp_10"
-			android:textColor="@color/black"
+			android:textColor="@color/text"
+			android:textColorHint="@color/text_hint"
 			android:textSize="@dimen/size_18" />
 
 		<LinearLayout
@@ -106,7 +121,8 @@
 				android:inputType="textPassword"
 				android:padding="@dimen/dp_10"
 				android:paddingBottom="@dimen/dp_10"
-				android:textColor="@color/black"
+				android:textColor="@color/text"
+				android:textColorHint="@color/text_hint"
 				android:textSize="@dimen/size_18" />
 
 			<ToggleButton
@@ -141,7 +157,8 @@
 				android:inputType="textPassword"
 				android:maxLength="50"
 				android:padding="10dp"
-				android:textColor="@color/black"
+				android:textColor="@color/text"
+				android:textColorHint="@color/text_hint"
 				android:textSize="18sp" />
 
 			<ToggleButton
@@ -162,9 +179,10 @@
 			android:layout_height="40dp"
 			android:layout_gravity="center"
 			android:layout_marginTop="15dp"
-			android:background="@drawable/bg_btn_login"
+			android:background="@drawable/color_buttom"
 			android:text="@string/register"
 			android:textAllCaps="false"
+			android:textColor="@color/white"
 			android:textSize="@dimen/size_18" />
 	</LinearLayout>
 

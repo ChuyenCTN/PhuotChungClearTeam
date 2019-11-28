@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="70dp"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:orientation="horizontal">
 	<de.hdodenhof.circleimageview.CircleImageView
 		android:id="@+id/img_avata"
@@ -10,6 +11,42 @@
 		android:layout_centerVertical="true"
 		android:layout_marginLeft="@dimen/dp_10"
 		android:src="@drawable/avatar"/>
+	<de.hdodenhof.circleimageview.CircleImageView
+		android:id="@+id/img_on"
+		android:layout_width="15dp"
+		android:layout_height="15dp"
+		android:layout_marginLeft="-15dp"
+		android:layout_marginTop="45dp"
+		android:layout_toEndOf="@id/img_avata"
+		android:layout_toRightOf="@id/img_avata"
+		android:src="@mipmap/ic_launcher"
+		android:visibility="gone"
+		app:civ_border_color="#05df29"
+		app:civ_border_width="10dp" />
+
+	<de.hdodenhof.circleimageview.CircleImageView
+		android:id="@+id/img_off"
+		android:layout_width="15dp"
+		android:layout_height="15dp"
+		android:layout_marginLeft="-15dp"
+		android:layout_marginTop="45dp"
+		android:layout_toEndOf="@id/img_avata"
+		android:layout_toRightOf="@id/img_avata"
+		android:src="@mipmap/ic_launcher"
+		android:visibility="gone"
+		app:civ_border_color="#bfbfbf"
+		app:civ_border_width="10dp" />
+
+	<!--<TextView-->
+		<!--android:id="@+id/last_msg"-->
+		<!--android:layout_width="wrap_content"-->
+		<!--android:layout_height="wrap_content"-->
+		<!--android:layout_marginLeft="10dp"-->
+		<!--android:layout_marginTop="33dp"-->
+		<!--android:layout_toRightOf="@id/profile_image1"-->
+		<!--android:maxLines="1"-->
+		<!--android:paddingTop="5dp"-->
+		<!--android:textColor="@color/colorPrimary" />-->
 	<TextView
 		android:id="@+id/tv_name"
 		android:layout_width="wrap_content"
