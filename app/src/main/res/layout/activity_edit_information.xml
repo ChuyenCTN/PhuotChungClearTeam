@@ -10,7 +10,7 @@
 	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="?attr/actionBarSize"
-		android:background="@color/bg_toolbar">
+		android:background="@color/bg_tab">
 
 		<ImageButton
 			android:id="@+id/img_back"

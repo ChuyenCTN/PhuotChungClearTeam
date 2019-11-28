@@ -15,6 +15,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -115,6 +117,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        changeStatustBar();
     }
 
     @Override
@@ -216,22 +219,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.main, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.search_location:
-
-                break;
-        }
-        return true;
     }
 
     @Override
@@ -446,7 +433,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
 */
     }
-
+    private void changeStatustBar() {
+        Window window = getActivity().getWindow();
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        // finally change the color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.setStatusBarColor(ContextCompat.getColor(getActivity(), R.color.bg_tab));
+        }
+    }
     private void initLocation() {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());

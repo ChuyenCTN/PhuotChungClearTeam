@@ -112,7 +112,7 @@ public class ChangepassActivity extends AppCompatActivity implements View.OnClic
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 // finally change the color
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setStatusBarColor(ContextCompat.getColor(ChangepassActivity.this, R.color.colorPrimaryDark));
+            window.setStatusBarColor(ContextCompat.getColor(ChangepassActivity.this, R.color.bg_tab));
         }
     }
 

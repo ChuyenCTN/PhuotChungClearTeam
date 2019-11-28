@@ -57,7 +57,7 @@ public class TourAllFragment extends Fragment {
     private DatabaseReference reference;
     private static TourAllFragment INSTANCE;
     private View view;
-    private String userId;
+    private String userId, keyAllUser;
     private TourMe mTourMe;
     private APIService apiService;
     boolean notify = false;
@@ -94,7 +94,7 @@ public class TourAllFragment extends Fragment {
 
         apiService = Client.getClient("https://fcm.googleapis.com").create(APIService.class);
 
-        Log.d("AAAA",userId);
+      //  Log.d("AAAA", userId);
         mapping(view);
         initRecyclerView();
         return view;
@@ -119,8 +119,11 @@ public class TourAllFragment extends Fragment {
             @Override
             public void onClickDetail(int position, TourMe response) {
                 if (response.getTvAdd().equals("Nhóm của bạn")) {
-                    startActivity(new Intent(getActivity(), TourGroupDetailActivity.class));
-                    //   Toast.makeText(getActivity(), "nhóm của bạn", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), TourGroupDetailActivity.class);
+                    intent.putExtra(Const.KEY_ID_1,keyAllUser);
+                    startActivity(intent);
+
+
                 } else {
                     Toast.makeText(getActivity(), response.getId(), Toast.LENGTH_SHORT).show();
                     notify = true;
@@ -147,7 +150,7 @@ public class TourAllFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username + ": " + message, "new Message", userid);
+                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username + ": " + message, "new Messenger", userid);
                     Sender sender = new Sender(data, token.getToken());
                     apiService.sendNotifycation(sender)
                             .enqueue(new Callback<MyResponse>() {
@@ -188,6 +191,8 @@ public class TourAllFragment extends Fragment {
                         list.add(mTourMe);
                         if (dataSnapshot1.getKey().equals(userId)) {
                             mTourMe.setTvAdd("Nhóm của bạn");
+                            keyAllUser = mTourMe.getKeyId();
+                            Log.d("AAAA",keyAllUser);
                             mTourMe.setMyTour(true);
                         } else {
                             mTourMe.setTvAdd("Đăng ký tham gia");

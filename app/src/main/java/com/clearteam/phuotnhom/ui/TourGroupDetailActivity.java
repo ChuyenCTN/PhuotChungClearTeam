@@ -74,7 +74,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
     private RecyclerView mRecyclerView;
     private List<String> keyRemoveMember = new ArrayList<>();
     private List<String> myListMember = new ArrayList<>();
-    private List<String> userIds = new ArrayList<>();
+    private List<String> listUpdateMember = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,7 +174,11 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
                 finish();
                 break;
             case R.id.img_message:
-                Toast.makeText(this, "show message", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(TourGroupDetailActivity.this,ChatGroupActivity.class);
+                intent.putExtra(Const.KEY_NAME_GROUP,nameGroup);
+                intent.putExtra(Const.KEY_IMAGE_GROUP,imageG);
+                intent.putExtra(Const.KEY_ID, id2);
+                startActivity(intent);
                 break;
             case R.id.img_menu_group:
                 PopupMenu popupMenu = new PopupMenu(TourGroupDetailActivity.this, v);
@@ -395,10 +399,42 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
             if (resultCode == RESULT_OK) {
                 String key = data.getData().toString();
                 readUsers(key);
+                updateMember(key);
                 adapter.notifyDataSetChanged();
+
             }
         }
     }
+
+    private void updateMember(String key) {
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        listUpdateMember = Arrays.asList(key.split(","));
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    User user = snapshot.getValue(User.class);
+                    assert user != null;
+                    assert firebaseUser != null;
+
+                    for (String temp : listUpdateMember) {
+                        if (!user.getId().equals(firebaseUser.getUid()) && temp.equals(user.getId())) {
+                            dataSnapshot.getRef().child(user.getId()).child("joined").setValue(id2);
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
 
     @Override
     protected void onPause() {

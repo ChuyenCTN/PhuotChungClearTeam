@@ -11,7 +11,7 @@ import com.clearteam.phuotnhom.fragment.TourMeFragment;
 
 public class TourGroupAdapter extends FragmentPagerAdapter {
 
-    private String[] title = new String[]{"Tour của bạn","Tất cả tuor"};
+    private String[] title = new String[]{"Nhóm của bạn","Tất cả nhóm"};
     public TourGroupAdapter(@NonNull FragmentManager fm) {
         super(fm);
     }

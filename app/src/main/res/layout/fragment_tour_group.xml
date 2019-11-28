@@ -11,10 +11,11 @@
 		android:id="@+id/tab_tour_group"
 		android:layout_width="match_parent"
 		android:layout_height="56dp"
-		android:background="#00BCD4"
-		app:tabIndicatorHeight="5dp"
-		app:tabSelectedTextColor="#ffffff"
-		app:tabTextColor="#FFFFFF" />
+		android:background="#F1F4F5"
+		app:tabIndicatorHeight="@dimen/dp_3"
+		app:tabSelectedTextColor="@color/bg_toolbar"
+		app:tabIndicatorColor="@color/bg_toolbar"
+		app:tabTextColor="@color/text" />
 
 	<androidx.viewpager.widget.ViewPager
 		android:id="@+id/vp_tour_group"
