@@ -68,8 +68,7 @@ import java.util.List;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private ImageView imgCurentLocation;
 
@@ -381,16 +380,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
     //    nearby
     private String getUrl(double latitude, double longitude, String nearbyPlace) {
-        String key = "AIzaSyAtpPlLN4Y-NrUsrg48F9_oAJnbL1B0tF4";
+        String key = "AIzaSyB9RoG4vLRQ1GqZ9XDJSeyfAa-PGMuLnxA";
         StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-        googlePlaceUrl.append("location=" + "21.0245" + "," + "105.84117");
+        googlePlaceUrl.append("location=" + mLatitude + "," + mLongitude);
         googlePlaceUrl.append("&radius=" + PROXIMITY_RADIUS);
         googlePlaceUrl.append("&type=" + nearbyPlace);
         googlePlaceUrl.append("&sensor=true");
 //        googlePlaceUrl.append("&key=" + getContext().getResources().getString(R.string.google_api_key));
         googlePlaceUrl.append("&key=" + key);
 
-        Log.d("MapsActivity", "url = " + googlePlaceUrl.toString());
+//        Log.d("MapsActivity", "url = " + googlePlaceUrl.toString());
 
         return googlePlaceUrl.toString();
     }
@@ -424,6 +423,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                String position = marker.getId();
+                String position1 = marker.getSnippet();
+                String position2 = String.valueOf(marker.getZIndex());
+                String position3 = marker.getTitle();
+
+//                Toast.makeText(getApplicationContext(), position + "", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), position1 + "", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), position2 + "", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), position3 + "", Toast.LENGTH_SHORT).show();
+
+
+
+                return false;
+            }
+        });
 /*
         String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
         String city = addresses.get(0).getLocality();
