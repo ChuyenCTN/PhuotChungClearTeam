@@ -1,6 +1,8 @@
 package com.clearteam.phuotnhom.model;
 
-public class TourMe {
+import java.io.Serializable;
+
+public class TourMe implements Serializable {
 
     private String id;
     private String name;
@@ -11,6 +13,16 @@ public class TourMe {
     private boolean isMyTour = true;
     private String avataGroup;
     private String keyId;
+    private String userGroupId;
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public TourMe() {
     }
@@ -22,7 +34,7 @@ public class TourMe {
         this.date = date;
     }
 
-    public TourMe(String id, String name, String addressStart, String addressEnd, String date, String tvAdd, boolean isMyTour,String avataGroup) {
+    public TourMe(String id, String name, String addressStart, String addressEnd, String date, String tvAdd, boolean isMyTour, String avataGroup) {
         this.id = id;
         this.name = name;
         this.addressStart = addressStart;
@@ -31,6 +43,14 @@ public class TourMe {
         this.tvAdd = tvAdd;
         this.isMyTour = isMyTour;
         this.avataGroup = avataGroup;
+    }
+
+    public String getUserGroupId() {
+        return userGroupId;
+    }
+
+    public void setUserGroupId(String userGroupId) {
+        this.userGroupId = userGroupId;
     }
 
     public String getId() {

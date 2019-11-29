@@ -3,6 +3,7 @@ package com.clearteam.phuotnhom.ui;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -11,9 +12,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +27,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.clearteam.phuotnhom.R;
+import com.clearteam.phuotnhom.model.TourMe;
 import com.clearteam.phuotnhom.model.User;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -49,13 +55,10 @@ import static com.google.firebase.storage.FirebaseStorage.getInstance;
 
 public class EditInformationActivity extends AppCompatActivity implements View.OnClickListener {
     private CircleImageView imgAvata;
-    private EditText edName;
-    private EditText edEmail;
-    private EditText edAddress;
-    private EditText edNumberPhone;
+    private EditText edName, edEmail, edAddress, edNumberPhone, ed_number_phone_relatives, edSex;
     private Button btnSave;
     private ImageButton imgBlack;
-    String name1, img1, email, address1, number_phone;
+    String name1, img1, email, address1, number_phone, tv_number_phone_relatives, sex;
 
     private String mStroragePath = "All_image_Uploads/";
     private int IMAGE_REQUSET_CODE = 5;
@@ -69,6 +72,7 @@ public class EditInformationActivity extends AppCompatActivity implements View.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_information);
+        changeStatustBar();
         initView();
     }
 
@@ -78,6 +82,8 @@ public class EditInformationActivity extends AppCompatActivity implements View.O
         edName = findViewById(R.id.name);
         edEmail = findViewById(R.id.email);
         edNumberPhone = findViewById(R.id.number_phone);
+        ed_number_phone_relatives = findViewById(R.id.ed_number_phone_relatives);
+        edSex = findViewById(R.id.ed_sex);
         edAddress = findViewById(R.id.address);
         btnSave = findViewById(R.id.btnLuu);
         imgBlack = findViewById(R.id.img_back);
@@ -85,26 +91,47 @@ public class EditInformationActivity extends AppCompatActivity implements View.O
         imgBlack.setOnClickListener(this);
         imgAvata.setOnClickListener(this);
         btnSave.setOnClickListener(this);
+
         mStorageReference = getInstance().getReference();
         mStorageReference = FirebaseStorage.getInstance().getReference();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference(mStoragePath);
         mProgressDialog = new ProgressDialog(EditInformationActivity.this);
         getData();
     }
+    private void changeStatustBar() {
+        Window window = this.getWindow();
+// clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+// finally change the color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.setStatusBarColor(ContextCompat.getColor(EditInformationActivity.this, R.color.bg_tab));
+        }
+    }
 
     private void getData() {
-        Bundle bundle = getIntent().getExtras();
+        //  Bundle bundle = getIntent().getExtras();
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
         if (bundle != null) {
-            name1 = bundle.getString(Const.KEY_NAME);
-            img1 = bundle.getString(Const.KEY_IMAGER);
-            email = bundle.getString(Const.KEY_EMAIL);
-            number_phone = bundle.getString(Const.KEY_NUMBER);
-            address1 = bundle.getString(Const.KEY_ADDRESS);
+            User user = ((User) bundle.getSerializable(Const.KEY_USER));
+            name1 = user.getUsername();
+            img1 = user.getImageURL();
+            email = user.getEmail();
+            number_phone = user.getNumberPhone();
+            tv_number_phone_relatives = user.getNumberPhoneRelatives();
+            sex = user.getSex();
+            address1 = user.getAddress();
 
             edName.setText(name1);
             edEmail.setText(email);
             edNumberPhone.setText(number_phone);
             edAddress.setText(address1);
+            ed_number_phone_relatives.setText(tv_number_phone_relatives);
+            edSex.setText(sex);
+            edAddress.setText(address1);
+
             if (img1.equals("default")) {
                 Glide.with(this).load(R.drawable.avatar).into(imgAvata);
             } else {
@@ -193,7 +220,7 @@ public class EditInformationActivity extends AppCompatActivity implements View.O
     }
 
     private void deletePreviousImage() {
-        if (!img1.equals("default")){
+        if (!img1.equals("default")) {
             StorageReference reference1 = getInstance().getReferenceFromUrl(img1);
             reference1.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
@@ -207,7 +234,7 @@ public class EditInformationActivity extends AppCompatActivity implements View.O
                     mProgressDialog.dismiss();
                 }
             });
-        }else{
+        } else {
             updateNewImage();
         }
 
@@ -249,6 +276,8 @@ public class EditInformationActivity extends AppCompatActivity implements View.O
         final String email = edEmail.getText().toString();
         final String address = edAddress.getText().toString();
         final String numberPhone = edNumberPhone.getText().toString();
+        final String numberPhoneRelatives = ed_number_phone_relatives.getText().toString();
+        final String sexx = edSex.getText().toString();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference(mStoragePath);
         Query query = reference.orderByChild("username").equalTo(name1);
@@ -261,6 +290,8 @@ public class EditInformationActivity extends AppCompatActivity implements View.O
                     dataSnapshot1.getRef().child("imageURL").setValue(toString);
                     dataSnapshot1.getRef().child("address").setValue(address);
                     dataSnapshot1.getRef().child("numberPhone").setValue(numberPhone);
+                    dataSnapshot1.getRef().child("numberPhoneRelatives").setValue(numberPhoneRelatives);
+                    dataSnapshot1.getRef().child("sex").setValue(sexx);
                 }
                 mProgressDialog.dismiss();
                 Toast.makeText(EditInformationActivity.this, "sửa thành công", Toast.LENGTH_SHORT).show();
@@ -278,7 +309,6 @@ public class EditInformationActivity extends AppCompatActivity implements View.O
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-//
             mFilePathUri = data.getData();
 
             Bitmap bitmap = null;
@@ -294,20 +324,6 @@ public class EditInformationActivity extends AppCompatActivity implements View.O
                 e.printStackTrace();
             }
             imgAvata.setImageBitmap(bitmap);
-
-//            final Uri imageUri = data.getData();
-//            final InputStream imageStream;
-//            try {
-//                imageStream = getContentResolver().openInputStream(imageUri);
-//                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-//                imgAvata.setImageBitmap(selectedImage);
-//                imgAvata.setImageURI(imageUri);
-//                imgAvata.invalidate();
-//
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            }
-
         } else {
             Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
 
