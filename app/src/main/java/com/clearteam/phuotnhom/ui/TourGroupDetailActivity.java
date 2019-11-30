@@ -16,7 +16,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +33,7 @@ import com.bumptech.glide.Glide;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.adapter.ListUserAdapter;
 import com.clearteam.phuotnhom.listener.ClickDetailMember;
+import com.clearteam.phuotnhom.model.TourMe;
 import com.clearteam.phuotnhom.model.User;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -57,9 +57,8 @@ import java.util.List;
 public class TourGroupDetailActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, DatePickerDialog.OnDateSetListener, ClickDetailMember, View.OnClickListener {
 
 
-
     private TextView tvNameGroup;
-    private ImageView imgAvataGroup, imgMenu,imgBack,imgMessage;
+    private ImageView imgAvataGroup, imgMenu, imgBack, imgMessage;
     private String nameGroup, imageG, addressStart, addressEnd, dateStart, keyID, keyRemove;
     private DatabaseReference reference;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -101,14 +100,15 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
 
     private void getData() {
         Intent intent = getIntent();
-        nameGroup = intent.getStringExtra(Const.KEY_NAME_GROUP);
-        id2 = intent.getStringExtra(Const.KEY_ID);
-        keyID = intent.getStringExtra(Const.KEY_ID_1);
-        addressStart = intent.getStringExtra(Const.KEY_ADDRESS_START_GROUP);
-        addressEnd = intent.getStringExtra(Const.KEY_ADDRESS_END_GROUP);
-        dateStart = intent.getStringExtra(Const.KEY_DATE_GROUP);
-        imageG = intent.getStringExtra(Const.KEY_IMAGE_GROUP);
-
+        Bundle bundle = intent.getExtras();
+        TourMe tour = ((TourMe) bundle.getSerializable(Const.KEY_DATA));
+        nameGroup = tour.getName();
+        id2 = tour.getId();
+        keyID = tour.getKeyId()+","+tour.getUserGroupId();
+        addressStart = tour.getAddressStart();
+        addressEnd = tour.getAddressEnd();
+        dateStart = tour.getDate();
+        imageG = tour.getAvataGroup();
 
         if (imageG == null) {
             Glide.with(this).load(R.drawable.avatar).into(imgAvataGroup);
@@ -141,7 +141,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
                         }
                     }
                 }
-                adapter = new ListUserAdapter(TourGroupDetailActivity.this, userList, TourGroupDetailActivity.this,true);
+                adapter = new ListUserAdapter(TourGroupDetailActivity.this, userList, TourGroupDetailActivity.this, true);
                 mRecyclerView.setAdapter(adapter);
             }
 
@@ -167,16 +167,17 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
 
         getData();
     }
+
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.img_back:
                 finish();
                 break;
             case R.id.img_message:
-                Intent intent = new Intent(TourGroupDetailActivity.this,ChatGroupActivity.class);
-                intent.putExtra(Const.KEY_NAME_GROUP,nameGroup);
-                intent.putExtra(Const.KEY_IMAGE_GROUP,imageG);
+                Intent intent = new Intent(TourGroupDetailActivity.this, ChatGroupActivity.class);
+                intent.putExtra(Const.KEY_NAME_GROUP, nameGroup);
+                intent.putExtra(Const.KEY_IMAGE_GROUP, imageG);
                 intent.putExtra(Const.KEY_ID, id2);
                 startActivity(intent);
                 break;
@@ -283,7 +284,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
     public void onClickDetail(int position, User user) {
         String keyUserId = user.getId();
         Intent intent = new Intent(TourGroupDetailActivity.this, InformationMemberActivity.class);
-        intent.putExtra(Const.KEY_USER_ID,keyUserId);
+        intent.putExtra(Const.KEY_USER_ID, keyUserId);
         startActivity(intent);
     }
 
@@ -399,41 +400,12 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
             if (resultCode == RESULT_OK) {
                 String key = data.getData().toString();
                 readUsers(key);
-                updateMember(key);
                 adapter.notifyDataSetChanged();
 
             }
         }
     }
 
-    private void updateMember(String key) {
-        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
-        listUpdateMember = Arrays.asList(key.split(","));
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    User user = snapshot.getValue(User.class);
-                    assert user != null;
-                    assert firebaseUser != null;
-
-                    for (String temp : listUpdateMember) {
-                        if (!user.getId().equals(firebaseUser.getUid()) && temp.equals(user.getId())) {
-                            dataSnapshot.getRef().child(user.getId()).child("joined").setValue(id2);
-                        }
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
 
 
     @Override

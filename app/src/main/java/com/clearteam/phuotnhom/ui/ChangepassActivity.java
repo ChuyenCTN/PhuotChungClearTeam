@@ -92,7 +92,7 @@ public class ChangepassActivity extends AppCompatActivity implements View.OnClic
                     if (user.getImageURL().equals("default")) {
                         imgAvata.setImageResource(R.drawable.avatar);
                     } else {
-                        Glide.with(ChangepassActivity.this).load(user.getImageURL()).into(imgAvata);
+                        Glide.with(getApplicationContext()).load(user.getImageURL()).into(imgAvata);
                     }
                 }
             }

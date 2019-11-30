@@ -76,9 +76,9 @@ public class InformationMemberActivity extends AppCompatActivity implements View
                     tvAddress.setText(user.getAddress());
                     tvNumberPhone.setText(user.getNumberPhone());
                     if (user.getImageURL().equals("default")) {
-                        Glide.with(InformationMemberActivity.this).load(R.drawable.avatar).into(imgAvata);
+                        Glide.with(getApplicationContext()).load(R.drawable.avatar).into(imgAvata);
                     } else {
-                        Glide.with(InformationMemberActivity.this).load(user.getImageURL()).into(imgAvata);
+                        Glide.with(getApplicationContext()).load(user.getImageURL()).into(imgAvata);
                     }
             }
 

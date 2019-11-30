@@ -37,6 +37,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -62,6 +63,7 @@ public class TourAllFragment extends Fragment {
     private APIService apiService;
     boolean notify = false;
     Intent intent;
+    List<String> listUserIds;
 
     public static TourAllFragment getInstance() {
         if (INSTANCE == null) {
@@ -118,9 +120,11 @@ public class TourAllFragment extends Fragment {
         mTourAllAdapter.setClickDetailTourGroup(new TourAllAdapter.clickDetailTourGroup() {
             @Override
             public void onClickDetail(int position, TourMe response) {
-                if (response.getTvAdd().equals("Nhóm của bạn")) {
+                if (response.getTvAdd().equals("Nhóm của bạn")||response.getTvAdd().equals("Bạn đã tham gia")) {
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(Const.KEY_DATA, response);
                     Intent intent = new Intent(getActivity(), TourGroupDetailActivity.class);
-                    intent.putExtra(Const.KEY_ID_1,keyAllUser);
+                    intent.putExtras(bundle);
                     startActivity(intent);
 
 
@@ -128,8 +132,9 @@ public class TourAllFragment extends Fragment {
                     Toast.makeText(getActivity(), response.getId(), Toast.LENGTH_SHORT).show();
                     notify = true;
                     String msg = "Muốn tham gia vào nhóm phượt của bạn";
+
                     if (!msg.equals("")) {
-                        sendNotification(fuser.getUid(), userid, msg);
+                        sendNotification(fuser.getUid(), userid, msg,response.getToken());
                     } else {
                         Toast.makeText(getActivity(), "You can't send empty message", Toast.LENGTH_SHORT).show();
                     }
@@ -139,7 +144,7 @@ public class TourAllFragment extends Fragment {
         });
     }
 
-    private void sendNotification(String receiver, final String username, final String message) {
+    private void sendNotification(String receiver, final String username, final String message,String token) {
 
         //final String userid = intent.getStringExtra("userid");
         final String userid = "7rxs0ORn4QbcITYDHgiuTQxvaKj2";
@@ -189,11 +194,20 @@ public class TourAllFragment extends Fragment {
                     for (DataSnapshot dta1 : dataSnapshot1.getChildren()) {
                         mTourMe = dta1.getValue(TourMe.class);
                         list.add(mTourMe);
+                        keyAllUser = mTourMe.getKeyId();
+                        Log.d("AAAAA",String.valueOf(keyAllUser));
+                        if (keyAllUser != null){
+                            listUserIds = new ArrayList<>();
+                            listUserIds = Arrays.asList(keyAllUser.split(","));
+                        }
                         if (dataSnapshot1.getKey().equals(userId)) {
                             mTourMe.setTvAdd("Nhóm của bạn");
-                            keyAllUser = mTourMe.getKeyId();
-                            Log.d("AAAA",keyAllUser);
                             mTourMe.setMyTour(true);
+                            mTourMe.setUserGroupId(dataSnapshot1.getKey());
+                        } else if (listUserIds.contains(userId) == true) {
+                            mTourMe.setTvAdd("Bạn đã tham gia");
+                            mTourMe.setMyTour(true);
+                            mTourMe.setUserGroupId(dataSnapshot1.getKey());
                         } else {
                             mTourMe.setTvAdd("Đăng ký tham gia");
                             mTourMe.setMyTour(false);
@@ -222,7 +236,6 @@ public class TourAllFragment extends Fragment {
     public void onResume() {
         super.onResume();
         final String userid = intent.getStringExtra("userid");
-        //  status("online");
         // final String userid = "eXHqjj7yt8f68Nj2VhQFXzVdErd2";
         currentUser(userid);
     }
@@ -231,7 +244,6 @@ public class TourAllFragment extends Fragment {
     public void onPause() {
         super.onPause();
         // reference.removeEventListener(seenListiener);
-        //status("offline");
         currentUser("none");
     }
 }

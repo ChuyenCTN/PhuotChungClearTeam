@@ -13,7 +13,8 @@ public class User implements Serializable {
     private String search;
     private boolean isSelected;
     private String isMember;
-
+    private String numberPhoneRelatives;
+    private String sex;
 
 
     public User() {
@@ -117,5 +118,21 @@ public class User implements Serializable {
 
     public void setIsMember(String isMember) {
         this.isMember = isMember;
+    }
+
+    public String getNumberPhoneRelatives() {
+        return numberPhoneRelatives;
+    }
+
+    public void setNumberPhoneRelatives(String numberPhoneRelatives) {
+        this.numberPhoneRelatives = numberPhoneRelatives;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }

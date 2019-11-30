@@ -40,6 +40,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,15 +62,15 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
     private String id, time;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private List<TourMe> list;
-    private  TourMe mTourMe;
+    private TourMe mTourMe;
     private TourMeAdapter tourMeAdapter;
     private TextView tvCheck;
-    private  View view;
+    private View view;
     private static TourMeFragment INSTANCE;
 
 
     public static TourMeFragment getInstance() {
-        if (INSTANCE == null){
+        if (INSTANCE == null) {
             INSTANCE = new TourMeFragment();
         }
         return INSTANCE;
@@ -85,7 +86,7 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (view == null){
+        if (view == null) {
             view = inflater.inflate(R.layout.fragment_tour_me, container, false);
             onDateSetListener1 = this;
 
@@ -116,23 +117,11 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
         tourMeAdapter.setClickDetailTourGroup(new TourMeAdapter.clickDetailTourGroup() {
             @Override
             public void onClickDetail(int position, TourMe tourMe) {
-                String name = list.get(position).getName();
-                String id = list.get(position).getId();
-                String img = list.get(position).getAvataGroup();
-                String addressStart = list.get(position).getAddressStart();
-                String addressEnd = list.get(position).getAddressEnd();
-                String date = list.get(position).getDate();
-                String keyId = list.get(position).getKeyId();
-
-
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Const.KEY_DATA, tourMe);
                 Intent intent = new Intent(getActivity(), TourGroupDetailActivity.class);
-                intent.putExtra(Const.KEY_ID,id);
-                intent.putExtra(Const.KEY_ID_1,keyId);
-                intent.putExtra(Const.KEY_NAME_GROUP,name);
-                intent.putExtra(Const.KEY_IMAGE_GROUP,img);
-                intent.putExtra(Const.KEY_ADDRESS_START_GROUP,addressStart);
-                intent.putExtra(Const.KEY_ADDRESS_END_GROUP,addressEnd);
-                intent.putExtra(Const.KEY_DATE_GROUP,date);
+                intent.putExtras(bundle);
+                startActivity(intent);
 
                 startActivity(intent);
             }
@@ -173,7 +162,7 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
                     mTourMe = dataSnapshot1.getValue(TourMe.class);
                     list.add(mTourMe);
                 }
-                if (list.size()==0){
+                if (list.size() == 0) {
                     tvCheck.setVisibility(View.VISIBLE);
                 } else {
                     tvCheck.setVisibility(View.GONE);
@@ -273,14 +262,9 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
         tourMe.setAddressStart(addressStart);
         tourMe.setAddressEnd(addressEnd);
         tourMe.setDate(dateStart);
+        tourMe.setToken(FirebaseInstanceId.getInstance().getToken());
         tourMe.setKeyId("");
         reference = FirebaseDatabase.getInstance().getReference();
-
-//        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPref.edit();
-//        editor.putString(Const.KEY_ID, id);
-//        editor.commit();
-
         reference.child("Groups").child(id).child(time).setValue(tourMe).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

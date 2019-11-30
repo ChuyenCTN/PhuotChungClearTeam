@@ -18,7 +18,7 @@
 			android:layout_height="@dimen/dp_24"
 			android:layout_centerVertical="true"
 			android:layout_marginLeft="@dimen/dp_10"
-			android:background="@drawable/left_arrow" />
+			android:background="@drawable/bg_back" />
 
 		<TextView
 			android:layout_width="wrap_content"
@@ -43,25 +43,35 @@
 		android:layout_marginTop="@dimen/dp_20"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:hint="name" />
+		android:hint="Tên" />
 
 	<EditText
 		android:id="@+id/email"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:hint="email" />
+		android:hint="Email" />
 
 	<EditText
 		android:id="@+id/number_phone"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:hint="number phone" />
+		android:hint="Số điện thoại" />
+	<EditText
+		android:id="@+id/ed_number_phone_relatives"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:hint="Số điện thoại người thân" />
+	<EditText
+		android:id="@+id/ed_sex"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:hint="Giới tính" />
 
 	<EditText
 		android:id="@+id/address"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:hint="address" />
+		android:hint="Quê quán" />
 	<Button
 		android:id="@+id/btnLuu"
 		android:layout_width="match_parent"

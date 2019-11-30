@@ -25,6 +25,8 @@ public class Const {
     public static String KEY_ADDRESS_END_GROUP = "address_end_group";
     public static String KEY_DATE_GROUP = "date_group";
     public static final int REQUEST_CODE = 1;
+    public static final String KEY_DATA = "key_data";
+    public static final String KEY_USER = "key_user";
     public static final String TOKEN_FIREBASE = "token_firebase";
 
 
