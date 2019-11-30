@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import com.bumptech.glide.Glide;
 import com.clearteam.phuotnhom.fragment.IntroductFragment;
 import com.clearteam.phuotnhom.fragment.MapFragment;
+import com.clearteam.phuotnhom.fragment.NotifyFragment;
 import com.clearteam.phuotnhom.fragment.ProfileFragment;
 import com.clearteam.phuotnhom.fragment.TourGroupFragment;
 import com.clearteam.phuotnhom.model.User;
@@ -47,7 +48,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private FrameLayout frameLayout, fameToolBar;
+    private FrameLayout frameLayout;
 
     private FragmentManager mFragmentManager;
     private TourGroupFragment mtourGroupFragment;
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View view = navigationView.getHeaderView(0);
         imgAvata = view.findViewById(R.id.img_avata);
         tvName = view.findViewById(R.id.tv_name);
-        tvEmail =view.findViewById(R.id.tv_email);
+        tvEmail = view.findViewById(R.id.tv_email);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if (user.getImageURL().equals("default")) {
                         imgAvata.setImageResource(R.drawable.avatar);
                     } else {
-                        Glide.with(MainActivity.this).load(user.getImageURL()).into(imgAvata);
+                        Glide.with(getApplicationContext()).load(user.getImageURL()).into(imgAvata);
                     }
 
                 }
@@ -128,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+
     private void updateToken(String token) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
         Token token1 = new Token(token);
@@ -185,6 +187,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_setting:
                 break;
             case R.id.nav_notifi:
+                setTitle("Thông báo");
+                replaceFragment(NotifyFragment.getInstance(), mFragmentManager);
                 break;
             case R.id.nav_introduction:
                 setTitle("Giới thiệu");

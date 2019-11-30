@@ -21,9 +21,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     //    private static final String TAG = "FCM Service";
-//
+
+    //
 //    @Override
 //    public void onMessageReceived(RemoteMessage remoteMessage) {
 //        // TODO: Handle FCM messages here.
@@ -36,14 +40,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-
-
-//        String sented = remoteMessage.getData().get("sented");
-//        String user = remoteMessage.getData().get("user");
-        //Log.d("AAAA",sented+ " / " + user);
-        String user = "";
-        String sented  = "eXHqjj7yt8f68Nj2VhQFXzVdErd2";
-
+        String sented = remoteMessage.getData().get("sented");
+        String user = remoteMessage.getData().get("user");
         SharedPreferences preferences = getSharedPreferences("PREFS", MODE_PRIVATE);
         String currentUser = preferences.getString("currentuser", "none");
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
