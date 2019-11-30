@@ -26,6 +26,7 @@ import com.clearteam.phuotnhom.model.User;
 import com.clearteam.phuotnhom.notification.Token;
 import com.clearteam.phuotnhom.ui.LoginActivity;
 import com.clearteam.phuotnhom.ui.map.MapFragment;
+import com.clearteam.phuotnhom.ui.schedule.SchedulerFragment;
 import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -177,6 +178,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 replaceFragment(mtourGroupFragment, mFragmentManager);
                 break;
             case R.id.nav_schedule:
+                setTitle("Lịch trình");
+                replaceFragment(SchedulerFragment.getInstance(), mFragmentManager);
                 break;
             case R.id.nav_user:
                 setTitle("Thông tin cá nhân");
