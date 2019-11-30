@@ -168,6 +168,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             hashMap.put("status", "offline");
                             hashMap.put("isMember", String.valueOf(false));
                             hashMap.put("search", username.toLowerCase());
+                            hashMap.put("latitude", "21.585165");
+                            hashMap.put("longitude", "105.561568");
 
                             mReference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

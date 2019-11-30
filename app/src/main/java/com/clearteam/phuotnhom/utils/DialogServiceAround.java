@@ -138,7 +138,7 @@ public class DialogServiceAround extends BottomSheetDialogFragment implements Vi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_restaurent_bts:
-                iChoose.onClick("restaurant", getString(R.string.txt_label_restaurant));
+                iChoose.onClick("food", getString(R.string.txt_label_restaurant));
                 break;
             case R.id.layout_hotel_bts:
                 iChoose.onClick("hotel", getString(R.string.txt_label_hotel));
