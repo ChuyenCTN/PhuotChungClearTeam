@@ -16,18 +16,27 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_gravity="center_horizontal"
-		android:text="Bạn bè đang online"
+		android:text="@string/title_status"
 		android:textColor="@color/black"
 		android:textSize="@dimen/size_18"
 		android:textStyle="bold" />
-
+	<TextView
+		android:id="@+id/tv_status"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/status_member"
+		android:textColor="@color/text"
+		android:textSize="@dimen/size_16"
+		android:layout_marginTop="@dimen/dp_20"
+		android:layout_gravity="center"
+		android:visibility="gone"/>
 	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_gravity="center"
-		android:layout_marginLeft="8dp"
+		android:layout_marginLeft="@dimen/dp_8"
 		android:layout_marginTop="@dimen/dp_30"
-		android:layout_marginRight="8dp"
+		android:layout_marginRight="@dimen/dp_8"
 		android:orientation="vertical">
 
 		<androidx.recyclerview.widget.RecyclerView
@@ -35,8 +44,8 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:clipToPadding="false"
-			android:paddingLeft="8dp"
-			android:paddingRight="8dp"
+			android:paddingLeft="@dimen/dp_8"
+			android:paddingRight="@dimen/dp_8"
 			android:scrollbars="none"
 			tools:listitem="@layout/item_user_status" />
 	</RelativeLayout>

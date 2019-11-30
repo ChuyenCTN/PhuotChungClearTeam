@@ -1,4 +1,4 @@
-package com.clearteam.phuotnhom.fragment;
+package com.clearteam.phuotnhom.ui.map;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -10,9 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -32,11 +29,12 @@ import androidx.fragment.app.Fragment;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.model.ServiceAround;
 import com.clearteam.phuotnhom.model.User;
-import com.clearteam.phuotnhom.utils.DialogServiceAround;
-import com.clearteam.phuotnhom.utils.DialogServiceAroundMemberOnline;
-import com.clearteam.phuotnhom.parseplace.GetNearbyPlacesData;
+import com.clearteam.phuotnhom.network.RetrofitClient;
+import com.clearteam.phuotnhom.network.api.APIService;
+import com.clearteam.phuotnhom.ui.map.model.PlaceResponse;
 import com.clearteam.phuotnhom.utils.Const;
 import com.clearteam.phuotnhom.utils.DialogServiceAround;
+import com.clearteam.phuotnhom.utils.DialogServiceAroundMemberOnline;
 import com.clearteam.phuotnhom.utils.GpsUtils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -65,13 +63,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private ImageView imgCurentLocation;
-
 
     private GoogleMap mMap;
     private List<ServiceAround> mServiceAroundList = new ArrayList<>();
@@ -94,8 +96,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     private LocationRequest locationRequest;
     private Location lastlocation;
     private Marker currentLocationmMarker;
+    private Marker placeMarker;
     public static final int REQUEST_LOCATION_CODE = 99;
     int PROXIMITY_RADIUS = 10000;
+
+    private String mContentPlace = "";
 
 
     //    my
@@ -113,6 +118,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
     private boolean isGPS = false;
 
+    private PlaceResponse mPlaceResponse;
+
+    private String placeKey = "AIzaSyB9RoG4vLRQ1GqZ9XDJSeyfAa-PGMuLnxA";
+
+    private Retrofit mRetrofit;
+    private APIService mApiService;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +141,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
         }
+
+        mRetrofit = RetrofitClient.getRetrofitClient();
+        mApiService = mRetrofit.create(APIService.class);
 
         imgCurentLocation = (ImageView) view.findViewById(R.id.img_curent_location);
         mLiServiceAround = view.findViewById(R.id.line_service_around);
@@ -232,20 +247,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
                     @Override
                     public void onClick(String nameService, String title) {
-                        getRecentNearby(nameService, title);
+                        mContentPlace = title;
+                        Toast.makeText(getContext(), "Đang tìm " + title + " gần đây", Toast.LENGTH_SHORT).show();
+                        getNearbyPlace(String.valueOf(mLatitude + "," + mLongitude), nameService);
                     }
                 });
                 dialogServiceAround.show(getChildFragmentManager(), "ADAS");
 
                 break;
             case R.id.line_friend:
-               DialogServiceAroundMemberOnline dialogServiceAroundMemberOnline = new DialogServiceAroundMemberOnline(userList, true, new DialogServiceAroundMemberOnline.IChoose() {
-                   @Override
-                   public void onChoose(User user) {
+                DialogServiceAroundMemberOnline dialogServiceAroundMemberOnline = new DialogServiceAroundMemberOnline(userList, true, new DialogServiceAroundMemberOnline.IChoose() {
+                    @Override
+                    public void onChoose(User user) {
 
-                   }
-               });
-               dialogServiceAroundMemberOnline.show(getChildFragmentManager(),"ADAD");
+                    }
+                });
+                dialogServiceAroundMemberOnline.show(getChildFragmentManager(), "ADAD");
                 break;
             case R.id.img_curent_location:
                 getCurrentLocation();
@@ -380,32 +397,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
     //    nearby
     private String getUrl(double latitude, double longitude, String nearbyPlace) {
-        String key = "AIzaSyB9RoG4vLRQ1GqZ9XDJSeyfAa-PGMuLnxA";
+
         StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-        googlePlaceUrl.append("location=" + mLatitude + "," + mLongitude);
+        googlePlaceUrl.append("location=" + latitude + "," + longitude);
         googlePlaceUrl.append("&radius=" + PROXIMITY_RADIUS);
         googlePlaceUrl.append("&type=" + nearbyPlace);
         googlePlaceUrl.append("&sensor=true");
-//        googlePlaceUrl.append("&key=" + getContext().getResources().getString(R.string.google_api_key));
-        googlePlaceUrl.append("&key=" + key);
+        googlePlaceUrl.append("&key=" + placeKey);
 
 //        Log.d("MapsActivity", "url = " + googlePlaceUrl.toString());
 
         return googlePlaceUrl.toString();
-    }
-
-
-    private void getRecentNearby(String data, String title) {
-        Object dataTransfer[] = new Object[2];
-        GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
-        mMap.clear();
-        String url = getUrl(mLatitude, mLongitude, data);
-        dataTransfer[0] = mMap;
-        dataTransfer[1] = url;
-
-        getNearbyPlacesData.execute(dataTransfer);
-        Toast.makeText(getContext(), "Đang tìm " + title + " gần đây", Toast.LENGTH_SHORT).show();
-
     }
 
 
@@ -438,7 +440,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 //                Toast.makeText(getApplicationContext(), position3 + "", Toast.LENGTH_SHORT).show();
 
 
-
                 return false;
             }
         });
@@ -451,6 +452,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
 */
     }
+
     private void changeStatustBar() {
         Window window = getActivity().getWindow();
         // clear FLAG_TRANSLUCENT_STATUS flag:
@@ -462,6 +464,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             window.setStatusBarColor(ContextCompat.getColor(getActivity(), R.color.bg_tab));
         }
     }
+
     private void initLocation() {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
@@ -480,4 +483,82 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         });
     }
 
+    private void getNearbyPlace(String location, String type) {
+        Call<PlaceResponse> call = mApiService.getPlaceNearby(location, Const.RADIUS_PLACE, type, "", placeKey);
+        call.enqueue(new Callback<PlaceResponse>() {
+            @Override
+            public void onResponse(Call<PlaceResponse> call, Response<PlaceResponse> response) {
+                if (response.code() == 200) {
+                    if (response != null) {
+                        mPlaceResponse = new PlaceResponse();
+                        mPlaceResponse = (PlaceResponse) response.body();
+                        if (mPlaceResponse.getStatus().equalsIgnoreCase(Const.STATUS_OK)) {
+                            Log.d("zxcvbnm,.", mPlaceResponse.getResults().size() + "");
+                            for (int i = 0; i < mPlaceResponse.getResults().size(); i++) {
+                                double lon = mPlaceResponse.getResults().get(i).getGeometry().getViewport().getNortheast().getLng();
+                                double lat = mPlaceResponse.getResults().get(i).getGeometry().getViewport().getNortheast().getLat();
+                                showMarkerNearby(lat, lon);
+                            }
+                        } else {
+                            Toast.makeText(getContext(), "Không tìm thấy " + mContentPlace + " gần đây", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PlaceResponse> call, Throwable t) {
+                Log.e("NearbyPlace: ", t.getMessage() + "");
+                Log.e("NearbyPlace: ", t.getLocalizedMessage() + "");
+            }
+        });
+
+    }
+
+
+    public void showMarkerNearby(double latitude, double longitude) {
+        try {
+            LatLng latLng = new LatLng(latitude, longitude);
+            mGeocoder = new Geocoder(getContext());
+            List<Address> addresses = mGeocoder.getFromLocation(latitude, longitude, 1);
+
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+            markerOptions.title(addresses.get(0).getAdminArea()).snippet(addresses.get(0).getAddressLine(0)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+            mMap.addMarker(markerOptions);
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.moveCamera(CameraUpdateFactory.zoomTo(11));
+
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                String position = marker.getId();
+                String position1 = marker.getSnippet();
+                String position2 = String.valueOf(marker.getZIndex());
+                String position3 = marker.getTitle();
+
+//                Toast.makeText(getApplicationContext(), position + "", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), position1 + "", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), position2 + "", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), position3 + "", Toast.LENGTH_SHORT).show();
+
+
+                return false;
+            }
+        });
+/*
+        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+        String city = addresses.get(0).getLocality();
+        String state = addresses.get(0).getAdminArea();
+        String country = addresses.get(0).getCountryName();
+        String postalCode = addresses.get(0).getPostalCode();
+        String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
+*/
+    }
 }

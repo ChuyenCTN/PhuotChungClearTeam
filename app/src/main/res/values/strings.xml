@@ -67,6 +67,8 @@
 	<string name="txt_label_petroleum">Trạm xăng, dầu</string>
 	<string name="txt_label_grocery">Cửa hàng tạp hóa</string>
 	<string name="txt_label_tourist_destination">Địa danh</string>
+	<string name="title_status">Bạn bè đang online</string>
+	<string name="status_member">Chưa có bạn bè online</string>
 
 
 </resources>

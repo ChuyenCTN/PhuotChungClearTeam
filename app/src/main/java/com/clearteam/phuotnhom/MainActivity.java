@@ -6,7 +6,6 @@ import android.view.MenuItem;
 
 import com.bumptech.glide.Glide;
 import com.clearteam.phuotnhom.fragment.IntroductFragment;
-import com.clearteam.phuotnhom.fragment.MapFragment;
 import com.clearteam.phuotnhom.fragment.NotifyFragment;
 import com.clearteam.phuotnhom.fragment.ProfileFragment;
 import com.clearteam.phuotnhom.fragment.TourGroupFragment;
@@ -18,6 +17,7 @@ import com.clearteam.phuotnhom.utils.Const;
 import com.facebook.login.LoginManager;
 
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -32,6 +32,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
+import com.clearteam.phuotnhom.fragment.IntroductFragment;
+import com.clearteam.phuotnhom.fragment.ProfileFragment;
+import com.clearteam.phuotnhom.fragment.TourGroupFragment;
+import com.clearteam.phuotnhom.model.User;
+import com.clearteam.phuotnhom.notification.Token;
+import com.clearteam.phuotnhom.ui.LoginActivity;
+import com.clearteam.phuotnhom.ui.map.MapFragment;
+import com.clearteam.phuotnhom.ui.schedule.SchedulerFragment;
+import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -103,9 +113,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     User user = dataSnapshot.getValue(User.class);
                     tvName.setText(user.getUsername());
                     tvEmail.setText(user.getEmail());
-
-                    if (user.getImageURL().equals("default")) {
-                        imgAvata.setImageResource(R.drawable.avatar);
+                    if (user.getImageURL() != null) {
+                        if (user.getImageURL().equals("default")) {
+                            imgAvata.setImageResource(R.drawable.avatar);
+                        } else {
+                            Glide.with(getApplicationContext()).load(user.getImageURL()).into(imgAvata);
+                        }
                     } else {
                         Glide.with(getApplicationContext()).load(user.getImageURL()).into(imgAvata);
                     }
@@ -179,6 +192,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 replaceFragment(mtourGroupFragment, mFragmentManager);
                 break;
             case R.id.nav_schedule:
+                setTitle("Lịch trình");
+                replaceFragment(SchedulerFragment.getInstance(), mFragmentManager);
                 break;
             case R.id.nav_user:
                 setTitle("Thông tin cá nhân");
