@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,6 +55,8 @@ public class ListStatusUserAdapter extends RecyclerView.Adapter<ListStatusUserAd
         private TextView tvName;
         private ImageView img_on;
         private ImageView img_off;
+        private ImageView imgMessage;
+        private ImageView imgLocation;
 
         public ViewHoder(@NonNull View itemView) {
             super(itemView);
@@ -61,6 +64,8 @@ public class ListStatusUserAdapter extends RecyclerView.Adapter<ListStatusUserAd
             tvName = itemView.findViewById(R.id.tv_username);
             img_on = itemView.findViewById(R.id.img_on);
             img_off = itemView.findViewById(R.id.img_off);
+            imgLocation = itemView.findViewById(R.id.img_location);
+            imgMessage = itemView.findViewById(R.id.img_message);
         }
 
         public void onBind(User user) {
@@ -83,7 +88,18 @@ public class ListStatusUserAdapter extends RecyclerView.Adapter<ListStatusUserAd
                 img_on.setVisibility(View.GONE);
                 img_off.setVisibility(View.GONE);
             }
-
+            imgMessage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mContext, "show message", Toast.LENGTH_SHORT).show();
+                }
+            });
+            imgLocation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mContext, "show location", Toast.LENGTH_SHORT).show();
+                }
+            });
 //            itemView.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {

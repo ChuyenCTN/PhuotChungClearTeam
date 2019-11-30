@@ -31,6 +31,7 @@ import com.clearteam.phuotnhom.model.ServiceAround;
 import com.clearteam.phuotnhom.model.User;
 import com.clearteam.phuotnhom.network.RetrofitClient;
 import com.clearteam.phuotnhom.network.api.APIService;
+import com.clearteam.phuotnhom.notification.Token;
 import com.clearteam.phuotnhom.ui.map.model.PlaceResponse;
 import com.clearteam.phuotnhom.utils.Const;
 import com.clearteam.phuotnhom.utils.DialogServiceAround;
@@ -57,11 +58,23 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -125,6 +138,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     private Retrofit mRetrofit;
     private APIService mApiService;
 
+    //firebase
+    private FirebaseUser firebaseUser;
+    private DatabaseReference reference;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,7 +178,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
         getAutocompletePlace();
 
+        initfirebase();
+
+        initRequestLocation();
+
         return view;
+    }
+
+    private void initRequestLocation() {
+        ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
+        ses.scheduleWithFixedDelay(new Runnable() {
+            @Override
+            public void run() {
+                getCurrentLocation();
+            }
+        }, 0, Const.TIME_REQUEST, TimeUnit.SECONDS);
+
+    }
+
+
+
+    private void initfirebase() {
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        updateToken(FirebaseInstanceId.getInstance().getToken());
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
     }
 
     public void getAutocompletePlace() {
@@ -188,7 +230,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             @Override
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
-                // AddPlace(place,1);
                 String location = place.getName();
                 String address = place.getAddress();
 
@@ -319,7 +360,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         mLongitude = location.getLongitude();
         lastlocation = location;
         showMarker(mLatitude, mLongitude);
-
         if (client != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
         }
@@ -395,24 +435,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     }
 
 
-    //    nearby
-    private String getUrl(double latitude, double longitude, String nearbyPlace) {
-
-        StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-        googlePlaceUrl.append("location=" + latitude + "," + longitude);
-        googlePlaceUrl.append("&radius=" + PROXIMITY_RADIUS);
-        googlePlaceUrl.append("&type=" + nearbyPlace);
-        googlePlaceUrl.append("&sensor=true");
-        googlePlaceUrl.append("&key=" + placeKey);
-
-//        Log.d("MapsActivity", "url = " + googlePlaceUrl.toString());
-
-        return googlePlaceUrl.toString();
-    }
-
-
     public void showMarker(double latitude, double longitude) {
         try {
+
+//            cai nay de update vi tri cua minh len firebase
+//            updateLatlng(String.valueOf(latitude), String.valueOf(longitude));
+
             LatLng latLng = new LatLng(latitude, longitude);
             mGeocoder = new Geocoder(getContext());
             List<Address> addresses = mGeocoder.getFromLocation(latitude, longitude, 1);
@@ -518,6 +546,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
     public void showMarkerNearby(double latitude, double longitude) {
         try {
+
             LatLng latLng = new LatLng(latitude, longitude);
             mGeocoder = new Geocoder(getContext());
             List<Address> addresses = mGeocoder.getFromLocation(latitude, longitude, 1);
@@ -528,7 +557,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             mMap.addMarker(markerOptions);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             mMap.moveCamera(CameraUpdateFactory.zoomTo(11));
-
 
 
         } catch (IOException e) {
@@ -560,5 +588,53 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         String postalCode = addresses.get(0).getPostalCode();
         String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
 */
+    }
+
+//    private void updateData(final String toString) {
+//        final String name = edName.getText().toString();
+//        final String email = edEmail.getText().toString();
+//        final String address = edAddress.getText().toString();
+//        final String numberPhone = edNumberPhone.getText().toString();
+//        final String numberPhoneRelatives = ed_number_phone_relatives.getText().toString();
+//        final String sexx = edSex.getText().toString();
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference reference = database.getReference(mStoragePath);
+//        Query query = reference.orderByChild("username").equalTo(name1);
+//        query.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+//                    dataSnapshot1.getRef().child("username").setValue(name);
+//                    dataSnapshot1.getRef().child("email").setValue(email);
+//                    dataSnapshot1.getRef().child("imageURL").setValue(toString);
+//                    dataSnapshot1.getRef().child("address").setValue(address);
+//                    dataSnapshot1.getRef().child("numberPhone").setValue(numberPhone);
+//                    dataSnapshot1.getRef().child("numberPhoneRelatives").setValue(numberPhoneRelatives);
+//                    dataSnapshot1.getRef().child("sex").setValue(sexx);
+//                }
+//                mProgressDialog.dismiss();
+//                Toast.makeText(EditInformationActivity.this, "sửa thành công", Toast.LENGTH_SHORT).show();
+//                finish();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                Toast.makeText(EditInformationActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
+
+    private void updateToken(String token) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
+        Token token1 = new Token(token);
+        reference.child(firebaseUser.getUid()).setValue(token1);
+    }
+
+    private void updateLatlng(String latitude, String longitude) {
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("latitude", latitude);
+        hashMap.put("longitude", longitude);
+        reference.updateChildren(hashMap);
     }
 }

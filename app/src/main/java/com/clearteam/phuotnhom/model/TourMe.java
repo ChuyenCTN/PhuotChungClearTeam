@@ -16,14 +16,6 @@ public class TourMe implements Serializable {
     private String userGroupId;
     private String token;
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
     public TourMe() {
     }
 
@@ -124,4 +116,13 @@ public class TourMe implements Serializable {
     public void setKeyId(String keyId) {
         this.keyId = keyId;
     }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
 }

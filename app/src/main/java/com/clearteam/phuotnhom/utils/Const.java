@@ -36,5 +36,7 @@ public class Const {
     public static final String STATUS_OK = "OK";
     public static final String RADIUS_PLACE = "100";
 
+    public static int TIME_REQUEST = 6;
+
 
 }

@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.adapter.TourAllAdapter;
 import com.clearteam.phuotnhom.model.TourMe;
+import com.clearteam.phuotnhom.model.User;
 import com.clearteam.phuotnhom.notification.APIService;
 import com.clearteam.phuotnhom.notification.Client;
 import com.clearteam.phuotnhom.notification.Data;
@@ -36,8 +37,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,12 +61,13 @@ public class TourAllFragment extends Fragment {
     private DatabaseReference reference;
     private static TourAllFragment INSTANCE;
     private View view;
-    private String userId, keyAllUser;
+    private String userId, keyAllUser, keyUserGroupId;
     private TourMe mTourMe;
     private APIService apiService;
     boolean notify = false;
     Intent intent;
     List<String> listUserIds;
+    private String saveCurrentDate;
 
     public static TourAllFragment getInstance() {
         if (INSTANCE == null) {
@@ -96,7 +100,7 @@ public class TourAllFragment extends Fragment {
 
         apiService = Client.getClient("https://fcm.googleapis.com").create(APIService.class);
 
-      //  Log.d("AAAA", userId);
+        //  Log.d("AAAA", userId);
         mapping(view);
         initRecyclerView();
         return view;
@@ -104,7 +108,7 @@ public class TourAllFragment extends Fragment {
 
     private void mapping(View view) {
         rcvTourAll = view.findViewById(R.id.rcvTourAll);
-        TextView tvadd = view.findViewById(R.id.tv_add);
+
     }
 
     private void initRecyclerView() {
@@ -114,13 +118,19 @@ public class TourAllFragment extends Fragment {
         rcvTourAll.setLayoutManager(manager);
         rcvTourAll.setAdapter(mTourAllAdapter);
         initData();
+
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
+        saveCurrentDate = currentDate.format(calendar.getTime());
         intent = getActivity().getIntent();
 
-        final String userid = "7rxs0ORn4QbcITYDHgiuTQxvaKj2";
+        //final String userid = "7rxs0ORn4QbcITYDHgiuTQxvaKj2";
         mTourAllAdapter.setClickDetailTourGroup(new TourAllAdapter.clickDetailTourGroup() {
             @Override
             public void onClickDetail(int position, TourMe response) {
-                if (response.getTvAdd().equals("Nhóm của bạn")||response.getTvAdd().equals("Bạn đã tham gia")) {
+                ///   Log.d("AAAAAA",response.getUserGroupId());
+
+                if (response.getTvAdd().equals("Nhóm của bạn") || response.getTvAdd().equals("Bạn đã tham gia")) {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(Const.KEY_DATA, response);
                     Intent intent = new Intent(getActivity(), TourGroupDetailActivity.class);
@@ -129,25 +139,71 @@ public class TourAllFragment extends Fragment {
 
 
                 } else {
-                    Toast.makeText(getActivity(), response.getId(), Toast.LENGTH_SHORT).show();
                     notify = true;
                     String msg = "Muốn tham gia vào nhóm phượt của bạn";
-
+                    keyUserGroupId = response.getUserGroupId();
                     if (!msg.equals("")) {
-                        sendNotification(fuser.getUid(), userid, msg,response.getToken());
+                        sendMessage(fuser.getUid(), keyUserGroupId, msg);
                     } else {
                         Toast.makeText(getActivity(), "You can't send empty message", Toast.LENGTH_SHORT).show();
                     }
-                    //  Toast.makeText(getActivity(), "Đợi phê duyệt", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Đợi phê duyệt", Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
     }
 
-    private void sendNotification(String receiver, final String username, final String message,String token) {
+    public void sendMessage(String sender, final String receiver, String message) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
-        //final String userid = intent.getStringExtra("userid");
-        final String userid = "7rxs0ORn4QbcITYDHgiuTQxvaKj2";
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("sender", sender);
+        hashMap.put("receiver", receiver);
+        hashMap.put("message", message);
+        hashMap.put("date", saveCurrentDate);
+
+        reference.child("Notify").push().setValue(hashMap);
+
+        final DatabaseReference chatR = FirebaseDatabase.getInstance().getReference("ListNotify")
+                .child(fuser.getUid())
+                .child(keyUserGroupId);
+
+        chatR.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    chatR.child("id").setValue(receiver);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        final String msg = message;
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                if (notify) {
+
+                    sendNotification(user.getUsername(), receiver, msg);
+                }
+                notify = false;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void sendNotification(final String username, String receiver, final String message) {
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
         Query query = tokens.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
@@ -155,7 +211,7 @@ public class TourAllFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username + ": " + message, "new Messenger", userid);
+                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username + ": " + message, "new Messenger", keyUserGroupId);
                     Sender sender = new Sender(data, token.getToken());
                     apiService.sendNotifycation(sender)
                             .enqueue(new Callback<MyResponse>() {
@@ -195,26 +251,24 @@ public class TourAllFragment extends Fragment {
                         mTourMe = dta1.getValue(TourMe.class);
                         list.add(mTourMe);
                         keyAllUser = mTourMe.getKeyId();
-                        Log.d("AAAAA",String.valueOf(keyAllUser));
-                        if (keyAllUser != null){
+                        if (keyAllUser != null) {
                             listUserIds = new ArrayList<>();
                             listUserIds = Arrays.asList(keyAllUser.split(","));
                         }
                         if (dataSnapshot1.getKey().equals(userId)) {
                             mTourMe.setTvAdd("Nhóm của bạn");
                             mTourMe.setMyTour(true);
-                            mTourMe.setUserGroupId(dataSnapshot1.getKey());
+
                         } else if (listUserIds.contains(userId) == true) {
                             mTourMe.setTvAdd("Bạn đã tham gia");
                             mTourMe.setMyTour(true);
-                            mTourMe.setUserGroupId(dataSnapshot1.getKey());
+
                         } else {
                             mTourMe.setTvAdd("Đăng ký tham gia");
                             mTourMe.setMyTour(false);
                         }
                     }
                 }
-
                 mTourAllAdapter.setData(list);
             }
 
@@ -235,9 +289,7 @@ public class TourAllFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        final String userid = intent.getStringExtra("userid");
-        // final String userid = "eXHqjj7yt8f68Nj2VhQFXzVdErd2";
-        currentUser(userid);
+        currentUser(keyUserGroupId);
     }
 
     @Override

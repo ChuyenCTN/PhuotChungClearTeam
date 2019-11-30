@@ -264,6 +264,7 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
         tourMe.setDate(dateStart);
         tourMe.setToken(FirebaseInstanceId.getInstance().getToken());
         tourMe.setKeyId("");
+        tourMe.setUserGroupId(id);
         reference = FirebaseDatabase.getInstance().getReference();
         reference.child("Groups").child(id).child(time).setValue(tourMe).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

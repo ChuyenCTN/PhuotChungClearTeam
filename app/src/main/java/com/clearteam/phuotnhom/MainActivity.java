@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.clearteam.phuotnhom.fragment.IntroductFragment;
+import com.clearteam.phuotnhom.fragment.NotifyFragment;
 import com.clearteam.phuotnhom.fragment.ProfileFragment;
 import com.clearteam.phuotnhom.fragment.TourGroupFragment;
 import com.clearteam.phuotnhom.model.User;
@@ -44,7 +45,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private FrameLayout frameLayout, fameToolBar;
+    private FrameLayout frameLayout;
 
     private FragmentManager mFragmentManager;
     private TourGroupFragment mtourGroupFragment;
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             Glide.with(MainActivity.this).load(user.getImageURL()).into(imgAvata);
                         }
                     } else {
-                        Glide.with(MainActivity.this).load(user.getImageURL()).into(imgAvata);
+                        Glide.with(getApplicationContext()).load(user.getImageURL()).into(imgAvata);
                     }
 
                 }
@@ -188,6 +189,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_setting:
                 break;
             case R.id.nav_notifi:
+                setTitle("Thông báo");
+                replaceFragment(NotifyFragment.getInstance(), mFragmentManager);
                 break;
             case R.id.nav_introduction:
                 setTitle("Giới thiệu");
