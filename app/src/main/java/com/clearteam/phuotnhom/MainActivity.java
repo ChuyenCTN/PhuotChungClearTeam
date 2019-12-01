@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void initView() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setBackgroundResource(R.drawable.color_gadient);
         setTitle("Home");
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -240,4 +241,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         status("offline");
     }
 
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        status("offline");
+//    }
 }

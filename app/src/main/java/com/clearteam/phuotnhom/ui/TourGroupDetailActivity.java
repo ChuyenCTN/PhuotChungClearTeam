@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 
 public class TourGroupDetailActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, DatePickerDialog.OnDateSetListener, ClickDetailMember, View.OnClickListener {
@@ -63,6 +64,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
     private DatabaseReference reference;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseAuth auth;
+    private FirebaseUser firebaseUser;
     private String id, id2;
     private EditText edName, edAddressStart, edAddressEnd, edDateStart;
     private static DatePickerDialog.OnDateSetListener onDateSetListener1;
@@ -104,7 +106,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
         TourMe tour = ((TourMe) bundle.getSerializable(Const.KEY_DATA));
         nameGroup = tour.getName();
         id2 = tour.getId();
-        keyID = tour.getKeyId()+","+tour.getUserGroupId();
+        keyID = tour.getKeyId() + "," + tour.getUserGroupId();
         addressStart = tour.getAddressStart();
         addressEnd = tour.getAddressEnd();
         dateStart = tour.getDate();
@@ -198,7 +200,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         // finally change the color
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setStatusBarColor(ContextCompat.getColor(TourGroupDetailActivity.this, R.color.bg_tab));
+            window.setBackgroundDrawable(ContextCompat.getDrawable(TourGroupDetailActivity.this, R.color.bg_tab));
         }
     }
 
@@ -406,7 +408,20 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
         }
     }
 
+    private void status(String status) {
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("status", status);
+        reference.updateChildren(hashMap);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status("online");
+    }
 
     @Override
     protected void onPause() {
@@ -417,6 +432,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
                 alertDialog = null;
             }
         }
+        status("offline");
     }
 
     @Override

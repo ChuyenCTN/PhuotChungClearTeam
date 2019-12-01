@@ -5,15 +5,17 @@ public class Notifi {
     private String receiver;
     private String message;
     private String date;
+    private String nameSender;
 
     public Notifi() {
     }
 
-    public Notifi(String sender, String receiver, String message, String date) {
+    public Notifi(String sender, String receiver, String message, String date, String nameSender) {
         this.sender = sender;
         this.receiver = receiver;
         this.message = message;
         this.date = date;
+        this.nameSender = nameSender;
     }
 
     public String getSender() {
@@ -48,4 +50,11 @@ public class Notifi {
         this.date = date;
     }
 
+    public String getNameSender() {
+        return nameSender;
+    }
+
+    public void setNameSender(String nameSender) {
+        this.nameSender = nameSender;
+    }
 }

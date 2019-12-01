@@ -61,13 +61,12 @@ public class TourAllFragment extends Fragment {
     private DatabaseReference reference;
     private static TourAllFragment INSTANCE;
     private View view;
-    private String userId, keyAllUser, keyUserGroupId;
+    private String userId, keyAllUser, keyUserGroupId,saveCurrentDate,nameSender;
     private TourMe mTourMe;
     private APIService apiService;
     boolean notify = false;
     Intent intent;
     List<String> listUserIds;
-    private String saveCurrentDate;
 
     public static TourAllFragment getInstance() {
         if (INSTANCE == null) {
@@ -100,9 +99,9 @@ public class TourAllFragment extends Fragment {
 
         apiService = Client.getClient("https://fcm.googleapis.com").create(APIService.class);
 
-        //  Log.d("AAAA", userId);
         mapping(view);
         initRecyclerView();
+        getNameSender();
         return view;
     }
 
@@ -142,6 +141,7 @@ public class TourAllFragment extends Fragment {
                     notify = true;
                     String msg = "Muốn tham gia vào nhóm phượt của bạn";
                     keyUserGroupId = response.getUserGroupId();
+
                     if (!msg.equals("")) {
                         sendMessage(fuser.getUid(), keyUserGroupId, msg);
                     } else {
@@ -153,15 +153,36 @@ public class TourAllFragment extends Fragment {
             }
         });
     }
+    private void getNameSender(){
+        auth = FirebaseAuth.getInstance();
+        fuser = FirebaseAuth.getInstance().getCurrentUser();
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                User user= dataSnapshot.getValue(User.class);
+                nameSender = user.getUsername();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
     public void sendMessage(String sender, final String receiver, String message) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", sender);
         hashMap.put("receiver", receiver);
         hashMap.put("message", message);
         hashMap.put("date", saveCurrentDate);
+        hashMap.put("nameSender", nameSender);
+
 
         reference.child("Notify").push().setValue(hashMap);
 

@@ -1,6 +1,8 @@
 package com.clearteam.phuotnhom.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +12,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.model.Notifi;
 import com.clearteam.phuotnhom.model.TourMe;
+import com.clearteam.phuotnhom.model.User;
+import com.clearteam.phuotnhom.ui.EditInformationActivity;
+import com.clearteam.phuotnhom.utils.Const;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -20,6 +33,10 @@ public class NotifyAdapter extends RecyclerView.Adapter<NotifyAdapter.ViewHolder
 
     private List<Notifi> notifiList;
     private Context mContext;
+    private FirebaseAuth auth;
+    DatabaseReference reference;
+    FirebaseUser firebaseUser;
+    String tvName;
 
     private clickDetailTourGroup clickDetailTourGroup;
 
@@ -66,7 +83,7 @@ public class NotifyAdapter extends RecyclerView.Adapter<NotifyAdapter.ViewHolder
         }
 
         void bindData(final Notifi notifi) {
-           // tvNameSender.setText(notifi.getSender());
+            tvNameSender.setText(notifi.getNameSender());
             tvMessage.setText(notifi.getMessage());
             tvDate.setText(notifi.getDate());
 

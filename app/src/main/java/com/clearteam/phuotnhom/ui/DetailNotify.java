@@ -18,8 +18,8 @@ import com.clearteam.phuotnhom.utils.Const;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_notify);
 
-        tv_user_sender = findViewById(R.id.tv_user_sender);
-        Intent intent = getIntent();
-        tv_user_sender.setText(intent.getStringExtra("userid"));
+//        tv_user_sender = findViewById(R.id.tv_user_sender);
+//        Intent intent = getIntent();
+//        tv_user_sender.setText(intent.getStringExtra("userid"));
     }
 }

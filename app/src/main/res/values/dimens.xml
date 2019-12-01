@@ -9,6 +9,7 @@
 	<dimen name="size_22">22sp</dimen>
 	<dimen name="size_12">12sp</dimen>
 	<dimen name="dp_400">400dp</dimen>
+	<dimen name="dp_200">200dp</dimen>
 	<dimen name="dp_220">220dp</dimen>
 	<dimen name="dp_380">380dp</dimen>
 	<dimen name="dp_32">32dp</dimen>
