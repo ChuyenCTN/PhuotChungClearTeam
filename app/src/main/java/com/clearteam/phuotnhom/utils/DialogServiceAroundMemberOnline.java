@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,6 +33,7 @@ public class DialogServiceAroundMemberOnline extends BottomSheetDialogFragment {
     private RecyclerView mRecyclerView;
     private IChoose iChoose;
     private boolean isChat;
+    private TextView tv_status;
     private BottomSheetBehavior.BottomSheetCallback mBottomSheetCallback = new BottomSheetBehavior.BottomSheetCallback() {
         @Override
         public void onStateChanged(@NonNull View view, int newState) {
@@ -77,6 +79,7 @@ public class DialogServiceAroundMemberOnline extends BottomSheetDialogFragment {
         }
 
         initData();
+       tv_status = contentView.findViewById(R.id.tv_status);
         mRecyclerView = contentView.findViewById(R.id.rcv_service_around);
         LinearLayoutManager layoutManager = new LinearLayoutManager(contentView.getContext());
         layoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -133,6 +136,11 @@ public class DialogServiceAroundMemberOnline extends BottomSheetDialogFragment {
                         DialogServiceAroundMemberOnline.this.dismiss();
                     }
                 });
+                if (userList.size()==0){
+                    tv_status.setVisibility(View.VISIBLE);
+                }else {
+                    tv_status.setVisibility(View.GONE);
+                }
                 mRecyclerView.setAdapter(adapter);
             }
 

@@ -27,7 +27,7 @@ public class FirebaseIDService extends FirebaseInstanceIdService {
         super.onTokenRefresh();
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         String refeshToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d("BBBB",refeshToken);
+       // Log.d("BBBB",refeshToken);
         if (firebaseUser != null){
             updateToken(refeshToken);
         }

@@ -13,9 +13,13 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.clearteam.phuotnhom.fragment.TourAllFragment;
 import com.clearteam.phuotnhom.notification.OreoNotification;
+import com.clearteam.phuotnhom.ui.DetailNotify;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -62,9 +66,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
 
+       // Log.d("AAAAA",user+"/"+title+"/"+body);
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
-        Intent intent = new Intent(MyFirebaseMessagingService.this, TourAllFragment.class);
+        Intent intent = new Intent(MyFirebaseMessagingService.this,  DetailNotify.class);
         Bundle bundle = new Bundle();
         bundle.putString("userid", user);
         intent.putExtras(bundle);
@@ -90,7 +95,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
-        Intent intent = new Intent(MyFirebaseMessagingService.this, TourAllFragment.class);
+        Intent intent = new Intent(MyFirebaseMessagingService.this, DetailNotify.class);
         Bundle bundle = new Bundle();
         bundle.putString("userid", user);
         intent.putExtras(bundle);
@@ -113,4 +118,5 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
         notificationManager.notify(i, builder.build());
     }
+
 }

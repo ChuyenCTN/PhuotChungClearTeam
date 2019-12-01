@@ -2,6 +2,20 @@ package com.clearteam.phuotnhom;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
+
+import com.bumptech.glide.Glide;
+import com.clearteam.phuotnhom.fragment.IntroductFragment;
+import com.clearteam.phuotnhom.fragment.NotifyFragment;
+import com.clearteam.phuotnhom.fragment.ProfileFragment;
+import com.clearteam.phuotnhom.fragment.TourGroupFragment;
+import com.clearteam.phuotnhom.model.User;
+import com.clearteam.phuotnhom.notification.Token;
+import com.clearteam.phuotnhom.ui.EditInformationActivity;
+import com.clearteam.phuotnhom.ui.LoginActivity;
+import com.clearteam.phuotnhom.utils.Const;
+import com.facebook.login.LoginManager;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -104,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         if (user.getImageURL().equals("default")) {
                             imgAvata.setImageResource(R.drawable.avatar);
                         } else {
-                            Glide.with(MainActivity.this).load(user.getImageURL()).into(imgAvata);
+                            Glide.with(getApplicationContext()).load(user.getImageURL()).into(imgAvata);
                         }
                     } else {
                         Glide.with(getApplicationContext()).load(user.getImageURL()).into(imgAvata);
