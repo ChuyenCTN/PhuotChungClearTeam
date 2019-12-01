@@ -38,5 +38,8 @@ public class Const {
 
     public static int TIME_REQUEST = 6;
 
+    public static int WIDTH_MARKER = 140;
+    public static int HEIGHT_MARKER = 140;
+
 
 }
