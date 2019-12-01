@@ -177,7 +177,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
         initfirebase();
 
-//        initRequestLocation();
+        initRequestLocation();
 
         return view;
     }
@@ -442,6 +442,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
 //            cai nay de update vi tri cua minh len firebase
             updateLatlng(String.valueOf(latitude), String.valueOf(longitude));
+            Log.d("zxcvbnm,", String.valueOf(latitude) + "\n" + String.valueOf(longitude));
+            Log.d("zxcvbnm,",latitude+"");
+            Log.d("zxcvbnm,",longitude+"");
 
             LatLng latLng = new LatLng(latitude, longitude);
             mGeocoder = new Geocoder(getContext());
