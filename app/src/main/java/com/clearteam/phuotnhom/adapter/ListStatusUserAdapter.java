@@ -6,14 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.clearteam.phuotnhom.R;
-import com.clearteam.phuotnhom.model.ServiceAround;
 import com.clearteam.phuotnhom.model.User;
 
 import java.util.List;
@@ -25,13 +23,15 @@ public class ListStatusUserAdapter extends RecyclerView.Adapter<ListStatusUserAd
     private boolean isChat;
 
 
-    public ListStatusUserAdapter(Context mContext, List<User> list, boolean isChat, IClickItem iClickItem) {
+    public ListStatusUserAdapter(Context mContext, List<User> list, boolean isChat) {
         this.mContext = mContext;
         this.list = list;
-        this.iClickItem = iClickItem;
         this.isChat = isChat;
     }
 
+    public void setiClickItem(IClickItem iClickItem) {
+        this.iClickItem = iClickItem;
+    }
 
     @NonNull
     @Override
@@ -91,13 +91,13 @@ public class ListStatusUserAdapter extends RecyclerView.Adapter<ListStatusUserAd
             imgMessage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext, "show message", Toast.LENGTH_SHORT).show();
+                    iClickItem.onMessageClick(getAdapterPosition(), user);
                 }
             });
             imgLocation.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(mContext, "show location", Toast.LENGTH_SHORT).show();
+                    iClickItem.onLocationClick(getAdapterPosition(), user);
                 }
             });
 //            itemView.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +117,8 @@ public class ListStatusUserAdapter extends RecyclerView.Adapter<ListStatusUserAd
     }
 
     public interface IClickItem {
-        void onItemClick(User user);
+        void onLocationClick(int position, User user);
+
+        void onMessageClick(int position, User user);
     }
 }

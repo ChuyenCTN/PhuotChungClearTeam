@@ -15,6 +15,8 @@ public class User implements Serializable {
     private String isMember;
     private String numberPhoneRelatives;
     private String sex;
+    private String latitude;
+    private String longitude;
 
 
     public User() {
@@ -134,5 +136,21 @@ public class User implements Serializable {
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 }

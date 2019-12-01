@@ -13,11 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.adapter.ListStatusUserAdapter;
-import com.clearteam.phuotnhom.adapter.ListUserAdapter;
-import com.clearteam.phuotnhom.adapter.UserAdapter;
 import com.clearteam.phuotnhom.model.User;
-import com.clearteam.phuotnhom.ui.AddMemberActivity;
-import com.clearteam.phuotnhom.ui.TourGroupDetailActivity;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,7 +24,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class DialogServiceAroundMemberOnline extends BottomSheetDialogFragment {
@@ -86,13 +81,23 @@ public class DialogServiceAroundMemberOnline extends BottomSheetDialogFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(contentView.getContext());
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
-        adapter = new ListStatusUserAdapter(getContext(), userList, true, new ListStatusUserAdapter.IClickItem() {
+        adapter = new ListStatusUserAdapter(getContext(), userList, true);
+
+        adapter.setiClickItem(new ListStatusUserAdapter.IClickItem() {
             @Override
-            public void onItemClick(User user) {
-                iChoose.onChoose(user);
+            public void onLocationClick(int position, User user) {
+                iChoose.onLocationClick(user);
+                DialogServiceAroundMemberOnline.this.dismiss();
+            }
+
+            @Override
+            public void onMessageClick(int position, User user) {
+                iChoose.onMessageClick(user);
                 DialogServiceAroundMemberOnline.this.dismiss();
             }
         });
+
+
         mRecyclerView.setAdapter(adapter);
 
     }
@@ -110,14 +115,22 @@ public class DialogServiceAroundMemberOnline extends BottomSheetDialogFragment {
                     User user = snapshot.getValue(User.class);
                     assert user != null;
                     assert firebaseUser != null;
-                        if (!user.getId().equals(firebaseUser.getUid())&& user.getStatus().equals("online")) {
-                            userList.add(user);
-                        }
+                    if (!user.getId().equals(firebaseUser.getUid()) && user.getStatus().equals("online")) {
+                        userList.add(user);
+                    }
                 }
-                adapter = new ListStatusUserAdapter(getContext(), userList, true, new ListStatusUserAdapter.IClickItem() {
+                adapter = new ListStatusUserAdapter(getContext(), userList, true);
+                adapter.setiClickItem(new ListStatusUserAdapter.IClickItem() {
                     @Override
-                    public void onItemClick(User user) {
+                    public void onLocationClick(int position, User user) {
+                        iChoose.onLocationClick(user);
+                        DialogServiceAroundMemberOnline.this.dismiss();
+                    }
 
+                    @Override
+                    public void onMessageClick(int position, User user) {
+                        iChoose.onMessageClick(user);
+                        DialogServiceAroundMemberOnline.this.dismiss();
                     }
                 });
                 mRecyclerView.setAdapter(adapter);
@@ -132,6 +145,10 @@ public class DialogServiceAroundMemberOnline extends BottomSheetDialogFragment {
 
 
     public interface IChoose {
-        void onChoose(User user);
+        void onLocationClick(User user);
+
+        void onMessageClick(User user);
+
+
     }
 }
