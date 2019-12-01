@@ -65,13 +65,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -196,8 +193,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
     }
 
-
-
     private void initfirebase() {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
@@ -299,8 +294,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             case R.id.line_friend:
                 DialogServiceAroundMemberOnline dialogServiceAroundMemberOnline = new DialogServiceAroundMemberOnline(userList, true, new DialogServiceAroundMemberOnline.IChoose() {
                     @Override
-                    public void onChoose(User user) {
+                    public void onLocationClick(User user) {
+                        Toast.makeText(getContext(), user.getUsername() + "   location", Toast.LENGTH_SHORT).show();
+                        showMarkerNearby(Double.parseDouble(user.getLatitude()), Double.parseDouble(user.getLongitude()));
 
+                    }
+
+                    @Override
+                    public void onMessageClick(User user) {
+                        Toast.makeText(getContext(), user.getUsername() + "   message", Toast.LENGTH_SHORT).show();
                     }
                 });
                 dialogServiceAroundMemberOnline.show(getChildFragmentManager(), "ADAD");
@@ -439,7 +441,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         try {
 
 //            cai nay de update vi tri cua minh len firebase
-//            updateLatlng(String.valueOf(latitude), String.valueOf(longitude));
+            updateLatlng(String.valueOf(latitude), String.valueOf(longitude));
+            Log.d("zxcvbnm,", String.valueOf(latitude) + "\n" + String.valueOf(longitude));
+            Log.d("zxcvbnm,",latitude+"");
+            Log.d("zxcvbnm,",longitude+"");
 
             LatLng latLng = new LatLng(latitude, longitude);
             mGeocoder = new Geocoder(getContext());
