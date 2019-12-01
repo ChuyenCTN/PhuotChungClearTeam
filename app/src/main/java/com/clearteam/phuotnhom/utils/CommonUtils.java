@@ -93,7 +93,15 @@ public class CommonUtils {
         Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         vectorDrawable.draw(canvas);
+        Bitmap smallMarker = Bitmap.createScaledBitmap(bitmap, Const.WIDTH_MARKER, Const.HEIGHT_MARKER, false);
+        return BitmapDescriptorFactory.fromBitmap(smallMarker);
+    }
+
+
+    public static BitmapDescriptor getBitmapFromURL(Bitmap bitmap) {
+
         return BitmapDescriptorFactory.fromBitmap(bitmap);
+
     }
 
 }
