@@ -2,7 +2,11 @@ package com.clearteam.phuotnhom.ui.map;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -29,10 +33,14 @@ import androidx.fragment.app.Fragment;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.model.ServiceAround;
 import com.clearteam.phuotnhom.model.User;
+import com.clearteam.phuotnhom.model.direction.DirectionFinder;
+import com.clearteam.phuotnhom.model.direction.DirectionFinderListener;
+import com.clearteam.phuotnhom.model.direction.Route;
 import com.clearteam.phuotnhom.network.RetrofitClient;
 import com.clearteam.phuotnhom.network.api.APIService;
 import com.clearteam.phuotnhom.notification.Token;
 import com.clearteam.phuotnhom.ui.map.model.PlaceResponse;
+import com.clearteam.phuotnhom.utils.CommonUtils;
 import com.clearteam.phuotnhom.utils.Const;
 import com.clearteam.phuotnhom.utils.DialogServiceAround;
 import com.clearteam.phuotnhom.utils.DialogServiceAroundMemberOnline;
@@ -53,6 +61,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.TypeFilter;
@@ -63,8 +73,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -81,7 +94,7 @@ import retrofit2.Retrofit;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, DirectionFinderListener {
 
     private ImageView imgCurentLocation;
 
@@ -135,9 +148,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     private Retrofit mRetrofit;
     private APIService mApiService;
 
+    private boolean moveCamFriend = true;
+    private boolean moveCamNearby = true;
+    private boolean moveCamMy = true;
+
     //firebase
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
+
+
+    //    direction
+    private List<Marker> originMarkers = new ArrayList<>();
+    private List<Marker> destinationMarkers = new ArrayList<>();
+    private List<Polyline> polylinePaths = new ArrayList<>();
+    private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -171,11 +195,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-       // initLocation();
+        initLocation();
 
-       // getAutocompletePlace();
+        getAutocompletePlace();
 
-      //  initfirebase();
+        initfirebase();
 
 //        initRequestLocation();
 
@@ -295,9 +319,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                 DialogServiceAroundMemberOnline dialogServiceAroundMemberOnline = new DialogServiceAroundMemberOnline(userList, true, new DialogServiceAroundMemberOnline.IChoose() {
                     @Override
                     public void onLocationClick(User user) {
-                        Toast.makeText(getContext(), user.getUsername() + "   location", Toast.LENGTH_SHORT).show();
-                        showMarkerNearby(Double.parseDouble(user.getLatitude()), Double.parseDouble(user.getLongitude()));
-
+                        moveCamFriend = true;
+                        showMarkerFriend(user.getUsername(), user.getImageURL(), Double.parseDouble(user.getLatitude()), Double.parseDouble(user.getLongitude()));
                     }
 
                     @Override
@@ -308,10 +331,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                 dialogServiceAroundMemberOnline.show(getChildFragmentManager(), "ADAD");
                 break;
             case R.id.img_curent_location:
-
-//                moveCamMy = true;
-//                sendRequest();
-//                getCurrentLocation();
+                moveCamMy = true;
+                getCurrentLocation();
                 break;
         }
     }
@@ -445,9 +466,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
 //            cai nay de update vi tri cua minh len firebase
             updateLatlng(String.valueOf(latitude), String.valueOf(longitude));
-            Log.d("zxcvbnm,", String.valueOf(latitude) + "\n" + String.valueOf(longitude));
-            Log.d("zxcvbnm,",latitude+"");
-            Log.d("zxcvbnm,",longitude+"");
 
             LatLng latLng = new LatLng(latitude, longitude);
             mGeocoder = new Geocoder(getContext());
@@ -457,7 +475,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             markerOptions.position(latLng);
             markerOptions.title(addresses.get(0).getAdminArea()).snippet(addresses.get(0).getAddressLine(0)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
             currentLocationmMarker = mMap.addMarker(markerOptions);
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f));
+
+            if (moveCamMy) {
+                moveCamMy = false;
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -563,9 +585,66 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             markerOptions.position(latLng);
             markerOptions.title(addresses.get(0).getAdminArea()).snippet(addresses.get(0).getAddressLine(0)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
             mMap.addMarker(markerOptions);
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(11));
+            if (moveCamNearby) {
+                moveCamNearby = false;
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                mMap.moveCamera(CameraUpdateFactory.zoomTo(10f));
+            }
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+
+                return false;
+            }
+        });
+
+    }
+
+    public void showMarkerFriend(String name, String imageUrl, double latitude, double longitude) {
+        try {
+            LatLng latLng = new LatLng(latitude, longitude);
+            mGeocoder = new Geocoder(getContext());
+            List<Address> addresses = mGeocoder.getFromLocation(latitude, longitude, 1);
+
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+            markerOptions.title(name).snippet(addresses.get(0).getAddressLine(0));
+            if (imageUrl.equalsIgnoreCase("default")) {
+                markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.avatar));
+            } else {
+                Picasso.get().load(imageUrl).into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        Bitmap bitmapSmall = Bitmap.createScaledBitmap(bitmap, Const.WIDTH_MARKER, Const.HEIGHT_MARKER, false);
+                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmapSmall));
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                    }
+                });
+            }
+
+            Log.d("zxcvbnm", imageUrl + "");
+
+
+            mMap.addMarker(markerOptions);
+            if (moveCamFriend) {
+                moveCamFriend = false;
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                mMap.moveCamera(CameraUpdateFactory.zoomTo(10f));
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -598,39 +677,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 */
     }
 
-//    private void updateData(final String toString) {
-//        final String name = edName.getText().toString();
-//        final String email = edEmail.getText().toString();
-//        final String address = edAddress.getText().toString();
-//        final String numberPhone = edNumberPhone.getText().toString();
-//        final String numberPhoneRelatives = ed_number_phone_relatives.getText().toString();
-//        final String sexx = edSex.getText().toString();
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference reference = database.getReference(mStoragePath);
-//        Query query = reference.orderByChild("username").equalTo(name1);
-//        query.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-//                    dataSnapshot1.getRef().child("username").setValue(name);
-//                    dataSnapshot1.getRef().child("email").setValue(email);
-//                    dataSnapshot1.getRef().child("imageURL").setValue(toString);
-//                    dataSnapshot1.getRef().child("address").setValue(address);
-//                    dataSnapshot1.getRef().child("numberPhone").setValue(numberPhone);
-//                    dataSnapshot1.getRef().child("numberPhoneRelatives").setValue(numberPhoneRelatives);
-//                    dataSnapshot1.getRef().child("sex").setValue(sexx);
-//                }
-//                mProgressDialog.dismiss();
-//                Toast.makeText(EditInformationActivity.this, "sửa thành công", Toast.LENGTH_SHORT).show();
-//                finish();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Toast.makeText(EditInformationActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
 
     private void updateToken(String token) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
@@ -644,5 +690,82 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         hashMap.put("latitude", latitude);
         hashMap.put("longitude", longitude);
         reference.updateChildren(hashMap);
+    }
+
+
+    private void sendRequest() {
+        String origin = "NewYork";
+        String destination = "Paris";
+        if (origin.isEmpty()) {
+            Toast.makeText(getActivity(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (destination.isEmpty()) {
+            Toast.makeText(getActivity(), "Please enter destination address!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            new DirectionFinder((DirectionFinderListener) this, origin, destination).execute();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onDirectionFinderStart() {
+        progressDialog = ProgressDialog.show(getContext(), "Please wait.",
+                "Finding direction..!", true);
+
+        if (originMarkers != null) {
+            for (Marker marker : originMarkers) {
+                marker.remove();
+            }
+        }
+
+        if (destinationMarkers != null) {
+            for (Marker marker : destinationMarkers) {
+                marker.remove();
+            }
+        }
+
+        if (polylinePaths != null) {
+            for (Polyline polyline : polylinePaths) {
+                polyline.remove();
+            }
+        }
+    }
+
+    @Override
+    public void onDirectionFinderSuccess(List<Route> routes) {
+        progressDialog.dismiss();
+        polylinePaths = new ArrayList<>();
+        originMarkers = new ArrayList<>();
+        destinationMarkers = new ArrayList<>();
+
+        for (Route route : routes) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
+            Log.d("zxcvbnm", route.duration.text + "");
+            Log.d("zxcvbnm", route.distance.text + "");
+
+            originMarkers.add(mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_add_pet))
+                    .title(route.startAddress)
+                    .position(route.startLocation)));
+            destinationMarkers.add(mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_seach_map))
+                    .title(route.endAddress)
+                    .position(route.endLocation)));
+
+            PolylineOptions polylineOptions = new PolylineOptions().
+                    geodesic(true).
+                    color(Color.BLUE).
+                    width(10);
+
+            for (int i = 0; i < route.points.size(); i++)
+                polylineOptions.add(route.points.get(i));
+
+            polylinePaths.add(mMap.addPolyline(polylineOptions));
+        }
     }
 }
