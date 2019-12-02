@@ -79,7 +79,6 @@ public class NotifyAdapter extends RecyclerView.Adapter<NotifyAdapter.ViewHolder
             tvMessage = itemView.findViewById(R.id.tv_message);
             tvDate = itemView.findViewById(R.id.tv_date);
 
-
         }
 
         void bindData(final Notifi notifi) {
