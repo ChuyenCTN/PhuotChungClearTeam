@@ -103,6 +103,11 @@ public class SchedulerFragment extends Fragment {
                         }
                     }
                 }
+                if (list.size() == 0){
+                    tvCheck.setVisibility(View.VISIBLE);
+                }else {
+                    tvCheck.setVisibility(View.GONE);
+                }
                 mTourAllAdapter.setData(list);
             }
 

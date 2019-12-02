@@ -171,11 +171,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-       // initLocation();
+        initLocation();
 
-       // getAutocompletePlace();
+        getAutocompletePlace();
 
-      //  initfirebase();
+        initfirebase();
 
 //        initRequestLocation();
 

@@ -1,6 +1,8 @@
 package com.clearteam.phuotnhom.model;
 
-public class Notifi {
+import java.io.Serializable;
+
+public class Notifi implements Serializable {
     private String sender;
     private String receiver;
     private String message;

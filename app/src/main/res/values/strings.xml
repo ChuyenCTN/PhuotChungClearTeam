@@ -70,6 +70,11 @@
 	<string name="title_status">Bạn bè đang online</string>
 	<string name="status_member">Chưa có bạn bè online</string>
 	<string name="status_scheduler">Bạn Chưa có lịch trình nào</string>
+	<string name="name_notify">Lê Hoàng</string>
+	<string name="message_notify">Xin tham gia vào nhóm phượt của bạn</string>
+	<string name="date_notify">20/11/2019</string>
+	<string name="refuse">Từ chối</string>
+	<string name="confirm">Xác nhận</string>
 
 
 </resources>

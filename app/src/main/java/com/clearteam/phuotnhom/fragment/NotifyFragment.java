@@ -1,6 +1,7 @@
 package com.clearteam.phuotnhom.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -18,6 +19,7 @@ import com.clearteam.phuotnhom.adapter.NotifyAdapter;
 import com.clearteam.phuotnhom.model.Notifi;
 import com.clearteam.phuotnhom.model.TourMe;
 import com.clearteam.phuotnhom.model.User;
+import com.clearteam.phuotnhom.ui.DetailNotify;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,6 +41,7 @@ public class NotifyFragment extends Fragment {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private RecyclerView recyclerView;
     private FirebaseAuth auth;
+    private Notifi notifi;
     FirebaseUser firebaseUser;
     private String userId;
     private static NotifyFragment INSTANCE;
@@ -79,6 +82,15 @@ public class NotifyFragment extends Fragment {
         userId = firebaseUser.getUid();
 
         initData();
+        adapter.setClickDetailTourGroup(new NotifyAdapter.clickDetailTourGroup() {
+            @Override
+            public void onClickDetail(int position, Notifi response) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Const.KEY_DATA, notifi);
+                Intent intent = new Intent(getActivity(), DetailNotify.class);
+                startActivity(intent,bundle);
+            }
+        });
         return view;
     }
 
@@ -90,7 +102,7 @@ public class NotifyFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 list.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    Notifi notifi = dataSnapshot1.getValue(Notifi.class);
+                    notifi = dataSnapshot1.getValue(Notifi.class);
 
                     if (notifi.getReceiver().equals(userId)) {
                         list.add(notifi);
