@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
 
-</LinearLayout>
+	<TextView
+		android:id="@+id/tv_check"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		android:text="@string/status_scheduler"
+		android:textColor="@color/text"
+		android:textSize="@dimen/size_16" />
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/rcv_tour_me"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent" />
+</RelativeLayout>

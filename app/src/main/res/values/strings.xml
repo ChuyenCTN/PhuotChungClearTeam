@@ -69,6 +69,7 @@
 	<string name="txt_label_tourist_destination">Địa danh</string>
 	<string name="title_status">Bạn bè đang online</string>
 	<string name="status_member">Chưa có bạn bè online</string>
+	<string name="status_scheduler">Bạn Chưa có lịch trình nào</string>
 
 
 </resources>
