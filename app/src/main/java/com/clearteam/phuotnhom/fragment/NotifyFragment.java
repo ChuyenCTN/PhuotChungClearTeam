@@ -85,10 +85,9 @@ public class NotifyFragment extends Fragment {
         adapter.setClickDetailTourGroup(new NotifyAdapter.clickDetailTourGroup() {
             @Override
             public void onClickDetail(int position, Notifi response) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Const.KEY_DATA, notifi);
                 Intent intent = new Intent(getActivity(), DetailNotify.class);
-                startActivity(intent,bundle);
+                intent.putExtra(Const.KEY_NOTIFYCATION,response);
+                startActivity(intent);
             }
         });
         return view;
@@ -103,11 +102,9 @@ public class NotifyFragment extends Fragment {
                 list.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     notifi = dataSnapshot1.getValue(Notifi.class);
-
                     if (notifi.getReceiver().equals(userId)) {
                         list.add(notifi);
                     }
-
                 }
                 adapter.setData(list);
             }

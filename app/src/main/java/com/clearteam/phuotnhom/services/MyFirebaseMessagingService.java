@@ -69,6 +69,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
        // Log.d("AAAAA",user+"/"+title+"/"+body);
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         int j = Integer.parseInt(user.replaceAll("[\\D]", ""));
+
         Intent intent = new Intent(MyFirebaseMessagingService.this,  DetailNotify.class);
         Bundle bundle = new Bundle();
         bundle.putString("userid", user);
