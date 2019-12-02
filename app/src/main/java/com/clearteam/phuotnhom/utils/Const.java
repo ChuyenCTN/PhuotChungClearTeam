@@ -39,8 +39,20 @@ public class Const {
 
     public static int TIME_REQUEST = 6;
 
-    public static int WIDTH_MARKER = 140;
+    public static int WIDTH_MARKER = 100;
     public static int HEIGHT_MARKER = 140;
+
+    public static int SIZE_MARKER = 10;
+
+
+    public static String ATM_PLACE = "atm";
+    public static String RESTAURANT_PLACE = "foods";
+    public static String HOSPITAL_PLACE = "hospitals";
+    public static String PETROLEUM_PLACE = "petroleums";
+    public static String HOTEL_PLACE = "hotels";
+    public static String PHARMACIES_PLACE = "pharmacies";
+    public static String GROCERY_PLACE = "grocery";
+    public static String TOURIES_PLACE = "touries";
 
 
 }

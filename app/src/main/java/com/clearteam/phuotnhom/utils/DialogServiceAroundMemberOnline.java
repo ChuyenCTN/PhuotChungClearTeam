@@ -1,31 +1,31 @@
 package com.clearteam.phuotnhom.utils;
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
+        import android.annotation.SuppressLint;
+        import android.app.Dialog;
+        import android.os.Bundle;
+        import android.view.View;
+        import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+        import androidx.annotation.NonNull;
+        import androidx.annotation.Nullable;
+        import androidx.coordinatorlayout.widget.CoordinatorLayout;
+        import androidx.recyclerview.widget.LinearLayoutManager;
+        import androidx.recyclerview.widget.RecyclerView;
 
-import com.clearteam.phuotnhom.R;
-import com.clearteam.phuotnhom.adapter.ListStatusUserAdapter;
-import com.clearteam.phuotnhom.model.User;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+        import com.clearteam.phuotnhom.R;
+        import com.clearteam.phuotnhom.adapter.ListStatusUserAdapter;
+        import com.clearteam.phuotnhom.model.User;
+        import com.google.android.material.bottomsheet.BottomSheetBehavior;
+        import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+        import com.google.firebase.auth.FirebaseAuth;
+        import com.google.firebase.auth.FirebaseUser;
+        import com.google.firebase.database.DataSnapshot;
+        import com.google.firebase.database.DatabaseError;
+        import com.google.firebase.database.DatabaseReference;
+        import com.google.firebase.database.FirebaseDatabase;
+        import com.google.firebase.database.ValueEventListener;
 
-import java.util.List;
+        import java.util.List;
 
 public class DialogServiceAroundMemberOnline extends BottomSheetDialogFragment {
     private List<User> userList;
@@ -79,7 +79,7 @@ public class DialogServiceAroundMemberOnline extends BottomSheetDialogFragment {
         }
 
         initData();
-       tv_status = contentView.findViewById(R.id.tv_status);
+        tv_status = contentView.findViewById(R.id.tv_status);
         mRecyclerView = contentView.findViewById(R.id.rcv_service_around);
         LinearLayoutManager layoutManager = new LinearLayoutManager(contentView.getContext());
         layoutManager.setOrientation(RecyclerView.VERTICAL);

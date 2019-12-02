@@ -124,6 +124,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     int PROXIMITY_RADIUS = 10000;
 
     private String mContentPlace = "";
+    private String mNamePlace = "";
+
+    private MarkerOptions[] markers;
+
+    private Marker markerNearby;
+
+    MarkerOptions markerOptions;
 
 
     //    my
@@ -190,6 +197,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         mLiServiceAround.setOnClickListener(this);
         mLiFriend.setOnClickListener(this);
         imgCurentLocation.setOnClickListener(this::onClick);
+
+        markerOptions = new MarkerOptions();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
@@ -308,8 +317,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                     @Override
                     public void onClick(String nameService, String title) {
                         mContentPlace = title;
-                        Toast.makeText(getContext(), "Đang tìm " + title + " gần đây", Toast.LENGTH_SHORT).show();
+                        mNamePlace = nameService;
+                        Toast.makeText(getContext(), "Đang tìm " + nameService + " gần đây", Toast.LENGTH_SHORT).show();
                         getNearbyPlace(String.valueOf(mLatitude + "," + mLongitude), nameService);
+
                     }
                 });
                 dialogServiceAround.show(getChildFragmentManager(), "ADAS");
@@ -389,6 +400,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         if (client != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
         }
+
     }
 
 
@@ -465,7 +477,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         try {
 
 //            cai nay de update vi tri cua minh len firebase
-            updateLatlng(String.valueOf(latitude), String.valueOf(longitude));
+//            updateLatlng(String.valueOf(latitude), String.valueOf(longitude));
 
             LatLng latLng = new LatLng(latitude, longitude);
             mGeocoder = new Geocoder(getContext());
@@ -542,7 +554,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     }
 
     private void getNearbyPlace(String location, String type) {
-        Call<PlaceResponse> call = mApiService.getPlaceNearby(location, Const.RADIUS_PLACE, type, "", placeKey);
+        Call<PlaceResponse> call = mApiService.getPlaceNearby(location, Const.RADIUS_PLACE, type, "true", "", placeKey);
         call.enqueue(new Callback<PlaceResponse>() {
             @Override
             public void onResponse(Call<PlaceResponse> call, Response<PlaceResponse> response) {
@@ -552,10 +564,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                         mPlaceResponse = (PlaceResponse) response.body();
                         if (mPlaceResponse.getStatus().equalsIgnoreCase(Const.STATUS_OK)) {
                             Log.d("zxcvbnm,.", mPlaceResponse.getResults().size() + "");
+                            markers = new MarkerOptions[mPlaceResponse.getResults().size()];
+//                mMap.clear();
                             for (int i = 0; i < mPlaceResponse.getResults().size(); i++) {
                                 double lon = mPlaceResponse.getResults().get(i).getGeometry().getViewport().getNortheast().getLng();
                                 double lat = mPlaceResponse.getResults().get(i).getGeometry().getViewport().getNortheast().getLat();
-                                showMarkerNearby(lat, lon);
+                                showMarkerNearby(i, lat, lon);
+                                markerOptions.position(new LatLng(lat, lon));
                             }
                         } else {
                             Toast.makeText(getContext(), "Không tìm thấy " + mContentPlace + " gần đây", Toast.LENGTH_SHORT).show();
@@ -574,16 +589,36 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     }
 
 
-    public void showMarkerNearby(double latitude, double longitude) {
+    public void showMarkerNearby(int position, double latitude, double longitude) {
         try {
 
             LatLng latLng = new LatLng(latitude, longitude);
             mGeocoder = new Geocoder(getContext());
             List<Address> addresses = mGeocoder.getFromLocation(latitude, longitude, 1);
 
-            MarkerOptions markerOptions = new MarkerOptions();
+
             markerOptions.position(latLng);
-            markerOptions.title(addresses.get(0).getAdminArea()).snippet(addresses.get(0).getAddressLine(0)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+            markerOptions.title(addresses.get(0).getAdminArea()).snippet(addresses.get(0).getAddressLine(0));
+            if (mNamePlace.equalsIgnoreCase(Const.ATM_PLACE)) {
+                markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.restaurant));
+            } else if (mNamePlace.equalsIgnoreCase(Const.RESTAURANT_PLACE)) {
+                markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.restaurant));
+            } else if (mNamePlace.equalsIgnoreCase(Const.PETROLEUM_PLACE)) {
+                markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.gas));
+            } else if (mNamePlace.equalsIgnoreCase(Const.GROCERY_PLACE)) {
+                markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.house));
+            } else if (mNamePlace.equalsIgnoreCase(Const.HOTEL_PLACE)) {
+                markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.hotel));
+            } else if (mNamePlace.equalsIgnoreCase(Const.HOSPITAL_PLACE)) {
+                markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.hospital));
+            } else if (mNamePlace.equalsIgnoreCase(Const.PHARMACIES_PLACE)) {
+                markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.hospital));
+            } else if (mNamePlace.equalsIgnoreCase(Const.TOURIES_PLACE)) {
+                markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.restaurant));
+            } else {
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+            }
+            markerNearby = mMap.addMarker(markerOptions);
             mMap.addMarker(markerOptions);
             if (moveCamNearby) {
                 moveCamNearby = false;
@@ -594,7 +629,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -636,9 +670,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                 });
             }
 
-            Log.d("zxcvbnm", imageUrl + "");
-
-
             mMap.addMarker(markerOptions);
             if (moveCamFriend) {
                 moveCamFriend = false;
@@ -657,12 +688,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                 String position1 = marker.getSnippet();
                 String position2 = String.valueOf(marker.getZIndex());
                 String position3 = marker.getTitle();
-
-//                Toast.makeText(getApplicationContext(), position + "", Toast.LENGTH_SHORT).show();
-//                Toast.makeText(getApplicationContext(), position1 + "", Toast.LENGTH_SHORT).show();
-//                Toast.makeText(getApplicationContext(), position2 + "", Toast.LENGTH_SHORT).show();
-//                Toast.makeText(getApplicationContext(), position3 + "", Toast.LENGTH_SHORT).show();
-
 
                 return false;
             }
@@ -768,4 +793,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             polylinePaths.add(mMap.addPolyline(polylineOptions));
         }
     }
+
+
 }
