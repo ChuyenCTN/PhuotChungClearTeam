@@ -33,11 +33,6 @@ public class NotifyAdapter extends RecyclerView.Adapter<NotifyAdapter.ViewHolder
 
     private List<Notifi> notifiList;
     private Context mContext;
-    private FirebaseAuth auth;
-    DatabaseReference reference;
-    FirebaseUser firebaseUser;
-    String tvName;
-
     private clickDetailTourGroup clickDetailTourGroup;
 
     public NotifyAdapter(List<Notifi> notifiList, Context mContext) {
@@ -92,13 +87,7 @@ public class NotifyAdapter extends RecyclerView.Adapter<NotifyAdapter.ViewHolder
                     clickDetailTourGroup.onClickDetail(getAdapterPosition(), notifi);
                 }
             });
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    clickDetailTourGroup.onLongClick(getAdapterPosition(), notifi);
-                    return true;
-                }
-            });
+
         }
     }
 
@@ -115,7 +104,6 @@ public class NotifyAdapter extends RecyclerView.Adapter<NotifyAdapter.ViewHolder
     public interface clickDetailTourGroup {
         void onClickDetail(int position, Notifi response);
 
-        void onLongClick(int adapterPosition, Notifi response);
     }
 
 

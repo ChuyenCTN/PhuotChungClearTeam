@@ -123,7 +123,6 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
                 intent.putExtras(bundle);
                 startActivity(intent);
 
-                startActivity(intent);
             }
 
             @Override
