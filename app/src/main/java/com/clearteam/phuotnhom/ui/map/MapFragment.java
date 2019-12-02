@@ -201,7 +201,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
         initfirebase();
 
-        initRequestLocation();
+//        initRequestLocation();
 
         return view;
     }
@@ -332,6 +332,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                 break;
             case R.id.img_curent_location:
                 moveCamMy = true;
+                sendRequest();
                 getCurrentLocation();
                 break;
         }
