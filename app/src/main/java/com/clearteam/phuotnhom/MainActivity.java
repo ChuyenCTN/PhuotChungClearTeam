@@ -30,7 +30,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.clearteam.phuotnhom.ui.map.MapFragment;
-import com.clearteam.phuotnhom.fragment.SchedulerFragment;
+import com.clearteam.phuotnhom.ui.scheduler.SchedulerFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

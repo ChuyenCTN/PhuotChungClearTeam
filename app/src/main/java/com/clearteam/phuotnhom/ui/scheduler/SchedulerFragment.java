@@ -1,4 +1,4 @@
-package com.clearteam.phuotnhom.fragment;
+package com.clearteam.phuotnhom.ui.scheduler;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -67,6 +67,12 @@ public class SchedulerFragment extends Fragment {
         manager.setOrientation(RecyclerView.VERTICAL);
         rcvTourMe.setLayoutManager(manager);
         rcvTourMe.setAdapter(mTourAllAdapter);
+        mTourAllAdapter.setClickDetailTourGroup(new TourAllAdapter.clickDetailTourGroup() {
+            @Override
+            public void onClickDetail(int position, TourMe response) {
+
+            }
+        });
         initData();
     }
 

@@ -1,7 +1,6 @@
 package com.clearteam.phuotnhom.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.clearteam.phuotnhom.R;
-import com.clearteam.phuotnhom.fragment.TourAllFragment;
 import com.clearteam.phuotnhom.model.TourMe;
-import com.clearteam.phuotnhom.ui.TourGroupDetailActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -79,12 +74,12 @@ public class TourAllAdapter extends RecyclerView.Adapter<TourAllAdapter.ViewHold
             tvDateStart.setText(tourMe.getDate());
             tvAdd.setText(tourMe.getTvAdd());
             tvAdd.setBackgroundColor(mContext.getResources().getColor(R.color.green));
-            if (!tourMe.isMyTour()){
+            if (!tourMe.isMyTour()) {
                 tvAdd.setBackgroundColor(mContext.getResources().getColor(R.color.bg_tab));
             }
 
 
-            tvAdd.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     clickDetailTourGroup.onClickDetail(getAdapterPosition(), tourMe);

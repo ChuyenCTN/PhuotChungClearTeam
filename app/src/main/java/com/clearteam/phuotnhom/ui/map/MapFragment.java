@@ -343,6 +343,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                 break;
             case R.id.img_curent_location:
                 moveCamMy = true;
+//                sendRequest();
                 getCurrentLocation();
                 break;
         }
@@ -563,9 +564,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                         mPlaceResponse = new PlaceResponse();
                         mPlaceResponse = (PlaceResponse) response.body();
                         if (mPlaceResponse.getStatus().equalsIgnoreCase(Const.STATUS_OK)) {
-                            Log.d("zxcvbnm,.", mPlaceResponse.getResults().size() + "");
                             markers = new MarkerOptions[mPlaceResponse.getResults().size()];
-//                mMap.clear();
+                            mMap.clear();
+                            showMarker(mLatitude, mLongitude);
                             for (int i = 0; i < mPlaceResponse.getResults().size(); i++) {
                                 double lon = mPlaceResponse.getResults().get(i).getGeometry().getViewport().getNortheast().getLng();
                                 double lat = mPlaceResponse.getResults().get(i).getGeometry().getViewport().getNortheast().getLat();
