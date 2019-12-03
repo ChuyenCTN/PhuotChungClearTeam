@@ -200,7 +200,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         // finally change the color
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setBackgroundDrawable(ContextCompat.getDrawable(TourGroupDetailActivity.this, R.color.bg_tab));
+            window.setStatusBarColor(ContextCompat.getColor(TourGroupDetailActivity.this, R.color.bg_tab));
         }
     }
 

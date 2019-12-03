@@ -59,6 +59,7 @@
 
     <!--    bottom sheet-->
 
+
     <string name="txt_label_restaurant">Nhà hàng, quán ăn</string>
     <string name="txt_label_hotel">Khách sạn, nhà nghỉ</string>
     <string name="txt_label_pharmacies">Hiệu thuốc</string>
@@ -75,6 +76,8 @@
     <string name="date_notify">20/11/2019</string>
     <string name="refuse">Từ chối</string>
     <string name="confirm">Xác nhận</string>
+	<string name="chua_xn">Chưa xác nhận</string>
+
 
 
 </resources>
