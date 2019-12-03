@@ -44,4 +44,13 @@ public class Const {
     public static String TOURIES_PLACE = "touries";
 
 
+    public static String NAME1_SOS = "name1sos";
+    public static String NAME2_SOS = "name2sos";
+    public static String NAME3_SOS = "name3sos";
+    public static String PHONE1_SOS = "phone1sos";
+    public static String PHONE2_SOS = "phone2sos";
+    public static String PHONE3_SOS = "phone3sos";
+    public static String CONTENT_SOS = "contentsos";
+
+
 }

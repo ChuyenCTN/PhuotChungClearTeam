@@ -2,19 +2,8 @@ package com.clearteam.phuotnhom;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
-
-import com.bumptech.glide.Glide;
-import com.clearteam.phuotnhom.fragment.IntroductFragment;
-import com.clearteam.phuotnhom.fragment.NotifyFragment;
-import com.clearteam.phuotnhom.fragment.ProfileFragment;
-import com.clearteam.phuotnhom.fragment.TourGroupFragment;
-import com.clearteam.phuotnhom.model.User;
-import com.clearteam.phuotnhom.notification.Token;
-import com.clearteam.phuotnhom.ui.LoginActivity;
-import com.facebook.login.LoginManager;
-
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -29,8 +18,18 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
+import com.clearteam.phuotnhom.fragment.IntroductFragment;
+import com.clearteam.phuotnhom.fragment.NotifyFragment;
+import com.clearteam.phuotnhom.fragment.ProfileFragment;
+import com.clearteam.phuotnhom.fragment.TourGroupFragment;
+import com.clearteam.phuotnhom.model.User;
+import com.clearteam.phuotnhom.notification.Token;
+import com.clearteam.phuotnhom.ui.LoginActivity;
 import com.clearteam.phuotnhom.ui.map.MapFragment;
 import com.clearteam.phuotnhom.ui.scheduler.SchedulerFragment;
+import com.clearteam.phuotnhom.ui.setting.SettingFragment;
+import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -190,6 +189,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 replaceFragment(ProfileFragment.getInstance(), mFragmentManager);
                 break;
             case R.id.nav_setting:
+                setTitle(getString(R.string.menu_setting));
+                replaceFragment(SettingFragment.getInstance(), mFragmentManager);
                 break;
             case R.id.nav_notifi:
                 setTitle("Thông báo");

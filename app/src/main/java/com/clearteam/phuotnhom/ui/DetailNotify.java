@@ -135,7 +135,7 @@ public class DetailNotify extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_refuse:
                  tvStatus.setText("Yêu cầu đã được từ chối");
-                 setResult(RESULT_CANCELED,);
+                 setResult(RESULT_CANCELED);
                 break;
         }
     }
