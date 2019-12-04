@@ -155,12 +155,7 @@ public class EditInformationActivity extends AppCompatActivity implements View.O
                 startActivityForResult(Intent.createChooser(intent, "Select imgae"), IMAGE_REQUSET_CODE);
                 break;
             case R.id.btnLuu:
-                // deletePreviousImage();
-//                if (btnSave.getText().equals("Upload")) {
-//                    uploadDataToFirebase();
-//                } else {
                 beginUpdate();
-//                }
                 break;
         }
     }

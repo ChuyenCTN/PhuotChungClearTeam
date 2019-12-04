@@ -72,6 +72,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
     private AlertDialog alertDialog;
     private ListUserAdapter adapter;
     private List<User> userList;
+    private TourMe tour;
     private RecyclerView mRecyclerView;
     private List<String> keyRemoveMember = new ArrayList<>();
     private List<String> myListMember = new ArrayList<>();
@@ -103,10 +104,16 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
     private void getData() {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        TourMe tour = ((TourMe) bundle.getSerializable(Const.KEY_DATA));
+        tour = ((TourMe) bundle.getSerializable(Const.KEY_DATA));
         nameGroup = tour.getName();
         id2 = tour.getId();
-        keyID = tour.getKeyId() + "," + tour.getUserGroupId();
+        String idUserGroup = tour.getUserGroupId();
+        if (idUserGroup.contains(tour.getKeyId())) {
+            keyID = tour.getKeyId();
+        } else {
+            keyID = tour.getKeyId() + "," + tour.getUserGroupId();
+        }
+
         addressStart = tour.getAddressStart();
         addressEnd = tour.getAddressEnd();
         dateStart = tour.getDate();
@@ -178,9 +185,9 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
                 break;
             case R.id.img_message:
                 Intent intent = new Intent(TourGroupDetailActivity.this, ChatGroupActivity.class);
-                intent.putExtra(Const.KEY_NAME_GROUP, nameGroup);
-                intent.putExtra(Const.KEY_IMAGE_GROUP, imageG);
-                intent.putExtra(Const.KEY_ID, id2);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Const.KEY_DATA, tour);
+                intent.putExtras(bundle);
                 startActivity(intent);
                 break;
             case R.id.img_menu_group:
@@ -342,13 +349,6 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
         final String addressEnd = edAddressEnd.getText().toString();
         final String date = edDateStart.getText().toString();
 
-//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Const.KEY_TOUR).child(id).child(id2)
-//        TourMe tourMe = new TourMe(name1,addressStart,addressEnd,date);
-//        reference.setValue(tourMe);
-//        notifyAll();
-//        Toast.makeText(this, "Sửa thành công", Toast.LENGTH_SHORT).show();
-//        finish();
-
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference(Const.KEY_TOUR);
         Query query = reference.child(id).orderByChild("name").equalTo(name1);
@@ -432,7 +432,6 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
                 alertDialog = null;
             }
         }
-        status("offline");
     }
 
     @Override

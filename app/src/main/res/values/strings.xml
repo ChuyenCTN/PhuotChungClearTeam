@@ -1,82 +1,88 @@
 <resources>
 
-    <string name="app_name">Phượt Chung</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="edit_user">Sửa thông tin</string>
-    <string name="add_group">Tạo nhóm</string>
-    <string name="change_password">Đổi mật khẩu</string>
+	<string name="app_name">Phượt Chung</string>
+	<string name="navigation_drawer_open">Open navigation drawer</string>
+	<string name="navigation_drawer_close">Close navigation drawer</string>
+	<string name="nav_header_title">Android Studio</string>
+	<string name="nav_header_subtitle">android.studio@android.com</string>
+	<string name="nav_header_desc">Navigation header</string>
+	<string name="edit_user">Sửa thông tin</string>
+	<string name="add_group">Tạo nhóm</string>
+	<string name="change_password">Đổi mật khẩu</string>
 
 
-    <string name="menu_home">Trang chủ</string>
-    <string name="menu_group">Nhóm tour</string>
-    <string name="menu_schedule">Lịch trình</string>
-    <string name="menu_setting">Cài đặt</string>
-    <string name="menu_introduction">Giới thiệu</string>
-    <string name="menu_user">Thông tin cá nhân</string>
-    <string name="menu_notifi">Thông báo</string>
-    <string name="menu_out">Đăng xuất</string>
-    <string name="facebook_app_id">555229505241189</string>
-    <string name="fb_login_protocol_scheme">fb555229505241189</string>
-    <string name="sign_in">Sign in</string>
-    <string name="register">Đăng ký</string>
-    <string name="register_here">Register here</string>
-    <string name="text_send_email">We have sent an email for resetting your password to your email address. Please check your email for next steps</string>
-    <string name="title_activity_maps">Map</string>
-    <string name="title_activity_main2">Main2Activity</string>
-    <string name="title_home">Dịch Vụ</string>
-    <string name="title_dashboard">Bạn bè</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="dich_vu">Dịch vụ xung quanh</string>
+	<string name="menu_home">Trang chủ</string>
+	<string name="menu_group">Nhóm tour</string>
+	<string name="menu_schedule">Lịch trình</string>
+	<string name="menu_setting">Cài đặt</string>
+	<string name="menu_introduction">Giới thiệu</string>
+	<string name="menu_user">Thông tin cá nhân</string>
+	<string name="menu_notifi">Thông báo</string>
+	<string name="menu_out">Đăng xuất</string>
+	<string name="facebook_app_id">555229505241189</string>
+	<string name="fb_login_protocol_scheme">fb555229505241189</string>
+	<string name="sign_in">Sign in</string>
+	<string name="register">Đăng ký</string>
+	<string name="register_here">Register here</string>
+	<string name="text_send_email">We have sent an email for resetting your password to your email address. Please check your email for next steps</string>
+	<string name="title_activity_maps">Map</string>
+	<string name="title_activity_main2">Main2Activity</string>
+	<string name="title_home">Dịch Vụ</string>
+	<string name="title_dashboard">Bạn bè</string>
+	<string name="title_notifications">Notifications</string>
+	<string name="dich_vu">Dịch vụ xung quanh</string>
 
 
-    <!-- TODO: Remove or change this placeholder text -->
+	<!-- TODO: Remove or change this placeholder text -->
 
 
-    <!--	Tour Group-->
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_sua_tt">Sửa thông tin</string>
-    <string name="title_doi_mk">Đổi mật khẩu</string>
+	<!--	Tour Group-->
+	<!-- TODO: Remove or change this placeholder text -->
+	<string name="hello_blank_fragment">Hello blank fragment</string>
+	<string name="title_sua_tt">Sửa thông tin</string>
+	<string name="title_doi_mk">Đổi mật khẩu</string>
 
-    <!--	Tour Group-->
-    <string name="txt_no_data_tour_group">Bạn chưa có nhóm. Hãy tạo nhóm mới</string>
-    <string name="txt_warning_no_tour_group">Bạn chưa có nhóm. Bạn có muốn tạo nhóm mới không?</string>
-    <string name="txt_title_tour_group">Nhóm Tour</string>
-    <string name="txt_label_agree">Đồng ý</string>
-    <string name="txt_label_cancel">Hủy</string>
-    <string name="txt_label_ok">OK</string>
-    <string name="txt_alert_notifi">Thông báo</string>
-    <string name="txt_alert_warning">Cảnh báo</string>
-    <string name="txt_alert_close">Đóng</string>
-    <string name="txt_label_add_new">Thêm</string>
-    <string name="txt_label_new">Thêm mới</string>
-    <string name="txt_title_new_group">Thêm nhóm</string>
-    <!-- TODO: Remove or change this placeholder text -->
+	<!--	Tour Group-->
+	<string name="txt_no_data_tour_group">Bạn chưa có nhóm. Hãy tạo nhóm mới</string>
+	<string name="txt_warning_no_tour_group">Bạn chưa có nhóm. Bạn có muốn tạo nhóm mới không?</string>
+	<string name="txt_title_tour_group">Nhóm Tour</string>
+	<string name="txt_label_agree">Đồng ý</string>
+	<string name="txt_label_cancel">Hủy</string>
+	<string name="txt_label_ok">OK</string>
+	<string name="txt_alert_notifi">Thông báo</string>
+	<string name="txt_alert_warning">Cảnh báo</string>
+	<string name="txt_alert_close">Đóng</string>
+	<string name="txt_label_add_new">Thêm</string>
+	<string name="txt_label_new">Thêm mới</string>
+	<string name="txt_title_new_group">Thêm nhóm</string>
+	<!-- TODO: Remove or change this placeholder text -->
 
-    <!--    bottom sheet-->
+	<!--    bottom sheet-->
+
+	<string name="txt_label_restaurant">Nhà hàng, quán ăn</string>
+	<string name="txt_label_hotel">Khách sạn, nhà nghỉ</string>
+	<string name="txt_label_pharmacies">Hiệu thuốc</string>
+	<string name="txt_label_hospital">Bệnh viện</string>
+	<string name="txt_label_ATM">Cây ATM</string>
+	<string name="txt_label_petroleum">Trạm xăng, dầu</string>
+	<string name="txt_label_grocery">Cửa hàng tạp hóa</string>
+	<string name="txt_label_tourist_destination">Địa danh</string>
+	<string name="title_status">Bạn bè đang online</string>
+	<string name="status_member">Chưa có bạn bè online</string>
+	<string name="status_scheduler">Bạn Chưa có lịch trình nào</string>
+	<string name="name_notify">Lê Hoàng</string>
+	<string name="message_notify">Xin tham gia vào nhóm phượt của bạn</string>
+	<string name="date_notify">20/11/2019</string>
+	<string name="hour_notify">22:00</string>
+	<string name="refuse">Từ chối</string>
+	<string name="confirm">Đồng ý</string>
+	<string name="chua_xn">Chưa phê duyệt</string>
+	<string name="refuse_status">Từ chối yêu câu</string>
+	<string name="confirm_status">Đồng ý yêu câu</string>
 
 
-    <string name="txt_label_restaurant">Nhà hàng, quán ăn</string>
-    <string name="txt_label_hotel">Khách sạn, nhà nghỉ</string>
-    <string name="txt_label_pharmacies">Hiệu thuốc</string>
-    <string name="txt_label_hospital">Bệnh viện</string>
-    <string name="txt_label_ATM">Cây ATM</string>
-    <string name="txt_label_petroleum">Trạm xăng, dầu</string>
-    <string name="txt_label_grocery">Cửa hàng tạp hóa</string>
-    <string name="txt_label_tourist_destination">Địa danh</string>
-    <string name="title_status">Bạn bè đang online</string>
-    <string name="status_member">Chưa có bạn bè online</string>
-    <string name="status_scheduler">Bạn Chưa có lịch trình nào</string>
-    <string name="name_notify">Lê Hoàng</string>
-    <string name="message_notify">Xin tham gia vào nhóm phượt của bạn</string>
-    <string name="date_notify">20/11/2019</string>
-    <string name="refuse">Từ chối</string>
-    <string name="confirm">Xác nhận</string>
-    <string name="chua_xn">Chưa xác nhận</string>
+
+
 
 
     <!--    sos-->

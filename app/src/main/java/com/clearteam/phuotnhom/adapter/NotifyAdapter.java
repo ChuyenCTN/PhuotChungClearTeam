@@ -67,12 +67,16 @@ public class NotifyAdapter extends RecyclerView.Adapter<NotifyAdapter.ViewHolder
         private TextView tvNameSender;
         private TextView tvMessage;
         private TextView tvDate;
+        private TextView tvHour;
+        private TextView tvStatus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvNameSender = itemView.findViewById(R.id.tvNameSender);
             tvMessage = itemView.findViewById(R.id.tv_message);
             tvDate = itemView.findViewById(R.id.tv_date);
+            tvHour = itemView.findViewById(R.id.tv_hour);
+            tvStatus = itemView.findViewById(R.id.tv_status);
 
         }
 
@@ -80,6 +84,8 @@ public class NotifyAdapter extends RecyclerView.Adapter<NotifyAdapter.ViewHolder
             tvNameSender.setText(notifi.getNameSender());
             tvMessage.setText(notifi.getMessage());
             tvDate.setText(notifi.getDate());
+            tvHour.setText(notifi.getHour());
+            tvStatus.setText(notifi.getStatus());
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

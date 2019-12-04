@@ -14,7 +14,7 @@
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintTop_toTopOf="parent">
 
-		<ImageView
+		<ImageButton
 			android:id="@+id/img_back"
 			android:layout_width="@dimen/dp_24"
 			android:layout_height="@dimen/dp_24"
@@ -73,12 +73,12 @@
 		android:paddingLeft="@dimen/dp_20"
 		android:paddingRight="@dimen/dp_10">
 
-		<ImageView
+		<ImageButton
 			android:id="@+id/img_image"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
-			android:src="@drawable/ic_image" />
+			android:background="@drawable/ic_image" />
 
 		<com.rockerhieu.emojicon.EmojiconEditText
 			android:id="@+id/edMsg"
@@ -94,12 +94,12 @@
 			android:paddingRight="@dimen/dp_15"
 			android:paddingBottom="@dimen/dp_8" />
 
-		<ImageView
+		<ImageButton
 			android:id="@+id/img_send"
 			android:layout_width="@dimen/dp_30"
 			android:layout_height="@dimen/dp_30"
 			android:layout_alignParentRight="true"
 			android:layout_centerVertical="true"
-			android:src="@drawable/bg_send" />
+			android:background="@drawable/bg_send" />
 	</RelativeLayout>
 </RelativeLayout>
