@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +37,12 @@ import com.clearteam.phuotnhom.adapter.ListUserAdapter;
 import com.clearteam.phuotnhom.listener.ClickDetailMember;
 import com.clearteam.phuotnhom.model.TourMe;
 import com.clearteam.phuotnhom.model.User;
+import com.clearteam.phuotnhom.notification.APIService;
+import com.clearteam.phuotnhom.notification.Client;
+import com.clearteam.phuotnhom.notification.Data;
+import com.clearteam.phuotnhom.notification.MyResponse;
+import com.clearteam.phuotnhom.notification.Sender;
+import com.clearteam.phuotnhom.notification.Token;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -55,23 +63,30 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
-public class TourGroupDetailActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, DatePickerDialog.OnDateSetListener, ClickDetailMember, View.OnClickListener {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class TourGroupDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, ClickDetailMember, View.OnClickListener {
 
 
     private TextView tvNameGroup;
     private ImageView imgAvataGroup, imgMenu, imgBack, imgMessage;
-    private String nameGroup, imageG, addressStart, addressEnd, dateStart, keyID, keyRemove;
+    private String nameGroup, imageG, addressStart, addressEnd, dateStart, keyID, keyRemove,title,content;
     private DatabaseReference reference;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseAuth auth;
     private FirebaseUser firebaseUser;
     private String id, id2;
-    private EditText edName, edAddressStart, edAddressEnd, edDateStart;
+    private LinearLayout llAddMember,llDelete,llNotify,llEdit,ll_location;
+    private EditText edName, edAddressStart, edAddressEnd, edDateStart,edTitle,edContent;
     private static DatePickerDialog.OnDateSetListener onDateSetListener1;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    private APIService apiService;
     private AlertDialog alertDialog;
     private ListUserAdapter adapter;
     private List<User> userList;
+    boolean notify = false;
     private TourMe tour;
     private RecyclerView mRecyclerView;
     private List<String> keyRemoveMember = new ArrayList<>();
@@ -89,6 +104,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
         FirebaseUser firebaseUser = auth.getCurrentUser();
         assert firebaseUser != null;
         id = firebaseUser.getUid();
+
         reference = database.getReference(Const.KEY_TOUR).child(id);
     }
 
@@ -120,7 +136,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
         imageG = tour.getAvataGroup();
 
         if (imageG == null) {
-            Glide.with(this).load(R.drawable.avatar).into(imgAvataGroup);
+            Glide.with(this).load(R.drawable.logo_group).into(imgAvataGroup);
         } else {
             Glide.with(this).load(imageG).into(imgAvataGroup);
         }
@@ -166,13 +182,24 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
         imgBack = findViewById(R.id.img_back);
         imgMessage = findViewById(R.id.img_message);
         tvNameGroup = findViewById(R.id.tv_name_group);
+        llAddMember = findViewById(R.id.ll_add_member);
+        llDelete = findViewById(R.id.ll_delete);
+        llNotify = findViewById(R.id.ll_notify);
+        ll_location = findViewById(R.id.ll_location);
+        llEdit = findViewById(R.id.ll_edit);
         imgAvataGroup = findViewById(R.id.img_avata_group);
-        imgMenu = findViewById(R.id.img_menu_group);
+//        imgMenu = findViewById(R.id.img_menu_group);
+        apiService = Client.getClient("https://fcm.googleapis.com").create(APIService.class);
 
         onDateSetListener1 = this;
         imgBack.setOnClickListener(this);
         imgMessage.setOnClickListener(this);
-        imgMenu.setOnClickListener(this);
+        llEdit.setOnClickListener(this);
+        llNotify.setOnClickListener(this);
+        ll_location.setOnClickListener(this);
+        llDelete.setOnClickListener(this);
+        llAddMember.setOnClickListener(this);
+//        imgMenu.setOnClickListener(this);
 
         getData();
     }
@@ -190,13 +217,161 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
-            case R.id.img_menu_group:
-                PopupMenu popupMenu = new PopupMenu(TourGroupDetailActivity.this, v);
-                popupMenu.setOnMenuItemClickListener(TourGroupDetailActivity.this);
-                popupMenu.inflate(R.menu.menu_tour_group);
-                popupMenu.show();
+            case R.id.ll_add_member:
+                Intent intent1 = new Intent(TourGroupDetailActivity.this, AddMemberActivity.class);
+                intent1.putExtra(Const.KEY_ID, id2);
+                intent1.putExtra(Const.KEY_ID_1, keyID);
+                startActivityForResult(intent1, Const.REQUEST_CODE);
+                break;
+            case R.id.ll_notify:
+                pushNotifyForMember();
+                break;
+            case R.id.ll_edit:
+                updateGroup();
+                break;
+            case R.id.ll_location:
+                Toast.makeText(this, "location", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.ll_delete:
+                deleteGroup();
                 break;
         }
+    }
+
+    private void pushNotifyForMember() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Thông báo cho các thành viên");
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View dialogView = layoutInflater.inflate(R.layout.item_dialog_push_notify, null);
+        builder.setView(dialogView);
+
+        edTitle = dialogView.findViewById(R.id.ed_title);
+        edContent = dialogView.findViewById(R.id.ed_content);
+
+
+
+        final Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+        final Button btnOk = dialogView.findViewById(R.id.btnOk);
+        alertDialog = builder.create();
+
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pushNotify();
+            }
+        });
+        alertDialog.show();
+    }
+
+    private void pushNotify() {
+        title = edTitle.getText().toString().trim();
+        content = edContent.getText().toString().trim();
+        if (title.isEmpty()){
+            Toast.makeText(this, "Tiêu đề đang trống", Toast.LENGTH_SHORT).show();
+        }else if (content.isEmpty()){
+            Toast.makeText(this, "Nội dung đang trống", Toast.LENGTH_SHORT).show();
+        }else{
+
+            sendMessage(id,keyID,content);
+        }
+    }
+    public void sendMessage(String sender, final String receiver, String message) {
+        // DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mReference = FirebaseDatabase.getInstance().getReference("Notify").child(id2);
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("id", id2);
+        hashMap.put("sender", sender);
+        hashMap.put("receiver", receiver);
+        hashMap.put("message", message);
+
+
+        //mReference.child("Notify").push().setValue(hashMap);
+        mReference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    //  Toast.makeText(getActivity(), "Đăng ký thành công !", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        final DatabaseReference chatR = FirebaseDatabase.getInstance().getReference("ListNotify")
+                .child(auth.getUid())
+                .child(keyID);
+
+        chatR.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    chatR.child("id").setValue(receiver);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        final String msg = message;
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(auth.getUid());
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                if (notify) {
+
+                    sendNotification(user.getUsername(), receiver, msg);
+                }
+                notify = false;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void sendNotification(final String username, String receiver, final String message) {
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
+        Query query = tokens.orderByKey().equalTo(receiver);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Token token = snapshot.getValue(Token.class);
+                    Data data = new Data(id, R.mipmap.ic_launcher, username + ": " + message, title, keyID);
+                    Sender sender = new Sender(data, token.getToken());
+                    apiService.sendNotifycation(sender)
+                            .enqueue(new Callback<MyResponse>() {
+                                @Override
+                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                    if (response.code() == 200) {
+                                        if (response.body().success != 1) {
+                                            Toast.makeText(TourGroupDetailActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<MyResponse> call, Throwable t) {
+
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void changeStatustBar() {
@@ -212,24 +387,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements PopupM
     }
 
 
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.add_user:
-                Intent intent = new Intent(TourGroupDetailActivity.this, AddMemberActivity.class);
-                intent.putExtra(Const.KEY_ID, id2);
-                intent.putExtra(Const.KEY_ID_1, keyID);
-                startActivityForResult(intent, Const.REQUEST_CODE);
-                break;
-            case R.id.edit_group:
-                updateGroup();
-                break;
-            case R.id.delete_group:
-                deleteGroup();
-                break;
-        }
-        return true;
-    }
+
 
     private void updateGroup() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);

@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.clearteam.phuotnhom.fragment.TourAllFragment;
+import com.clearteam.phuotnhom.model.Notifi;
 import com.clearteam.phuotnhom.notification.OreoNotification;
 import com.clearteam.phuotnhom.ui.DetailNotify;
 import com.google.firebase.auth.FirebaseAuth;
@@ -65,6 +66,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String icon = remoteMessage.getData().get("icon");
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
+        Log.d("AAAAA",body );
+        //Notifi notifi = new Notifi()
 
        // Log.d("AAAAA",user+"/"+title+"/"+body);
         RemoteMessage.Notification notification = remoteMessage.getNotification();

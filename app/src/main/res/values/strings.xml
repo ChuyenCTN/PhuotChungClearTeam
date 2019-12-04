@@ -102,6 +102,15 @@
     <string name="txt_error_phonesos2">Số điện thoại không đúng</string>
     <string name="txt_hint_contentsos">Vui lòng nhập nội dung tin nhắn</string>
     <string name="txt_label_success_info_sos">Lưu thông tin thành công</string>
+	<string name="them_thanh_vien">Thêm thành viên</string>
+	<string name="xoa_nhom">Xóa nhóm</string>
+	<string name="thong_bao">Thông báo</string>
+	<string name="btn_huy">Hủy</string>
+	<string name="btn_thong_bao">Thông báo</string>
+	<string name="ed_noi_dung">Nội dung</string>
+	<string name="ed_tieu_de">Tiêu đề</string>
+	<string name="vi_tri">Vị Trí</string>
+	<string name="sua_tt">Sửa thông tin</string>
 
 
 </resources>
