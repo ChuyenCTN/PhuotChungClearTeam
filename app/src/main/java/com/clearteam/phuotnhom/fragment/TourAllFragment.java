@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.clearteam.phuotnhom.MainActivity;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.adapter.TourAllAdapter;
 import com.clearteam.phuotnhom.model.TourMe;
@@ -26,8 +27,11 @@ import com.clearteam.phuotnhom.notification.Data;
 import com.clearteam.phuotnhom.notification.MyResponse;
 import com.clearteam.phuotnhom.notification.Sender;
 import com.clearteam.phuotnhom.notification.Token;
+import com.clearteam.phuotnhom.ui.RegisterActivity;
 import com.clearteam.phuotnhom.ui.TourGroupDetailActivity;
 import com.clearteam.phuotnhom.utils.Const;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -61,7 +65,7 @@ public class TourAllFragment extends Fragment {
     private DatabaseReference reference;
     private static TourAllFragment INSTANCE;
     private View view;
-    private String userId, keyAllUser, keyUserGroupId,saveCurrentDate,nameSender;
+    private String userId, keyAllUser, keyUserGroupId,saveCurrentDate,nameSender,saveCurrentTime,time,keyIDGroup;
     private TourMe mTourMe;
     private APIService apiService;
     boolean notify = false;
@@ -117,17 +121,13 @@ public class TourAllFragment extends Fragment {
         rcvTourAll.setLayoutManager(manager);
         rcvTourAll.setAdapter(mTourAllAdapter);
         initData();
-
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
-        saveCurrentDate = currentDate.format(calendar.getTime());
-        intent = getActivity().getIntent();
+        creatKeyIDNotify();
+        creatDateHourNotify();
 
         //final String userid = "7rxs0ORn4QbcITYDHgiuTQxvaKj2";
         mTourAllAdapter.setClickDetailTourGroup(new TourAllAdapter.clickDetailTourGroup() {
             @Override
             public void onClickDetail(int position, TourMe response) {
-                ///   Log.d("AAAAAA",response.getUserGroupId());
 
                 if (response.getTvAdd().equals("Nhóm của bạn") || response.getTvAdd().equals("Bạn đã tham gia")) {
                     Bundle bundle = new Bundle();
@@ -136,12 +136,11 @@ public class TourAllFragment extends Fragment {
                     intent.putExtras(bundle);
                     startActivity(intent);
 
-
                 } else {
                     notify = true;
                     String msg = "Muốn tham gia vào nhóm phượt của bạn";
                     keyUserGroupId = response.getUserGroupId();
-
+                    keyIDGroup = response.getId();
                     if (!msg.equals("")) {
                         sendMessage(fuser.getUid(), keyUserGroupId, msg);
                     } else {
@@ -153,6 +152,27 @@ public class TourAllFragment extends Fragment {
             }
         });
     }
+
+    private void creatDateHourNotify() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
+        saveCurrentDate = currentDate.format(calendar.getTime());
+
+        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm");
+        saveCurrentTime = currentTime.format(calendar.getTime());
+        intent = getActivity().getIntent();
+    }
+
+    private void creatKeyIDNotify(){
+        Calendar c = Calendar.getInstance();
+        String year = String.valueOf(c.get(Calendar.YEAR));
+        String month = String.valueOf(c.get(Calendar.MONTH + 1));
+        String date = String.valueOf(c.get(Calendar.DATE));
+        String hour = String.valueOf(c.get(Calendar.HOUR));
+        String minute = String.valueOf(c.get(Calendar.MINUTE));
+        String second = String.valueOf(c.get(Calendar.SECOND));
+        time = "" + year + "" + month + "" + date + "" + hour + "" + minute + "" + second + "";
+    }
     private void getNameSender(){
         auth = FirebaseAuth.getInstance();
         fuser = FirebaseAuth.getInstance().getCurrentUser();
@@ -163,7 +183,6 @@ public class TourAllFragment extends Fragment {
 
                 User user= dataSnapshot.getValue(User.class);
                 nameSender = user.getUsername();
-
             }
 
             @Override
@@ -173,19 +192,29 @@ public class TourAllFragment extends Fragment {
         });
     }
     public void sendMessage(String sender, final String receiver, String message) {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-
-
+       // DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mReference = FirebaseDatabase.getInstance().getReference("Notify").child(time);
         HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("id", time);
+        hashMap.put("idGroup", keyIDGroup);
         hashMap.put("sender", sender);
         hashMap.put("receiver", receiver);
         hashMap.put("message", message);
         hashMap.put("date", saveCurrentDate);
+        hashMap.put("hour", saveCurrentTime);
         hashMap.put("nameSender", nameSender);
+        hashMap.put("status", "Chưa phê duyệt");
 
 
-        reference.child("Notify").push().setValue(hashMap);
-
+        //mReference.child("Notify").push().setValue(hashMap);
+        mReference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                  //  Toast.makeText(getActivity(), "Đăng ký thành công !", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         final DatabaseReference chatR = FirebaseDatabase.getInstance().getReference("ListNotify")
                 .child(fuser.getUid())
                 .child(keyUserGroupId);
@@ -272,6 +301,7 @@ public class TourAllFragment extends Fragment {
                         mTourMe = dta1.getValue(TourMe.class);
                         list.add(mTourMe);
                         keyAllUser = mTourMe.getKeyId();
+
                         if (keyAllUser != null) {
                             listUserIds = new ArrayList<>();
                             listUserIds = Arrays.asList(keyAllUser.split(","));

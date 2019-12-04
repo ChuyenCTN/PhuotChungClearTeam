@@ -14,9 +14,9 @@
 		android:src="@drawable/img_header" />
 	<ImageButton
 		android:id="@+id/img_back"
-		android:layout_width="@dimen/dp_30"
-		android:layout_height="@dimen/dp_30"
-		android:src="@drawable/bg_back"
+		android:layout_width="@dimen/dp_24"
+		android:layout_height="@dimen/dp_24"
+		android:background="@drawable/bg_back"
 		android:layout_marginTop="@dimen/dp_15"
 		android:layout_marginLeft="@dimen/dp_15"/>
 
@@ -69,13 +69,20 @@
 				android:textSize="@dimen/size_16"/>
 		</LinearLayout>
 		<TextView
+			android:id="@+id/tv_hour"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/hour_notify"
+			android:textColor="@color/text"
+			android:layout_marginLeft="@dimen/dp_10"
+			android:layout_marginTop="@dimen/dp_20" />
+		<TextView
 			android:id="@+id/tv_date"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/date_notify"
 			android:textColor="@color/text"
-			android:layout_marginLeft="@dimen/dp_10"
-			android:layout_marginTop="@dimen/dp_20" />
+			android:layout_marginLeft="@dimen/dp_10"/>
 		<TextView
 			android:id="@+id/tv_status"
 			android:layout_width="wrap_content"

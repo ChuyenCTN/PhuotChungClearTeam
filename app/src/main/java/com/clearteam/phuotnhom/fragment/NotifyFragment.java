@@ -6,10 +6,12 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,6 +104,7 @@ public class NotifyFragment extends Fragment {
                 list.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     notifi = dataSnapshot1.getValue(Notifi.class);
+
                     if (notifi.getReceiver().equals(userId)) {
                         list.add(notifi);
                     }
@@ -115,4 +118,5 @@ public class NotifyFragment extends Fragment {
             }
         });
     }
+
 }

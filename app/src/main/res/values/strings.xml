@@ -73,9 +73,12 @@
 	<string name="name_notify">Lê Hoàng</string>
 	<string name="message_notify">Xin tham gia vào nhóm phượt của bạn</string>
 	<string name="date_notify">20/11/2019</string>
+	<string name="hour_notify">22:00</string>
 	<string name="refuse">Từ chối</string>
 	<string name="confirm">Đồng ý</string>
-	<string name="chua_xn">Chưa xác nhận</string>
+	<string name="chua_xn">Chưa phê duyệt</string>
+	<string name="refuse_status">Từ chối yêu câu</string>
+	<string name="confirm_status">Đồng ý yêu câu</string>
 
 
 </resources>
