@@ -1,17 +1,24 @@
 package com.clearteam.phuotnhom;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -29,6 +36,9 @@ import com.clearteam.phuotnhom.ui.LoginActivity;
 import com.clearteam.phuotnhom.ui.map.MapFragment;
 import com.clearteam.phuotnhom.ui.scheduler.SchedulerFragment;
 import com.clearteam.phuotnhom.ui.setting.SettingFragment;
+import com.clearteam.phuotnhom.ui.setting.model.InfoSOS;
+import com.clearteam.phuotnhom.utils.Const;
+import com.clearteam.phuotnhom.utils.PrefUtils;
 import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,12 +49,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.klinker.android.send_message.BroadcastUtils;
 
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
 
     private FrameLayout frameLayout;
 
@@ -83,6 +95,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         replaceFragment(MapFragment.getInstance(), mFragmentManager);
+
+        BroadcastUtils.sendExplicitBroadcast(this, new Intent(), "test action");
     }
 
     private void intDataUser() {
@@ -111,7 +125,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     } else {
                         Glide.with(getApplicationContext()).load(user.getImageURL()).into(imgAvata);
                     }
-
                 }
             }
 
@@ -148,11 +161,56 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sos:
-                //startActivity(new Intent(MainActivity.this, EditInformationActivity.class));
+                checkAndroidVersion();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void checkAndroidVersion() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            int checkCallPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
+            if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, Const.SMS_REQUEST);
+                return;
+            } else {
+                sendSms();
+            }
+        } else
+            sendSms();
+        {
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case Const.SMS_REQUEST:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    sendSms();
+                } else {
+                    Toast.makeText(MainActivity.this, "SEND_SMS Denied", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    public void sendSms() {
+        InfoSOS infoSOS = PrefUtils.getInfoSOS(getApplicationContext());
+        if (infoSOS != null) {
+            String contentSOS = infoSOS.getContent() + "\n" + MapFragment.address;
+            SmsManager sms = SmsManager.getDefault();
+            Toast.makeText(this, getResources().getString(R.string.txt_label_sendding_sos), Toast.LENGTH_SHORT).show();
+            sms.sendTextMessage(infoSOS.getNumberphone1(), null, contentSOS, null, null);
+            sms.sendTextMessage(infoSOS.getNumberphone2(), null, contentSOS, null, null);
+            sms.sendTextMessage(infoSOS.getNumberphone3(), null, contentSOS, null, null);
+        } else {
+            Toast.makeText(this, getResources().getString(R.string.txt_label_error_info_sos), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void status(String status) {
@@ -236,4 +294,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        super.onDestroy();
 //        status("offline");
 //    }
+
+
 }

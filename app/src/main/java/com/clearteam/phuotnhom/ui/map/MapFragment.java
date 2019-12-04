@@ -132,6 +132,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
     MarkerOptions markerOptions;
 
+    public static String address = "";
+
 
     //    my
     private double mLatitude = 0.0;
@@ -483,7 +485,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             LatLng latLng = new LatLng(latitude, longitude);
             mGeocoder = new Geocoder(getContext());
             List<Address> addresses = mGeocoder.getFromLocation(latitude, longitude, 1);
-
+            address = addresses.get(0).getAdminArea() + " - " + addresses.get(0).getAddressLine(0);
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(latLng);
             markerOptions.title(addresses.get(0).getAdminArea()).snippet(addresses.get(0).getAddressLine(0)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
@@ -645,7 +647,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             LatLng latLng = new LatLng(latitude, longitude);
             mGeocoder = new Geocoder(getContext());
             List<Address> addresses = mGeocoder.getFromLocation(latitude, longitude, 1);
-
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(latLng);
             markerOptions.title(name).snippet(addresses.get(0).getAddressLine(0));

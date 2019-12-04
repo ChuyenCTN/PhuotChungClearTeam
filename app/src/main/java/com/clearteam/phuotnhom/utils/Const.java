@@ -1,6 +1,8 @@
 package com.clearteam.phuotnhom.utils;
 
 public class Const {
+
+    public static final int SMS_REQUEST = 66;
     public static final int SPLASH_TIME = 800;
     public static final String KEY_NOTIFY = "key_notify";
     public static final String KEY_NOTIFYCATION = "notifycation";

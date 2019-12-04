@@ -1,9 +1,12 @@
 package com.clearteam.phuotnhom.ui;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -19,10 +22,12 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.clearteam.phuotnhom.MainActivity;
 import com.clearteam.phuotnhom.R;
+import com.clearteam.phuotnhom.mms.PermissionActivity;
 import com.clearteam.phuotnhom.utils.Const;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -65,6 +70,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initView();
+        checkAndroidVersion();
+        reQuestPermission();
     }
 
     private void initView() {
@@ -275,6 +282,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             }
                         }
                     });
+        }
+    }
+
+    public void checkAndroidVersion() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            int checkCallPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
+            if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, Const.SMS_REQUEST);
+                return;
+            }
+        }
+    }
+
+    private void reQuestPermission() {
+        if (PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean("request_permissions", true) &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            startActivity(new Intent(this, PermissionActivity.class));
+            finish();
+            return;
         }
     }
 }

@@ -96,6 +96,8 @@
     <string name="txt_error_phonesos2">Số điện thoại không đúng</string>
     <string name="txt_hint_contentsos">Vui lòng nhập nội dung tin nhắn</string>
     <string name="txt_label_success_info_sos">Lưu thông tin thành công</string>
+    <string name="txt_label_error_info_sos">Vui lòng thêm thông tin liên lạc</string>
+    <string name="txt_label_sendding_sos">Đang gửi tin nhắn SOS</string>
 
 
 </resources>
