@@ -1,9 +1,12 @@
 package com.clearteam.phuotnhom.ui;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -65,6 +68,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private SharedPreferences mSharedPreferences;
     private LoginButton loginButton;
 
+    private ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +80,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initView() {
-
+        mProgressDialog = new ProgressDialog(this);
         changeStatustBar();
 
         tvRegister = findViewById(R.id.tv_register);
@@ -253,6 +258,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void login() {
+        showLoading();
         final String email = edEmail.getText().toString();
         String password = edPass.getText().toString();
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
@@ -267,6 +273,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+                            dissmissDialog();
                             if (task.isSuccessful()) {
                                 SharedPreferences.Editor editor = mSharedPreferences.edit();
                                 editor.putBoolean(Const.IS_LOGIN_TK, true);
@@ -301,6 +308,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             finish();
             return;
         }
+    }
+
+    private void showLoading() {
+        mProgressDialog.show();
+        mProgressDialog.setContentView(R.layout.dialog_loading);
+        if (mProgressDialog.getWindow() != null) {
+            mProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setCancelable(true);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+    }
+
+    private void dissmissDialog() {
+        mProgressDialog.dismiss();
     }
 }
 
