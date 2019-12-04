@@ -73,6 +73,7 @@ public class DetailNotify extends AppCompatActivity implements View.OnClickListe
     }
 
     private void iniView() {
+
         tvName = findViewById(R.id.tvNameNotify);
         tvMessage = findViewById(R.id.tv_message);
         tvDate = findViewById(R.id.tv_date);
@@ -87,7 +88,6 @@ public class DetailNotify extends AppCompatActivity implements View.OnClickListe
         imgBack.setOnClickListener(this);
         btnConfirm.setOnClickListener(this);
         btnRefuse.setOnClickListener(this);
-
 
     }
 
@@ -180,6 +180,8 @@ public class DetailNotify extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_refuse:
                 clickRefuse();
+                 tvStatus.setText("Yêu cầu đã được từ chối");
+                 setResult(RESULT_CANCELED);
                 break;
         }
     }

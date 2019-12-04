@@ -81,4 +81,27 @@
 	<string name="confirm_status">Đồng ý yêu câu</string>
 
 
+
+
+
+
+    <!--    sos-->
+    <string name="txt_label_sos">SOS</string>
+    <string name="txt_lienhekhancap">Thêm liên hệ khẩn cấp</string>
+    <string name="txt_lienhekhancap1">Liên hệ thứ nhất</string>
+    <string name="txt_lienhekhancap2">Liên hệ thứ 2</string>
+    <string name="txt_lienhekhancap3">Liên hệ thứ 3</string>
+    <string name="txt_tinnhankhancap">Thêm tin nhắn khẩn cấp</string>
+    <string name="txt_hint_tinnhankhancap">Tôi đang cần sự giúp đỡ!</string>
+    <string name="txt_label_confirm_sos">Xác nhận</string>
+    <string name="txt_hint_tenlienhe">Tên liên hệ</string>
+    <string name="txt_hint_sodienthoai">Số điện thoại</string>
+
+    <string name="txt_error_namesos">Vui lòng nhập tên liên hệ</string>
+    <string name="txt_error_phonesos1">Vui lòng nhập số điện thoại liên hệ</string>
+    <string name="txt_error_phonesos2">Số điện thoại không đúng</string>
+    <string name="txt_hint_contentsos">Vui lòng nhập nội dung tin nhắn</string>
+    <string name="txt_label_success_info_sos">Lưu thông tin thành công</string>
+
+
 </resources>

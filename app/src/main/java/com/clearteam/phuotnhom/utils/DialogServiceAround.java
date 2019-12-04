@@ -138,28 +138,28 @@ public class DialogServiceAround extends BottomSheetDialogFragment implements Vi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_restaurent_bts:
-                iChoose.onClick("food", getString(R.string.txt_label_restaurant));
+                iChoose.onClick(Const.RESTAURANT_PLACE, getString(R.string.txt_label_restaurant));
                 break;
             case R.id.layout_hotel_bts:
-                iChoose.onClick("hotel", getString(R.string.txt_label_hotel));
+                iChoose.onClick(Const.HOTEL_PLACE, getString(R.string.txt_label_hotel));
                 break;
             case R.id.layout_pharmacies_bts:
-                iChoose.onClick("pharmacies", getString(R.string.txt_label_pharmacies));
+                iChoose.onClick(Const.PHARMACIES_PLACE, getString(R.string.txt_label_pharmacies));
                 break;
             case R.id.layout_hospital_bts:
-                iChoose.onClick("hospital", getString(R.string.txt_label_hospital));
+                iChoose.onClick(Const.HOSPITAL_PLACE, getString(R.string.txt_label_hospital));
                 break;
             case R.id.layout_atm_bts:
-                iChoose.onClick("atm", getString(R.string.txt_label_ATM));
+                iChoose.onClick(Const.ATM_PLACE, getString(R.string.txt_label_ATM));
                 break;
             case R.id.layout_petroleum_bts:
-                iChoose.onClick("petroleums", getString(R.string.txt_label_petroleum));
+                iChoose.onClick(Const.PETROLEUM_PLACE, getString(R.string.txt_label_petroleum));
                 break;
             case R.id.layout_grocery_bts:
-                iChoose.onClick("grocery", getString(R.string.txt_label_grocery));
+                iChoose.onClick(Const.GROCERY_PLACE, getString(R.string.txt_label_grocery));
                 break;
             case R.id.layout_touries_bts:
-                iChoose.onClick("touries", getString(R.string.txt_label_tourist_destination));
+                iChoose.onClick(Const.TOURIES_PLACE, getString(R.string.txt_label_tourist_destination));
                 break;
         }
         dismiss();

@@ -34,7 +34,7 @@
 		android:layout_height="wrap_content"
 		android:layout_below="@id/img_logo"
 		android:layout_marginTop="@dimen/dp_20"
-		android:paddingRight="10dp"
+		android:paddingRight="@dimen/dp_10"
 		android:paddingLeft="@dimen/dp_10"
 		android:orientation="vertical">
 
