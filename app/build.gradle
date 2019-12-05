@@ -76,4 +76,8 @@ dependencies {
 
 //    mms
     implementation 'com.klinkerapps:logger:1.0.3'
+
+
+    // Event Bus Library
+    implementation 'org.greenrobot:eventbus:3.1.1'
 }

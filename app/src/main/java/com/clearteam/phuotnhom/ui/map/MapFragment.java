@@ -3,6 +3,7 @@ package com.clearteam.phuotnhom.ui.map;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -12,6 +13,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,6 +77,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -493,7 +499,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
             if (moveCamMy) {
                 moveCamMy = false;
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -676,11 +682,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             if (moveCamFriend) {
                 moveCamFriend = false;
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                mMap.moveCamera(CameraUpdateFactory.zoomTo(10f));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(12f));
             }
 
         } catch (IOException e) {
             e.printStackTrace();
+            Log.e("zxcvbn", e.getMessage());
         }
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -796,5 +803,55 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getCurrentLocation();
+            }
+        }, 3000);
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void ReceiverProduct(User friend) {
+        if (friend != null) {
+            Toast.makeText(getActivity(), getResources().getString(R.string.txt_finding_location_friend) + friend.getUsername(), Toast.LENGTH_SHORT).show();
+            moveCamFriend = true;
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    showMarkerFriend(friend.getUsername(), friend.getImageURL(), Double.parseDouble(friend.getLatitude()), Double.parseDouble(friend.getLongitude()));
+
+                }
+            }, 1000);
+            Log.d("zxcvbnm,.", friend.getUsername() + "\n" + friend.getLatitude() + "\n" + friend.getLongitude() + "\n" + friend.getImageURL());
+
+            EventBus.getDefault().removeAllStickyEvents();
+        }
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        EventBus.getDefault().unregister(this);
+    }
+
+
+    private void checkkk() {
+        Toast.makeText(getActivity(), "guidhfgihfdhudfuiuituighruieiu", Toast.LENGTH_SHORT).show();
+
+    }
 
 }

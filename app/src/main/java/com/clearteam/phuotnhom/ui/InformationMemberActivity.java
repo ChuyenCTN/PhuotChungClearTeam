@@ -1,9 +1,5 @@
 package com.clearteam.phuotnhom.ui;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +10,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.clearteam.phuotnhom.MainActivity;
@@ -26,6 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.greenrobot.eventbus.EventBus;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class InformationMemberActivity extends AppCompatActivity implements View.OnClickListener {
@@ -35,6 +37,9 @@ public class InformationMemberActivity extends AppCompatActivity implements View
     private LinearLayout llLocation, llMessage;
     private String keyUserId;
     private DatabaseReference reference;
+
+    private User mUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,16 +75,17 @@ public class InformationMemberActivity extends AppCompatActivity implements View
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                    User user = dataSnapshot.getValue(User.class);
-                    tvName.setText(user.getUsername());
-                    tvEmaill.setText(user.getEmail());
-                    tvAddress.setText(user.getAddress());
-                    tvNumberPhone.setText(user.getNumberPhone());
-                    if (user.getImageURL().equals("default")) {
-                        Glide.with(getApplicationContext()).load(R.drawable.avatar).into(imgAvata);
-                    } else {
-                        Glide.with(getApplicationContext()).load(user.getImageURL()).into(imgAvata);
-                    }
+                User user = dataSnapshot.getValue(User.class);
+                mUser = user;
+                tvName.setText(user.getUsername());
+                tvEmaill.setText(user.getEmail());
+                tvAddress.setText(user.getAddress());
+                tvNumberPhone.setText(user.getNumberPhone());
+                if (user.getImageURL().equals("default")) {
+                    Glide.with(getApplicationContext()).load(R.drawable.avatar).into(imgAvata);
+                } else {
+                    Glide.with(getApplicationContext()).load(user.getImageURL()).into(imgAvata);
+                }
             }
 
             @Override
@@ -104,12 +110,14 @@ public class InformationMemberActivity extends AppCompatActivity implements View
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.img_back:
                 finish();
                 break;
             case R.id.ll_location:
-                Toast.makeText(this, "show map", Toast.LENGTH_SHORT).show();
+                EventBus.getDefault().postSticky(mUser);
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
                 break;
             case R.id.ll_message:
                 Toast.makeText(this, "show message", Toast.LENGTH_SHORT).show();

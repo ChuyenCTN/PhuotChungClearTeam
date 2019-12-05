@@ -1,13 +1,5 @@
 package com.clearteam.phuotnhom.ui;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,9 +16,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.clearteam.phuotnhom.R;
-import com.clearteam.phuotnhom.adapter.ListUserAdapter;
 import com.clearteam.phuotnhom.adapter.MessageAdapter;
 import com.clearteam.phuotnhom.model.Messenger;
 import com.clearteam.phuotnhom.model.TourMe;
@@ -59,7 +58,7 @@ public class ChatGroupActivity extends AppCompatActivity implements View.OnClick
     private ImageButton img_back, img_image, imgSend;
     private EditText edTextSend;
     private String nameGroup, imageG, idMember, saveCurrentTime, saveCurrentDate, idSender, imgAvataSender, idUserGroup, nameSender, idGroup;
-    private String checker = "",myUrl="";
+    private String checker = "", myUrl = "";
     private FirebaseUser fuser;
     private DatabaseReference reference;
     private MessageAdapter messageAdapter;
@@ -294,15 +293,15 @@ public class ChatGroupActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 438 ) {
+        if (requestCode == 438) {
             loadingBar.setTitle("Gửi ảnh");
             loadingBar.setMessage("Xin vui lòng chờ, chúng tôi đang gửi ảnh...");
             loadingBar.setCanceledOnTouchOutside(false);
             loadingBar.show();
             fileUri = data.getData();
-            if (!checker.equals("image")){
+            if (!checker.equals("image")) {
 
-            }else if (checker.equals("image")){
+            } else if (checker.equals("image")) {
                 StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Image File");
 
 
@@ -312,15 +311,15 @@ public class ChatGroupActivity extends AppCompatActivity implements View.OnClick
                 uploadTask.continueWithTask(new Continuation() {
                     @Override
                     public Object then(@NonNull Task task) throws Exception {
-                    if (!task.isSuccessful()){
-                        throw  task.getException();
-                    }
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
+                        }
                         return filePath.getDownloadUrl();
                     }
                 }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             Uri downloadUrl = task.getResult();
                             myUrl = downloadUrl.toString();
                             DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Const.KEY_TOUR).child(idUserGroup).child(idGroup);
@@ -343,7 +342,7 @@ public class ChatGroupActivity extends AppCompatActivity implements View.OnClick
                     }
                 });
 
-            }else {
+            } else {
                 loadingBar.dismiss();
                 Toast.makeText(this, "Không có ảnh được chọn, Lỗi", Toast.LENGTH_SHORT).show();
             }

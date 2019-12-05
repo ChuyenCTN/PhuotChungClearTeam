@@ -51,6 +51,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.klinker.android.send_message.BroadcastUtils;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -288,6 +291,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onPause();
         status("offline");
     }
+
+
 
 //    @Override
 //    protected void onDestroy() {
