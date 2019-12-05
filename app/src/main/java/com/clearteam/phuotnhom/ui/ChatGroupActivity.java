@@ -70,6 +70,10 @@ public class ChatGroupActivity extends AppCompatActivity implements View.OnClick
     private Uri fileUri;
     private ProgressDialog loadingBar;
 
+    private String messageSOS = "";
+
+    private String type = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,19 +86,26 @@ public class ChatGroupActivity extends AppCompatActivity implements View.OnClick
     private void initData() {
 
         Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        tour = ((TourMe) bundle.getSerializable(Const.KEY_DATA));
-        nameGroup = tour.getName();
-        imageG = tour.getAvataGroup();
-        idGroup = tour.getId();
+        if (intent != null) {
+            type = intent.getStringExtra(Const.TYPE);
 
-        idUserGroup = tour.getUserGroupId();
-        idMember = tour.getKeyId();
-        tvName.setText(nameGroup);
-        if (imageG == null) {
-            Glide.with(this).load(R.drawable.avatar).into(imgAvata);
-        } else {
-            Glide.with(this).load(imageG).into(imgAvata);
+            if (type.equalsIgnoreCase(Const.TYPE_SOS)) {
+                messageSOS = intent.getStringExtra(Const.KEY_DATA);
+            }
+            Bundle bundle = intent.getExtras();
+            tour = ((TourMe) bundle.getSerializable(Const.KEY_DATA));
+            nameGroup = tour.getName();
+            imageG = tour.getAvataGroup();
+            idGroup = tour.getId();
+
+            idUserGroup = tour.getUserGroupId();
+            idMember = tour.getKeyId();
+            tvName.setText(nameGroup);
+            if (imageG == null) {
+                Glide.with(this).load(R.drawable.avatar).into(imgAvata);
+            } else {
+                Glide.with(this).load(imageG).into(imgAvata);
+            }
         }
     }
 

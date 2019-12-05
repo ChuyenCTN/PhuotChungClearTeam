@@ -81,6 +81,10 @@
     <string name="confirm_status">Đồng ý yêu câu</string>
     <string name="txt_label_loading">Vui lòng chờ</string>
     <string name="txt_finding_location_friend">Đang tìm vị trí của\u0020</string>
+    <string name="txt_finding_location_group_friends">Đang tìm vị trí mọi người trong nhóm\u0020</string>
+    <string name="txt_label_finding">Đang tìm\u0020</string>
+    <string name="txt_label_recently">\u0020 gần đây</string>
+    <string name="txt_label_not_founding">Không tìm thấy\u0020</string>
 
 
     <!--    sos-->
@@ -102,16 +106,15 @@
     <string name="txt_label_success_info_sos">Lưu thông tin thành công</string>
     <string name="txt_label_error_info_sos">Vui lòng thêm thông tin liên lạc</string>
     <string name="txt_label_sendding_sos">Đang gửi tin nhắn SOS</string>
-	<string name="them_thanh_vien">Thêm thành viên</string>
-	<string name="xoa_nhom">Xóa nhóm</string>
-	<string name="thong_bao">Thông báo</string>
-	<string name="btn_huy">Hủy</string>
-	<string name="btn_thong_bao">Thông báo</string>
-	<string name="ed_noi_dung">Nội dung</string>
-	<string name="ed_tieu_de">Tiêu đề</string>
-	<string name="vi_tri">Vị Trí</string>
-	<string name="sua_tt">Sửa thông tin</string>
->>>>>>> origin/develop
+    <string name="them_thanh_vien">Thêm thành viên</string>
+    <string name="xoa_nhom">Xóa nhóm</string>
+    <string name="thong_bao">Thông báo</string>
+    <string name="btn_huy">Hủy</string>
+    <string name="btn_thong_bao">Thông báo</string>
+    <string name="ed_noi_dung">Nội dung</string>
+    <string name="ed_tieu_de">Tiêu đề</string>
+    <string name="vi_tri">Vị Trí</string>
+    <string name="sua_tt">Sửa thông tin</string>
 
 
 </resources>

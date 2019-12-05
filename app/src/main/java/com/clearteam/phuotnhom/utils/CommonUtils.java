@@ -1,8 +1,11 @@
 package com.clearteam.phuotnhom.utils;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 
 import androidx.core.content.ContextCompat;
@@ -18,6 +21,8 @@ import java.util.regex.Pattern;
 public class CommonUtils {
 
     private static final String TAG = "CommonUtils";
+
+    public static ProgressDialog progressDialog;
 
     private CommonUtils() {
         // This utility class is not publicly instantiable
@@ -35,6 +40,22 @@ public class CommonUtils {
 //        progressDialog.setCanceledOnTouchOutside(false);
 //        return progressDialog;
 //    }
+
+    public static void showLoading(Context context) {
+        progressDialog = new ProgressDialog(context);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.dialog_loading);
+        if (progressDialog.getWindow() != null) {
+            progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(true);
+        progressDialog.setCanceledOnTouchOutside(false);
+    }
+
+    public static void hideLoading() {
+        progressDialog.dismiss();
+    }
 
     public static boolean isEmailValid(String email) {
         Pattern pattern;

@@ -32,6 +32,7 @@ import com.clearteam.phuotnhom.fragment.ProfileFragment;
 import com.clearteam.phuotnhom.fragment.TourGroupFragment;
 import com.clearteam.phuotnhom.model.User;
 import com.clearteam.phuotnhom.notification.Token;
+import com.clearteam.phuotnhom.ui.ChatGroupActivity;
 import com.clearteam.phuotnhom.ui.LoginActivity;
 import com.clearteam.phuotnhom.ui.map.MapFragment;
 import com.clearteam.phuotnhom.ui.scheduler.SchedulerFragment;
@@ -50,9 +51,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.klinker.android.send_message.BroadcastUtils;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.HashMap;
 
@@ -211,6 +209,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             sms.sendTextMessage(infoSOS.getNumberphone1(), null, contentSOS, null, null);
             sms.sendTextMessage(infoSOS.getNumberphone2(), null, contentSOS, null, null);
             sms.sendTextMessage(infoSOS.getNumberphone3(), null, contentSOS, null, null);
+//            Intent intent = new Intent(getApplicationContext(), ChatGroupActivity.class);
+//            intent.putExtra(Const.TYPE, Const.TYPE_SOS);
+//            intent.putExtra(Const.KEY_DATA, contentSOS);
+//            startActivity(intent);
         } else {
             Toast.makeText(this, getResources().getString(R.string.txt_label_error_info_sos), Toast.LENGTH_SHORT).show();
         }
@@ -291,7 +293,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onPause();
         status("offline");
     }
-
 
 
 //    @Override

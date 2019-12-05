@@ -37,6 +37,18 @@
     </FrameLayout>
 
     <ImageView
+        android:id="@+id/img_type_map"
+        android:layout_width="@dimen/dp_45"
+        android:layout_height="@dimen/dp_45"
+        android:layout_above="@+id/img_curent_location"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dp_8"
+        android:layout_marginBottom="@dimen/dp_16"
+        android:background="@drawable/bg_circle"
+        android:padding="@dimen/dp_6"
+        app:srcCompat="@drawable/avatar" />
+
+    <ImageView
         android:id="@+id/img_curent_location"
         android:layout_width="@dimen/dp_45"
         android:layout_height="@dimen/dp_45"
@@ -45,7 +57,7 @@
         android:layout_marginRight="@dimen/dp_8"
         android:layout_marginBottom="@dimen/dp_100"
         android:background="@drawable/bg_circle"
-        android:padding="@dimen/dp_8"
+        android:padding="@dimen/dp_6"
         app:srcCompat="@drawable/ic_gps_fixed_24" />
 
     <!--</androidx.appcompat.widget.Toolbar>-->
@@ -60,16 +72,19 @@
 
         <LinearLayout
             android:id="@+id/line_service_around"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_45"
-            android:layout_marginRight="@dimen/dp_35"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_marginRight="@dimen/dp_8"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
             android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
                 android:layout_width="@dimen/dp_24"
                 android:layout_height="@dimen/dp_24"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/service" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -82,16 +97,19 @@
 
         <LinearLayout
             android:id="@+id/line_friend"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_45"
-            android:layout_marginLeft="@dimen/dp_70"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_marginRight="@dimen/dp_8"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
             android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
                 android:layout_width="@dimen/dp_24"
                 android:layout_height="@dimen/dp_24"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/friends" />
 
             <TextView
                 android:layout_width="wrap_content"

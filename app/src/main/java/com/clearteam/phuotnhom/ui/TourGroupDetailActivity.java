@@ -8,9 +8,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -25,13 +23,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.clearteam.phuotnhom.MainActivity;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.adapter.ListUserAdapter;
 import com.clearteam.phuotnhom.listener.ClickDetailMember;
@@ -55,6 +53,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,14 +72,14 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
 
     private TextView tvNameGroup;
     private ImageView imgAvataGroup, imgMenu, imgBack, imgMessage;
-    private String nameGroup, imageG, addressStart, addressEnd, dateStart, keyID, keyRemove,title,content;
+    private String nameGroup, imageG, addressStart, addressEnd, dateStart, keyID, keyRemove, title, content;
     private DatabaseReference reference;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseAuth auth;
     private FirebaseUser firebaseUser;
     private String id, id2;
-    private LinearLayout llAddMember,llDelete,llNotify,llEdit,ll_location;
-    private EditText edName, edAddressStart, edAddressEnd, edDateStart,edTitle,edContent;
+    private LinearLayout llAddMember, llDelete, llNotify, llEdit, ll_location;
+    private EditText edName, edAddressStart, edAddressEnd, edDateStart, edTitle, edContent;
     private static DatePickerDialog.OnDateSetListener onDateSetListener1;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     private APIService apiService;
@@ -213,6 +213,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
             case R.id.img_message:
                 Intent intent = new Intent(TourGroupDetailActivity.this, ChatGroupActivity.class);
                 Bundle bundle = new Bundle();
+                intent.putExtra(Const.TYPE, Const.TYPE_CHAT);
                 bundle.putSerializable(Const.KEY_DATA, tour);
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -230,7 +231,11 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
                 updateGroup();
                 break;
             case R.id.ll_location:
-                Toast.makeText(this, "location", Toast.LENGTH_SHORT).show();
+                if (userList != null) {
+                    EventBus.getDefault().postSticky(userList);
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    finish();
+                }
                 break;
             case R.id.ll_delete:
                 deleteGroup();
@@ -247,7 +252,6 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
 
         edTitle = dialogView.findViewById(R.id.ed_title);
         edContent = dialogView.findViewById(R.id.ed_content);
-
 
 
         final Button btnCancel = dialogView.findViewById(R.id.btnCancel);
@@ -273,15 +277,16 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
     private void pushNotify() {
         title = edTitle.getText().toString().trim();
         content = edContent.getText().toString().trim();
-        if (title.isEmpty()){
+        if (title.isEmpty()) {
             Toast.makeText(this, "Tiêu đề đang trống", Toast.LENGTH_SHORT).show();
-        }else if (content.isEmpty()){
+        } else if (content.isEmpty()) {
             Toast.makeText(this, "Nội dung đang trống", Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
 
-            sendMessage(id,keyID,content);
+            sendMessage(id, keyID, content);
         }
     }
+
     public void sendMessage(String sender, final String receiver, String message) {
         // DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference mReference = FirebaseDatabase.getInstance().getReference("Notify").child(id2);
@@ -338,6 +343,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
             }
         });
     }
+
     private void sendNotification(final String username, String receiver, final String message) {
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
         Query query = tokens.orderByKey().equalTo(receiver);
@@ -385,8 +391,6 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
             window.setStatusBarColor(ContextCompat.getColor(TourGroupDetailActivity.this, R.color.bg_tab));
         }
     }
-
-
 
 
     private void updateGroup() {

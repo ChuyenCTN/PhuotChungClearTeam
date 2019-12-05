@@ -31,6 +31,7 @@ import androidx.core.content.ContextCompat;
 import com.clearteam.phuotnhom.MainActivity;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.mms.PermissionActivity;
+import com.clearteam.phuotnhom.utils.CommonUtils;
 import com.clearteam.phuotnhom.utils.Const;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -258,7 +259,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void login() {
-        showLoading();
+        CommonUtils.showLoading(LoginActivity.this);
         final String email = edEmail.getText().toString();
         String password = edPass.getText().toString();
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
@@ -273,7 +274,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            dissmissDialog();
+                            CommonUtils.hideLoading();
                             if (task.isSuccessful()) {
                                 SharedPreferences.Editor editor = mSharedPreferences.edit();
                                 editor.putBoolean(Const.IS_LOGIN_TK, true);

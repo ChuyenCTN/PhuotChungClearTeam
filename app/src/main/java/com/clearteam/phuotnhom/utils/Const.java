@@ -32,6 +32,8 @@ public class Const {
 
     public static int WIDTH_MARKER = 100;
     public static int HEIGHT_MARKER = 140;
+    public static int HEIGHT_MARKER_FRIEND = 100;
+    public static int WIDTH_MARKER_FRIEND = 100;
 
     public static int SIZE_MARKER = 10;
 
@@ -53,6 +55,10 @@ public class Const {
     public static String PHONE2_SOS = "phone2sos";
     public static String PHONE3_SOS = "phone3sos";
     public static String CONTENT_SOS = "contentsos";
+
+    public static String TYPE = "type";
+    public static String TYPE_SOS = "type_sos";
+    public static String TYPE_CHAT = "type_chat";
 
 
 }
