@@ -94,6 +94,7 @@ public class DetailNotify extends AppCompatActivity implements View.OnClickListe
     private void getData() {
         Intent intent = getIntent();
         if (intent != null) {
+
             notifi = ((Notifi) intent.getSerializableExtra(Const.KEY_NOTIFYCATION));
             tvName.setText(notifi.getNameSender());
             tvMessage.setText(notifi.getMessage());

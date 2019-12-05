@@ -40,6 +40,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.JsonObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,7 +69,7 @@ public class TourAllFragment extends Fragment {
     private DatabaseReference reference;
     private static TourAllFragment INSTANCE;
     private View view;
-    private String userId, keyAllUser, keyUserGroupId,saveCurrentDate,nameSender,saveCurrentTime,time,keyIDGroup;
+    private String userId, keyAllUser, keyUserGroupId, saveCurrentDate, nameSender, saveCurrentTime, time, keyIDGroup;
     private TourMe mTourMe;
     private APIService apiService;
     boolean notify = false;
@@ -139,6 +143,7 @@ public class TourAllFragment extends Fragment {
                 } else {
                     notify = true;
                     String msg = "Muốn tham gia vào nhóm phượt của bạn";
+
                     keyUserGroupId = response.getUserGroupId();
                     keyIDGroup = response.getId();
                     if (!msg.equals("")) {
@@ -153,6 +158,7 @@ public class TourAllFragment extends Fragment {
         });
     }
 
+
     private void creatDateHourNotify() {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -163,7 +169,7 @@ public class TourAllFragment extends Fragment {
         intent = getActivity().getIntent();
     }
 
-    private void creatKeyIDNotify(){
+    private void creatKeyIDNotify() {
         Calendar c = Calendar.getInstance();
         String year = String.valueOf(c.get(Calendar.YEAR));
         String month = String.valueOf(c.get(Calendar.MONTH + 1));
@@ -173,7 +179,8 @@ public class TourAllFragment extends Fragment {
         String second = String.valueOf(c.get(Calendar.SECOND));
         time = "" + year + "" + month + "" + date + "" + hour + "" + minute + "" + second + "";
     }
-    private void getNameSender(){
+
+    private void getNameSender() {
         auth = FirebaseAuth.getInstance();
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
@@ -181,7 +188,7 @@ public class TourAllFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                User user= dataSnapshot.getValue(User.class);
+                User user = dataSnapshot.getValue(User.class);
                 nameSender = user.getUsername();
             }
 
@@ -191,19 +198,34 @@ public class TourAllFragment extends Fragment {
             }
         });
     }
+    public static JSONObject getWeatherJson() {
+        try {
+            JSONObject user = new JSONObject();
+            user.put("data", "John");
+            user.put("LastName", "Reese");
+            return user;
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public void sendMessage(String sender, final String receiver, String message) {
-       // DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        // DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference mReference = FirebaseDatabase.getInstance().getReference("Notify").child(time);
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("id", time);
         hashMap.put("idGroup", keyIDGroup);
         hashMap.put("sender", sender);
         hashMap.put("receiver", receiver);
-        hashMap.put("message", message);
+        hashMap.put("message", String.valueOf(getWeatherJson()));
         hashMap.put("date", saveCurrentDate);
         hashMap.put("hour", saveCurrentTime);
         hashMap.put("nameSender", nameSender);
         hashMap.put("status", "Chưa phê duyệt");
+
+
 
 
         //mReference.child("Notify").push().setValue(hashMap);
@@ -211,7 +233,7 @@ public class TourAllFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                  //  Toast.makeText(getActivity(), "Đăng ký thành công !", Toast.LENGTH_SHORT).show();
+                    //  Toast.makeText(getActivity(), "Đăng ký thành công !", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -261,7 +283,7 @@ public class TourAllFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username + ": " + message, "new Messenger", keyUserGroupId);
+                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username + ": " + getWeatherJson(), "Thông báo mới", keyUserGroupId);
                     Sender sender = new Sender(data, token.getToken());
                     apiService.sendNotifycation(sender)
                             .enqueue(new Callback<MyResponse>() {
