@@ -85,6 +85,8 @@
     <string name="txt_label_finding">Đang tìm\u0020</string>
     <string name="txt_label_recently">\u0020 gần đây</string>
     <string name="txt_label_not_founding">Không tìm thấy\u0020</string>
+    <string name="txt_label_follow_direction">Chỉ đường tới \u0020</string>
+    <string name="txt_finding_direction">Đang tìm tuyến đường tốt nhất, vui lòng chờ </string>
 
 
     <!--    sos-->
@@ -115,6 +117,8 @@
     <string name="ed_tieu_de">Tiêu đề</string>
     <string name="vi_tri">Vị Trí</string>
     <string name="sua_tt">Sửa thông tin</string>
+    <string name="txt_label_walking">Đi bộ/xe đạp</string>
+    <string name="txt_label_driving">Lái xe</string>
 
 
 </resources>

@@ -61,4 +61,11 @@ public class Const {
     public static String TYPE_CHAT = "type_chat";
 
 
+    public static String MODE_DRIVING = "driving";
+    public static String MODE_WALKING = "walking";
+
+    public static final int PATTERN_DASH_LENGTH_PX = 20;
+    public static final int PATTERN_GAP_LENGTH_PX = 20;
+
+
 }

@@ -2,7 +2,7 @@ package com.clearteam.phuotnhom.ui.map;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -60,9 +61,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Dash;
+import com.google.android.gms.maps.model.Dot;
+import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.libraries.places.api.Places;
@@ -70,6 +75,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -86,6 +92,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -97,10 +104,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.clearteam.phuotnhom.utils.Const.PATTERN_DASH_LENGTH_PX;
+import static com.clearteam.phuotnhom.utils.Const.PATTERN_GAP_LENGTH_PX;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, DirectionFinderListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, DirectionFinderListener, GoogleMap.OnMarkerClickListener {
 
     private ImageView imgCurentLocation;
     private ImageView imgTypeMap;
@@ -161,6 +170,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     private PlaceResponse mPlaceResponse;
 
     private String placeKey = "AIzaSyB9RoG4vLRQ1GqZ9XDJSeyfAa-PGMuLnxA";
+    private String autoPlaceKey = "AIzaSyAtpPlLN4Y-NrUsrg48F9_oAJnbL1B0tF4";
 
     private Retrofit mRetrofit;
     private APIService mApiService;
@@ -178,9 +188,44 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     private List<Marker> originMarkers = new ArrayList<>();
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
-    private ProgressDialog progressDialog;
+
+
+    private String modeDirection = "";
+
+    public static final PatternItem DOT = new Dot();
+    public static final PatternItem DASH = new Dash(PATTERN_DASH_LENGTH_PX);
+    public static final PatternItem GAP = new Gap(PATTERN_GAP_LENGTH_PX);
+    public static final List<PatternItem> PATTERN_POLYGON_ALPHA = Arrays.asList(GAP, DASH);
 
     private List<User> listUser;
+
+    //    dialog
+    private TextView tvNameInfoDialog;
+    private TextView tvAddressInfoDialog;
+    private TextView tvInfo1InfoDialog;
+    private Button btnDrivingInfoDialog;
+    private Button btnWalkingInfoDialog;
+    private Button btnShareLocationInfoDialog;
+
+    AlertDialog.Builder mBuilder;
+
+    AlertDialog dialogInfo;
+
+
+    //    bottomsheet info
+    private BottomSheetBehavior mSheetBehavior;
+    private View bottomSheetInfoDirection;
+    private ImageView imgCloseBottomInfo;
+    private TextView tvNameBottomInfo;
+    private TextView tvAddressBottomInfo;
+    private TextView tvDistanceBottomInfo;
+    private TextView tvTimeBottomInfo;
+    private TextView tvChooseWalkingBottomInfo;
+    private TextView tvChooseDrivingBottomInfo;
+
+    private String mTimeBottomInfo = "";
+    private String mDistanceBottomInfo = "";
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -192,20 +237,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_map, container, false);
-
+        mapping(view);
         setHasOptionsMenu(true);
 
+        initBottomSheet();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
         }
 
         mRetrofit = RetrofitClient.getRetrofitClient();
         mApiService = mRetrofit.create(APIService.class);
-
-        imgCurentLocation = (ImageView) view.findViewById(R.id.img_curent_location);
-        mLiServiceAround = view.findViewById(R.id.line_service_around);
-        mLiFriend = view.findViewById(R.id.line_friend);
-        imgTypeMap = (ImageView) view.findViewById(R.id.img_type_map);
 
 
         mLiServiceAround.setOnClickListener(this);
@@ -232,6 +273,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         return view;
     }
 
+    private void mapping(View view) {
+        imgCurentLocation = (ImageView) view.findViewById(R.id.img_curent_location);
+        mLiServiceAround = view.findViewById(R.id.line_service_around);
+        mLiFriend = view.findViewById(R.id.line_friend);
+        imgTypeMap = (ImageView) view.findViewById(R.id.img_type_map);
+
+        bottomSheetInfoDirection = view.findViewById(R.id.bottom_sheet_info_direction);
+        imgCloseBottomInfo = (ImageView) view.findViewById(R.id.img_close_bottom_info);
+        tvNameBottomInfo = (TextView) view.findViewById(R.id.tv_name_bottom_info);
+        tvAddressBottomInfo = (TextView) view.findViewById(R.id.tv_address_bottom_info);
+        tvDistanceBottomInfo = (TextView) view.findViewById(R.id.tv_distance_bottom_info);
+        tvTimeBottomInfo = (TextView) view.findViewById(R.id.tv_time_bottom_info);
+        tvChooseWalkingBottomInfo = (TextView) view.findViewById(R.id.tv_choose_walking_bottom_info);
+        tvChooseDrivingBottomInfo = (TextView) view.findViewById(R.id.tv_choose_driving_bottom_info);
+    }
+
     private void initRequestLocation() {
         ScheduledExecutorService ses = Executors.newSingleThreadScheduledExecutor();
         ses.scheduleWithFixedDelay(new Runnable() {
@@ -254,7 +311,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     public void getAutocompletePlace() {
 
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), "AIzaSyAtpPlLN4Y-NrUsrg48F9_oAJnbL1B0tF4");
+            Places.initialize(getApplicationContext(), autoPlaceKey);
         }
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 getChildFragmentManager().findFragmentById(R.id.autocomplate);
@@ -267,8 +324,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         TextView tvSeach = (TextView) ((LinearLayout) autocompleteFragment.getView()).getChildAt(1);
         searchIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_seach_map));
         searchIcon.setPadding(50, 0, 0, 0);
-        edSeach.setTextSize(18);
-        tvSeach.setTextSize(18);
+        searchIcon.setMaxWidth(16);
+        edSeach.setTextSize(16);
+        tvSeach.setTextSize(16);
         //   tvSeach.getResources().getColor(R.color.text_seach);
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -317,9 +375,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        imgTypeMap.setImageDrawable(getResources().getDrawable(R.drawable.vetinh));
         mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
+        mMap.setOnMarkerClickListener(this);
     }
 
     @Override
@@ -361,13 +420,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                 break;
             case R.id.img_curent_location:
                 moveCamMy = true;
-//                sendRequest();
                 getCurrentLocation();
                 break;
             case R.id.img_type_map:
                 if (mMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL) {
+                    imgTypeMap.setImageDrawable(getResources().getDrawable(R.drawable.normal));
                     mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
                 } else if (mMap.getMapType() == GoogleMap.MAP_TYPE_HYBRID) {
+                    imgTypeMap.setImageDrawable(getResources().getDrawable(R.drawable.vetinh));
                     mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
                 }
                 break;
@@ -506,6 +566,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             markerOptions.position(latLng);
             markerOptions.title(addresses.get(0).getAdminArea()).snippet(addresses.get(0).getAddressLine(0)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
             currentLocationmMarker = mMap.addMarker(markerOptions);
+            currentLocationmMarker.setTag(0);
+
 
             if (moveCamMy) {
                 moveCamMy = false;
@@ -515,31 +577,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             e.printStackTrace();
         }
 
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                String position = marker.getId();
-                String position1 = marker.getSnippet();
-                String position2 = String.valueOf(marker.getZIndex());
-                String position3 = marker.getTitle();
 
-//                Toast.makeText(getApplicationContext(), position + "", Toast.LENGTH_SHORT).show();
-//                Toast.makeText(getApplicationContext(), position1 + "", Toast.LENGTH_SHORT).show();
-//                Toast.makeText(getApplicationContext(), position2 + "", Toast.LENGTH_SHORT).show();
-//                Toast.makeText(getApplicationContext(), position3 + "", Toast.LENGTH_SHORT).show();
-
-
-                return false;
-            }
-        });
-/*
-        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-        String city = addresses.get(0).getLocality();
-        String state = addresses.get(0).getAdminArea();
-        String country = addresses.get(0).getCountryName();
-        String postalCode = addresses.get(0).getPostalCode();
-        String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
-*/
     }
 
     private void changeStatustBar() {
@@ -588,7 +626,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                             for (int i = 0; i < mPlaceResponse.getResults().size(); i++) {
                                 double lon = mPlaceResponse.getResults().get(i).getGeometry().getViewport().getNortheast().getLng();
                                 double lat = mPlaceResponse.getResults().get(i).getGeometry().getViewport().getNortheast().getLat();
-                                showMarkerNearby(i, lat, lon);
+                                showMarkerNearby(lat, lon);
                                 markerOptions.position(new LatLng(lat, lon));
                             }
                         } else {
@@ -608,7 +646,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     }
 
 
-    public void showMarkerNearby(int position, double latitude, double longitude) {
+    public void showMarkerNearby(double latitude, double longitude) {
         try {
 
             LatLng latLng = new LatLng(latitude, longitude);
@@ -641,20 +679,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             if (moveCamNearby) {
                 moveCamNearby = false;
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                mMap.moveCamera(CameraUpdateFactory.zoomTo(10f));
+                mMap.moveCamera(CameraUpdateFactory.zoomTo(14f));
             }
+
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    showDataBottomSheet(getAddress(latLng)[0], marker.getPosition(), marker.getPosition().latitude + "," + marker.getPosition().longitude);
+
+//                    showDialogInfo(getAddress(latLng)[0], getAddress(latLng)[1], marker.getPosition().latitude + "," + marker.getPosition().longitude);
+                    return true;
+                }
+            });
+
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-
-                return false;
-            }
-        });
-
     }
 
     public void showMarkerFriend(String name, String imageUrl, double latitude, double longitude) {
@@ -694,22 +735,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(12f));
             }
 
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    showDataBottomSheet(name, marker.getPosition(), marker.getPosition().latitude + "," + marker.getPosition().longitude);
+//                    showDialogInfo(name, addresses.get(0).getAddressLine(0), latitude + "," + longitude);
+                    return true;
+                }
+            });
+
         } catch (IOException e) {
             e.printStackTrace();
             Log.e("zxcvbn", e.getMessage());
         }
-
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                String position = marker.getId();
-                String position1 = marker.getSnippet();
-                String position2 = String.valueOf(marker.getZIndex());
-                String position3 = marker.getTitle();
-
-                return false;
-            }
-        });
 /*
         String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
         String city = addresses.get(0).getLocality();
@@ -736,30 +774,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     }
 
 
-    private void sendRequest() {
-        String origin = "NewYork";
-        String destination = "Paris";
-        if (origin.isEmpty()) {
-            Toast.makeText(getActivity(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (destination.isEmpty()) {
-            Toast.makeText(getActivity(), "Please enter destination address!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        try {
-            new DirectionFinder((DirectionFinderListener) this, origin, destination).execute();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+    private void sendRequestDirection(String destination, String mode) {
+        String origin = mLatitude + "," + mLongitude;
+        if (origin != null && destination != null)
+            try {
+                new DirectionFinder((DirectionFinderListener) this, origin, destination, mode).execute();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
     }
 
     @Override
     public void onDirectionFinderStart() {
-        progressDialog = ProgressDialog.show(getContext(), "Please wait.",
-                "Finding direction..!", true);
-
+        Toast.makeText(getContext(), getString(R.string.txt_finding_direction), Toast.LENGTH_SHORT).show();
         if (originMarkers != null) {
             for (Marker marker : originMarkers) {
                 marker.remove();
@@ -781,35 +808,37 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
-        progressDialog.dismiss();
+
         polylinePaths = new ArrayList<>();
         originMarkers = new ArrayList<>();
         destinationMarkers = new ArrayList<>();
 
         for (Route route : routes) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
-            Log.d("zxcvbnm", route.duration.text + "");
-            Log.d("zxcvbnm", route.distance.text + "");
+            mTimeBottomInfo = route.duration.text;
+            mDistanceBottomInfo = route.distance.text;
+            if (tvTimeBottomInfo != null) {
+                tvTimeBottomInfo.setVisibility(View.VISIBLE);
+                tvDistanceBottomInfo.setVisibility(View.VISIBLE);
+                tvTimeBottomInfo.setText(CommonUtils.formatTimeDirection(route.duration.text));
+                tvDistanceBottomInfo.setText(route.distance.text);
+            }
 
-            originMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_add_pet))
-                    .title(route.startAddress)
-                    .position(route.startLocation)));
-            destinationMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_seach_map))
-                    .title(route.endAddress)
-                    .position(route.endLocation)));
 
             PolylineOptions polylineOptions = new PolylineOptions().
                     geodesic(true).
                     color(Color.BLUE).
-                    width(10);
-
+                    width(20);
+            if (modeDirection.equalsIgnoreCase(Const.MODE_WALKING)) {
+                polylineOptions.pattern(Collections.singletonList(DOT));
+            }
             for (int i = 0; i < route.points.size(); i++)
                 polylineOptions.add(route.points.get(i));
 
             polylinePaths.add(mMap.addPolyline(polylineOptions));
+
         }
+
     }
 
     @Override
@@ -844,8 +873,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
                 }
             }, 1000);
-            Log.d("zxcvbnm,.", friend.getUsername() + "\n" + friend.getLatitude() + "\n" + friend.getLongitude() + "\n" + friend.getImageURL());
-
             EventBus.getDefault().removeAllStickyEvents();
         }
     }
@@ -877,4 +904,114 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         EventBus.getDefault().unregister(this);
     }
 
+    private void showDialogInfo(String name, String address, String location) {
+        mBuilder = new AlertDialog.Builder(getActivity());
+
+        View dialog = (View) LayoutInflater.from(getActivity()).inflate(R.layout.dialog_info_marker, null);
+        mBuilder.setView(dialog);
+
+        tvNameInfoDialog = (TextView) dialog.findViewById(R.id.tv_name_info_dialog);
+        tvAddressInfoDialog = (TextView) dialog.findViewById(R.id.tv_address_info_dialog);
+        tvInfo1InfoDialog = (TextView) dialog.findViewById(R.id.tv_info1_info_dialog);
+        btnDrivingInfoDialog = (Button) dialog.findViewById(R.id.btn_driving_info_dialog);
+        btnWalkingInfoDialog = (Button) dialog.findViewById(R.id.btn_walking_info_dialog);
+        btnShareLocationInfoDialog = (Button) dialog.findViewById(R.id.btn_share_location_info_dialog);
+
+        if (name != null) {
+            tvNameInfoDialog.setText(name);
+            tvInfo1InfoDialog.setText(getResources().getString(R.string.txt_label_follow_direction) + name);
+        }
+        if (address != null) {
+            tvAddressInfoDialog.setText(address);
+        }
+        if (location != null) {
+            btnDrivingInfoDialog.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sendRequestDirection(location, Const.MODE_DRIVING);
+                    modeDirection = Const.MODE_DRIVING;
+                    dialogInfo.dismiss();
+                }
+            });
+
+            btnShareLocationInfoDialog.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialogInfo.dismiss();
+                }
+            });
+
+            btnWalkingInfoDialog.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    modeDirection = Const.MODE_WALKING;
+                    sendRequestDirection(location, Const.MODE_WALKING);
+                    dialogInfo.dismiss();
+                }
+            });
+        }
+
+        dialogInfo = mBuilder.show();
+
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        return true;
+    }
+
+    public String[] getAddress(LatLng latLng) {
+        String[] add = new String[2];
+        try {
+            Geocoder geocoder = new Geocoder(getContext());
+            List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            add[0] = addresses.get(0).getAdminArea();
+            add[1] = addresses.get(0).getAddressLine(0);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return add;
+
+    }
+
+    private void showDataBottomSheet(String name, LatLng latLng, String location) {
+        mSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        tvNameBottomInfo.setText(getResources().getString(R.string.txt_label_follow_direction) + name);
+        tvAddressBottomInfo.setText(getAddress(latLng)[1]);
+
+        tvChooseWalkingBottomInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                modeDirection = Const.MODE_WALKING;
+                sendRequestDirection(location, Const.MODE_WALKING);
+            }
+        });
+
+        tvChooseDrivingBottomInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendRequestDirection(location, Const.MODE_DRIVING);
+                modeDirection = Const.MODE_DRIVING;
+            }
+        });
+
+
+    }
+
+    private void initBottomSheet() {
+        mSheetBehavior = BottomSheetBehavior.from(bottomSheetInfoDirection);
+        mSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+
+        imgCloseBottomInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+
+
+    }
 }
