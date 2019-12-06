@@ -167,7 +167,7 @@ public class ChatGroupActivity extends AppCompatActivity implements View.OnClick
                     }
                     for (String temp : myListMember) {
                         if (!user.getId().equals(firebaseUser.getUid()) && temp.equals(user.getId())) {
-                            Log.d("AAAAA", user.getId());
+                           // Log.d("AAAAA", user.getId());
                             readMessage();
                         }
                     }

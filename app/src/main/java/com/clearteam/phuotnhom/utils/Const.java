@@ -6,6 +6,7 @@ public class Const {
     public static final int SPLASH_TIME = 800;
     public static final String KEY_NOTIFY = "key_notify";
     public static final String KEY_NOTIFYCATION = "notifycation";
+    public static final String KEY_NOTIFY_ALL_MEMBER = "key_notify_all_member";
     public static String KEY_TOUR = "Groups";
     public static String KEY_IS_PRER = "login";
     public static String KEY_ID = "id";

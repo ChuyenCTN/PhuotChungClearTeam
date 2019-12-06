@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Notifi implements Serializable {
     private String id;
+    private String idGroup;
     private String sender;
     private String receiver;
     private String message;
@@ -11,13 +12,16 @@ public class Notifi implements Serializable {
     private String hour;
     private String nameSender;
     private String status;
-    private String idGroup;
+
+
 
 
     public Notifi() {
     }
 
-    public Notifi(String sender, String receiver, String message, String date, String hour, String nameSender, String status) {
+    public Notifi(String id, String idGroup, String sender, String receiver, String message, String date, String hour, String nameSender, String status) {
+        this.id = id;
+        this.idGroup = idGroup;
         this.sender = sender;
         this.receiver = receiver;
         this.message = message;
