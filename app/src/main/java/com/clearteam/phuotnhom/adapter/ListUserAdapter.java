@@ -16,6 +16,8 @@ import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.listener.ClickDetailMember;
 import com.clearteam.phuotnhom.model.TourMe;
 import com.clearteam.phuotnhom.model.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -25,12 +27,14 @@ public class ListUserAdapter extends RecyclerView.Adapter<ListUserAdapter.ViewHo
     private List<User> userList;
     private ClickDetailMember mListener;
     private boolean isChat;
+    private String idUserGroup;
 
-    public ListUserAdapter(Context mContext, List<User> userList, ClickDetailMember mListener, boolean isChat) {
+    public ListUserAdapter(Context mContext, List<User> userList, ClickDetailMember mListener, boolean isChat,String idUserGroup) {
         this.mContext = mContext;
         this.userList = userList;
         this.isChat = isChat;
         this.mListener = mListener;
+        this.idUserGroup = idUserGroup;
     }
 
     @NonNull
@@ -69,6 +73,12 @@ public class ListUserAdapter extends RecyclerView.Adapter<ListUserAdapter.ViewHo
         }
 
         public void bindData(User user) {
+            if (user.getId().equals(idUserGroup)){
+                tvTV.setText("Người tạo");
+            }else {
+                tvTV.setText("Thành viên");
+            }
+
             tvName.setText(user.getUsername());
             String url = user.getImageURL();
             Glide.with(mContext)

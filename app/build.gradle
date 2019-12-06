@@ -30,6 +30,7 @@ android {
 }
 
 dependencies {
+    implementation project(":library")
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.0.0'
@@ -72,4 +73,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.8.2'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.8.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.2'
+
+//    mms
+    implementation 'com.klinkerapps:logger:1.0.3'
 }

@@ -1,9 +1,15 @@
 package com.clearteam.phuotnhom.ui;
 
+import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -19,10 +25,12 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.clearteam.phuotnhom.MainActivity;
 import com.clearteam.phuotnhom.R;
+import com.clearteam.phuotnhom.mms.PermissionActivity;
 import com.clearteam.phuotnhom.utils.Const;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -60,15 +68,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private SharedPreferences mSharedPreferences;
     private LoginButton loginButton;
 
+    private ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initView();
+        checkAndroidVersion();
+        reQuestPermission();
     }
 
     private void initView() {
-
+        mProgressDialog = new ProgressDialog(this);
         changeStatustBar();
 
         tvRegister = findViewById(R.id.tv_register);
@@ -246,6 +258,75 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void login() {
+        showLoading();
+        final String email = edEmail.getText().toString();
+        String password = edPass.getText().toString();
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "Điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+        } else if (isEmail(edEmail) == false) {
+            edEmail.setError("Chưa đúng định dạng");
+        } else if (password.length() < 6) {
+            edPass.setError("password trên 6 ký tự");
+            Toast.makeText(LoginActivity.this, "password trên 6 ký tự", Toast.LENGTH_SHORT).show();
+        } else {
+            auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            dissmissDialog();
+                            if (task.isSuccessful()) {
+                                SharedPreferences.Editor editor = mSharedPreferences.edit();
+                                editor.putBoolean(Const.IS_LOGIN_TK, true);
+                                editor.apply();
+                                updateUI();
+                                Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                                finish();
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không chính xác", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+    }
+
+
+    public void checkAndroidVersion() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            int checkCallPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
+            if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, Const.SMS_REQUEST);
+                return;
+            }
+        }
+    }
+
+    private void reQuestPermission() {
+        if (PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean("request_permissions", true) &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            startActivity(new Intent(this, PermissionActivity.class));
+            finish();
+            return;
+        }
+    }
+
+    private void showLoading() {
+        mProgressDialog.show();
+        mProgressDialog.setContentView(R.layout.dialog_loading);
+        if (mProgressDialog.getWindow() != null) {
+            mProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setCancelable(true);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+    }
+
+    private void dissmissDialog() {
+        mProgressDialog.dismiss();
+    }
+}
+
+/*
         final String email = edEmail.getText().toString();
         String password = edPass.getText().toString();
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
@@ -262,24 +343,55 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 SharedPreferences.Editor editor = mSharedPreferences.edit();
-                                editor.putBoolean(Const.IS_LOGIN_TK, true);
+                                editor.putBoolean(Const.IS_LOGIN_TK,true);
                                 editor.apply();
                                 updateUI();
-                                Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }else{
+
+                            } else {
                                 Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không chính xác", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
-        }
-    }
-    //    @Override
+
+
+        }*/
+
+
+///*
+//        final String email = edEmail.getText().toString();
+//        String password = edPass.getText().toString();
+//        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+//            Toast.makeText(this, "Điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+//        } else if (isEmail(edEmail) == false) {
+//            edEmail.setError("Chưa đúng định dạng");
+//        } else if (password.length() < 6) {
+//            edPass.setError("password trên 6 ký tự");
+//            Toast.makeText(LoginActivity.this, "password trên 6 ký tự", Toast.LENGTH_SHORT).show();
+//        } else {
+//            auth.signInWithEmailAndPassword(email, password)
+//                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<AuthResult> task) {
+//                            if (task.isSuccessful()) {
+//                                SharedPreferences.Editor editor = mSharedPreferences.edit();
+//                                editor.putBoolean(Const.IS_LOGIN_TK,true);
+//                                editor.apply();
+//                                updateUI();
+//
+//                            } else {
+//                                Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không chính xác", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    });
+//    }
+//
+//    @Override
+
 //    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 //        mCallbackManager.onActivityResult(requestCode, resultCode, data);
 //        super.onActivityResult(requestCode, resultCode, data);
 //    }
-}
+
 
 
 

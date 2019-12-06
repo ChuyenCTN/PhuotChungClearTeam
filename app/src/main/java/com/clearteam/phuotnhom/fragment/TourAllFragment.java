@@ -69,7 +69,7 @@ public class TourAllFragment extends Fragment {
     private DatabaseReference reference;
     private static TourAllFragment INSTANCE;
     private View view;
-    private String userId, keyAllUser, keyUserGroupId, saveCurrentDate, nameSender, saveCurrentTime, time, keyIDGroup;
+    private String userId, keyAllUser, keyUserGroupId, saveCurrentDate, nameSender, saveCurrentTime, time, keyIDGroup,msg;
     private TourMe mTourMe;
     private APIService apiService;
     boolean notify = false;
@@ -142,7 +142,7 @@ public class TourAllFragment extends Fragment {
 
                 } else {
                     notify = true;
-                    String msg = "Muốn tham gia vào nhóm phượt của bạn";
+                    msg = "Muốn tham gia vào nhóm phượt của bạn";
 
                     keyUserGroupId = response.getUserGroupId();
                     keyIDGroup = response.getId();
@@ -198,11 +198,21 @@ public class TourAllFragment extends Fragment {
             }
         });
     }
-    public static JSONObject getWeatherJson() {
+
+    public JSONObject getDataJson() {
+
         try {
             JSONObject user = new JSONObject();
-            user.put("data", "John");
-            user.put("LastName", "Reese");
+            user.put("id", time);
+            user.put("idGroup", keyIDGroup);
+            user.put("sender", fuser.getUid());
+            user.put("receiver", keyUserGroupId);
+            user.put("message", msg);
+            user.put("date", saveCurrentDate);
+            user.put("hour", saveCurrentTime);
+            user.put("nameSender", nameSender);
+            user.put("status", "Chưa phê duyệt");
+
             return user;
         }
         catch(Exception e) {
@@ -219,7 +229,7 @@ public class TourAllFragment extends Fragment {
         hashMap.put("idGroup", keyIDGroup);
         hashMap.put("sender", sender);
         hashMap.put("receiver", receiver);
-        hashMap.put("message", String.valueOf(getWeatherJson()));
+        hashMap.put("message", message);
         hashMap.put("date", saveCurrentDate);
         hashMap.put("hour", saveCurrentTime);
         hashMap.put("nameSender", nameSender);
@@ -283,7 +293,7 @@ public class TourAllFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username + ": " + getWeatherJson(), "Thông báo mới", keyUserGroupId);
+                    Data data = new Data(fuser.getUid(), R.drawable.logo_group, username + ": " + message, "Thông báo mới",keyUserGroupId,getDataJson().toString());
                     Sender sender = new Sender(data, token.getToken());
                     apiService.sendNotifycation(sender)
                             .enqueue(new Callback<MyResponse>() {

@@ -169,9 +169,6 @@ public class SOSSettingActivity extends AppCompatActivity {
         reference.updateChildren(hashMap);
         Toast.makeText(this, getResources().getString(R.string.txt_label_success_info_sos), Toast.LENGTH_SHORT).show();
 
-//        SmsManager sms = SmsManager.getDefault();
-//        sms.sendTextMessage("0383605881", null, "Tôi đang cần sự giúp đỡ test", null, null);
-
         finish();
     }
 
