@@ -707,7 +707,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
             markerOptions.position(latLng);
             markerOptions.title(name).snippet(addresses.get(0).getAddressLine(0));
             if (imageUrl.equalsIgnoreCase("default")) {
-                markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.avatar));
+                markerOptions.icon(CommonUtils.bitmapDescriptorFromVectorFriend(getContext(), R.drawable.avatar));
             } else {
                 Picasso.get().load(imageUrl).into(new Target() {
                     @Override

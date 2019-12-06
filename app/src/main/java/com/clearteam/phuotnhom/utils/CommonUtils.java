@@ -121,6 +121,16 @@ public class CommonUtils {
         return BitmapDescriptorFactory.fromBitmap(smallMarker);
     }
 
+    public static BitmapDescriptor bitmapDescriptorFromVectorFriend(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        Bitmap smallMarker = Bitmap.createScaledBitmap(bitmap, Const.WIDTH_MARKER_FRIEND, Const.HEIGHT_MARKER_FRIEND, false);
+        return BitmapDescriptorFactory.fromBitmap(smallMarker);
+    }
+
 
     public static BitmapDescriptor getBitmapFromURL(Bitmap bitmap) {
 
