@@ -42,7 +42,7 @@
             <ImageView
                 android:layout_width="@dimen/dp_60"
                 android:layout_height="@dimen/dp_60"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/img_restaurant" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -71,7 +71,7 @@
             <ImageView
                 android:layout_width="@dimen/dp_60"
                 android:layout_height="@dimen/dp_60"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/img_hotel" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -99,7 +99,7 @@
             <ImageView
                 android:layout_width="@dimen/dp_60"
                 android:layout_height="@dimen/dp_60"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/img_pharmacies" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -127,7 +127,7 @@
             <ImageView
                 android:layout_width="@dimen/dp_60"
                 android:layout_height="@dimen/dp_60"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/img_hospital" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -166,7 +166,7 @@
             <ImageView
                 android:layout_width="@dimen/dp_60"
                 android:layout_height="@dimen/dp_60"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/img_atm" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -194,7 +194,7 @@
             <ImageView
                 android:layout_width="@dimen/dp_60"
                 android:layout_height="@dimen/dp_60"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/img_petroleum" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -222,7 +222,7 @@
             <ImageView
                 android:layout_width="@dimen/dp_60"
                 android:layout_height="@dimen/dp_60"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/img_grocery" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -250,7 +250,7 @@
             <ImageView
                 android:layout_width="@dimen/dp_60"
                 android:layout_height="@dimen/dp_60"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/img_touries" />
 
             <TextView
                 android:layout_width="wrap_content"

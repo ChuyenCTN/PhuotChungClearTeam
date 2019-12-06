@@ -1,12 +1,13 @@
 package com.clearteam.phuotnhom.ui;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,8 +25,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import com.clearteam.phuotnhom.MainActivity;
 import com.clearteam.phuotnhom.R;
+import com.clearteam.phuotnhom.utils.CommonUtils;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,7 +49,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, LocationListener {
     private EditText edName, edEmail, edNumberPhone, edPass, edConfiPass;
     private ToggleButton togglePass, toggleConfiPass;
     private Button btnRegister;
@@ -56,13 +62,27 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private Uri imageUri;
     private StorageTask uploadTask;
 
+    private LocationManager locationManager;
+    protected double latitude;
+    protected double longitude;
+    protected boolean gps_enabled, network_enabled;
+    protected LocationListener locationListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         changeStatustBar();
         initView();
+        initLocation();
     }
+
+    @SuppressLint("MissingPermission")
+    private void initLocation() {
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+    }
+
 
     private void initView() {
         edName = findViewById(R.id.ed_name);
@@ -149,10 +169,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void register(final String username, final String email, String password) {
+        CommonUtils.showLoading(RegisterActivity.this);
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        CommonUtils.hideLoading();
                         if (task.isSuccessful()) {
                             FirebaseUser firebaseUser = auth.getCurrentUser();
                             assert firebaseUser != null;
@@ -170,8 +192,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             hashMap.put("status", "offline");
                             hashMap.put("isMember", String.valueOf(false));
                             hashMap.put("search", username.toLowerCase());
-                            hashMap.put("latitude", "21.585165");
-                            hashMap.put("longitude", "105.561568");
+                            hashMap.put("latitude", String.valueOf(latitude));
+                            hashMap.put("longitude", String.valueOf(longitude));
 
                             mReference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
@@ -281,4 +303,24 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
+    }
 }

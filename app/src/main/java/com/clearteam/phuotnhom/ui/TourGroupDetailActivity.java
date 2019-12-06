@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -30,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.clearteam.phuotnhom.MainActivity;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.adapter.ListUserAdapter;
 import com.clearteam.phuotnhom.listener.ClickDetailMember;
@@ -54,6 +54,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONObject;
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -214,6 +215,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
             case R.id.img_message:
                 Intent intent = new Intent(TourGroupDetailActivity.this, ChatGroupActivity.class);
                 Bundle bundle = new Bundle();
+                intent.putExtra(Const.TYPE, Const.TYPE_CHAT);
                 bundle.putSerializable(Const.KEY_DATA, tour);
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -239,7 +241,11 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
                 }
                 break;
             case R.id.ll_location:
-                Toast.makeText(this, "location", Toast.LENGTH_SHORT).show();
+                if (userList != null) {
+                    EventBus.getDefault().postSticky(userList);
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    finish();
+                }
                 break;
             case R.id.ll_delete:
                 if (id.equals(tour.getUserGroupId())) {
@@ -309,7 +315,15 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
         }
     }
 
-    public void sendMessage(String sender, String receiver, String message, String title) {
+
+    public void sendMessage(String sender, final String receiver, String message,String title) {
+        // DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mReference = FirebaseDatabase.getInstance().getReference("Notify").child(id2);
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("id", id2);
+        hashMap.put("sender", sender);
+        hashMap.put("receiver", receiver);
+        hashMap.put("message", message);
 
         final DatabaseReference chatR = FirebaseDatabase.getInstance().getReference("ListNotify")
                 .child(auth.getUid())
@@ -387,6 +401,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
         }
 
     private void sendNotification(final String username, String receiver, final String message, String title) {
+
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
         Query query = tokens.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
@@ -436,7 +451,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
 
     private void updateGroup() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Thay đổi thông tin");
+        builder.setTitle("Tạo nhóm");
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         final View dialogView = layoutInflater.inflate(R.layout.item_dialog_add_tour_me, null);
         builder.setView(dialogView);

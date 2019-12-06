@@ -73,8 +73,8 @@ public class ListStatusUserAdapter extends RecyclerView.Adapter<ListStatusUserAd
             String url = user.getImageURL();
             Glide.with(mContext)
                     .load(url)
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .error(R.mipmap.ic_launcher)
+                    .placeholder(R.drawable.default_user)
+                    .error(R.drawable.default_user)
                     .into(imgAvata);
             if (isChat) {
                 if (user.getStatus().equals("online")) {

@@ -1,5 +1,4 @@
 <resources>
-
 	<string name="app_name">Phượt Chung</string>
 	<string name="navigation_drawer_open">Open navigation drawer</string>
 	<string name="navigation_drawer_close">Close navigation drawer</string>
@@ -9,8 +8,6 @@
 	<string name="edit_user">Sửa thông tin</string>
 	<string name="add_group">Tạo nhóm</string>
 	<string name="change_password">Đổi mật khẩu</string>
-
-
 	<string name="menu_home">Trang chủ</string>
 	<string name="menu_group">Nhóm tour</string>
 	<string name="menu_schedule">Lịch trình</string>
@@ -31,8 +28,6 @@
 	<string name="title_dashboard">Bạn bè</string>
 	<string name="title_notifications">Notifications</string>
 	<string name="dich_vu">Dịch vụ xung quanh</string>
-
-
 	<!-- TODO: Remove or change this placeholder text -->
 
 
@@ -57,59 +52,7 @@
 	<string name="txt_title_new_group">Thêm nhóm</string>
 	<!-- TODO: Remove or change this placeholder text -->
 
-	<!--    bottom sheet-->
 
-	<string name="txt_label_restaurant">Nhà hàng, quán ăn</string>
-	<string name="txt_label_hotel">Khách sạn, nhà nghỉ</string>
-	<string name="txt_label_pharmacies">Hiệu thuốc</string>
-	<string name="txt_label_hospital">Bệnh viện</string>
-	<string name="txt_label_ATM">Cây ATM</string>
-	<string name="txt_label_petroleum">Trạm xăng, dầu</string>
-	<string name="txt_label_grocery">Cửa hàng tạp hóa</string>
-	<string name="txt_label_tourist_destination">Địa danh</string>
-	<string name="title_status">Bạn bè đang online</string>
-	<string name="status_member">Chưa có bạn bè online</string>
-	<string name="status_scheduler">Bạn Chưa có lịch trình nào</string>
-	<string name="name_notify">Lê Hoàng</string>
-	<string name="message_notify">Xin tham gia vào nhóm phượt của bạn</string>
-	<string name="date_notify">20/11/2019</string>
-	<string name="hour_notify">22:00</string>
-	<string name="refuse">Từ chối</string>
-	<string name="confirm">Đồng ý</string>
-	<string name="chua_xn">Chưa phê duyệt</string>
-	<string name="refuse_status">Từ chối yêu câu</string>
-	<string name="confirm_status">Đồng ý yêu câu</string>
-	<string name="txt_label_loading">Vui lòng chờ</string>
-
-
-	<!--    sos-->
-	<string name="txt_label_sos">SOS</string>
-	<string name="txt_lienhekhancap">Thêm liên hệ khẩn cấp</string>
-	<string name="txt_lienhekhancap1">Liên hệ thứ nhất</string>
-	<string name="txt_lienhekhancap2">Liên hệ thứ 2</string>
-	<string name="txt_lienhekhancap3">Liên hệ thứ 3</string>
-	<string name="txt_tinnhankhancap">Thêm tin nhắn khẩn cấp</string>
-	<string name="txt_hint_tinnhankhancap">Tôi đang cần sự giúp đỡ!</string>
-	<string name="txt_label_confirm_sos">Xác nhận</string>
-	<string name="txt_hint_tenlienhe">Tên liên hệ</string>
-	<string name="txt_hint_sodienthoai">Số điện thoại</string>
-
-	<string name="txt_error_namesos">Vui lòng nhập tên liên hệ</string>
-	<string name="txt_error_phonesos1">Vui lòng nhập số điện thoại liên hệ</string>
-	<string name="txt_error_phonesos2">Số điện thoại không đúng</string>
-	<string name="txt_hint_contentsos">Vui lòng nhập nội dung tin nhắn</string>
-	<string name="txt_label_success_info_sos">Lưu thông tin thành công</string>
-	<string name="them_thanh_vien">Thêm thành viên</string>
-	<string name="xoa_nhom">Xóa nhóm</string>
-	<string name="thong_bao">Thông báo</string>
-	<string name="btn_huy">Hủy</string>
-	<string name="btn_thong_bao">Thông báo</string>
-	<string name="ed_noi_dung">Nội dung</string>
-	<string name="ed_tieu_de">Tiêu đề</string>
-	<string name="vi_tri">Vị Trí</string>
-	<string name="sua_tt">Sửa thông tin</string>
-	<string name="txt_label_error_info_sos">Vui lòng thêm thông tin liên lạc</string>
-	<string name="txt_label_sendding_sos">Đang gửi tin nhắn SOS</string>
 	<string name="name_tour">Clear team</string>
 	<string name="chi_tiet_lt">Chi tiết lịch trình di chuyển</string>
 	<string name="address_start">Hà Nội</string>
@@ -118,5 +61,63 @@
 	<string name="btn_them">Thêm</string>
 	<string name="dia_chi_dung_chan">Địa chỉ dừng chân</string>
 
+
+    <!--    bottom sheet-->
+    <string name="txt_label_restaurant">Nhà hàng, quán ăn</string>
+    <string name="txt_label_hotel">Khách sạn, nhà nghỉ</string>
+    <string name="txt_label_pharmacies">Hiệu thuốc</string>
+    <string name="txt_label_hospital">Bệnh viện</string>
+    <string name="txt_label_ATM">Cây ATM</string>
+    <string name="txt_label_petroleum">Trạm xăng, dầu</string>
+    <string name="txt_label_grocery">Cửa hàng tạp hóa</string>
+    <string name="txt_label_tourist_destination">Địa danh</string>
+    <string name="title_status">Bạn bè đang online</string>
+    <string name="status_member">Chưa có bạn bè online</string>
+    <string name="status_scheduler">Bạn Chưa có lịch trình nào</string>
+    <string name="name_notify">Lê Hoàng</string>
+    <string name="message_notify">Xin tham gia vào nhóm phượt của bạn</string>
+    <string name="date_notify">20/11/2019</string>
+    <string name="hour_notify">22:00</string>
+    <string name="refuse">Từ chối</string>
+    <string name="confirm">Đồng ý</string>
+    <string name="chua_xn">Chưa phê duyệt</string>
+    <string name="refuse_status">Từ chối yêu câu</string>
+    <string name="confirm_status">Đồng ý yêu câu</string>
+    <string name="txt_label_loading">Vui lòng chờ</string>
+    <string name="txt_finding_location_friend">Đang tìm vị trí của\u0020</string>
+    <string name="txt_finding_location_group_friends">Đang tìm vị trí mọi người trong nhóm\u0020</string>
+    <string name="txt_label_finding">Đang tìm\u0020</string>
+    <string name="txt_label_recently">\u0020 gần đây</string>
+    <string name="txt_label_not_founding">Không tìm thấy\u0020</string>
+
+
+    <!--    sos-->
+    <string name="txt_label_sos">SOS</string>
+    <string name="txt_lienhekhancap">Thêm liên hệ khẩn cấp</string>
+    <string name="txt_lienhekhancap1">Liên hệ thứ nhất</string>
+    <string name="txt_lienhekhancap2">Liên hệ thứ 2</string>
+    <string name="txt_lienhekhancap3">Liên hệ thứ 3</string>
+    <string name="txt_tinnhankhancap">Thêm tin nhắn khẩn cấp</string>
+    <string name="txt_hint_tinnhankhancap">Tôi đang cần sự giúp đỡ!</string>
+    <string name="txt_label_confirm_sos">Xác nhận</string>
+    <string name="txt_hint_tenlienhe">Tên liên hệ</string>
+    <string name="txt_hint_sodienthoai">Số điện thoại</string>
+
+    <string name="txt_error_namesos">Vui lòng nhập tên liên hệ</string>
+    <string name="txt_error_phonesos1">Vui lòng nhập số điện thoại liên hệ</string>
+    <string name="txt_error_phonesos2">Số điện thoại không đúng</string>
+    <string name="txt_hint_contentsos">Vui lòng nhập nội dung tin nhắn</string>
+    <string name="txt_label_success_info_sos">Lưu thông tin thành công</string>
+    <string name="txt_label_error_info_sos">Vui lòng thêm thông tin liên lạc</string>
+    <string name="txt_label_sendding_sos">Đang gửi tin nhắn SOS</string>
+    <string name="them_thanh_vien">Thêm thành viên</string>
+    <string name="xoa_nhom">Xóa nhóm</string>
+    <string name="thong_bao">Thông báo</string>
+    <string name="btn_huy">Hủy</string>
+    <string name="btn_thong_bao">Thông báo</string>
+    <string name="ed_noi_dung">Nội dung</string>
+    <string name="ed_tieu_de">Tiêu đề</string>
+    <string name="vi_tri">Vị Trí</string>
+    <string name="sua_tt">Sửa thông tin</string>
 
 </resources>
