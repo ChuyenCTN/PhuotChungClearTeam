@@ -124,6 +124,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     } else {
                         Glide.with(getApplicationContext()).load(user.getImageURL()).into(imgAvata);
                     }
+                    InfoSOS infoSOS = new InfoSOS();
+                    if (user.getName1sos() != null && user.getPhone1sos() != null) {
+                        infoSOS.setName1(user.getName1sos());
+                        infoSOS.setNumberphone1(user.getPhone1sos());
+                    }
+                    if (user.getName2sos() != null && user.getPhone2sos() != null) {
+                        infoSOS.setName2(user.getName2sos());
+                        infoSOS.setNumberphone2(user.getPhone2sos());
+                    }
+                    if (user.getName3sos() != null && user.getPhone3sos() != null) {
+                        infoSOS.setName3(user.getName3sos());
+                        infoSOS.setNumberphone3(user.getPhone3sos());
+                    }
+                    if (user.getContentsos() != null) {
+                        infoSOS.setContent(user.getContentsos());
+                    }
+                    if (infoSOS != null) {
+                        PrefUtils.saveInfoSOS(getApplicationContext(), infoSOS);
+                    }
+
                 }
             }
 

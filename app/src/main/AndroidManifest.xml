@@ -112,6 +112,8 @@
 		</service>
 
 		<activity android:name=".mms.PermissionActivity" />
+
+		<uses-library android:name="com.google.android.maps" />
 	</application>
 
 </manifest>

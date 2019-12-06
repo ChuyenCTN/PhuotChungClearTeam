@@ -491,6 +491,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
 
     private void getCurrentLocation() {
+        Toast.makeText(getContext(), "hdfhfhfdhfg", Toast.LENGTH_SHORT).show();
         if (isContinue) {
             mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
         } else {
@@ -599,13 +600,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(1 * 1000); // 10 seconds
         locationRequest.setFastestInterval(5 * 200); // 5 seconds
-
+        getCurrentLocation();
         new GpsUtils(getContext()).turnGPSOn(new GpsUtils.onGpsListener() {
             @Override
             public void gpsStatus(boolean isGPSEnable) {
                 // turn on GPS
                 isGPS = isGPSEnable;
-                getCurrentLocation();
+
             }
         });
     }
@@ -844,13 +845,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     @Override
     public void onResume() {
         super.onResume();
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getCurrentLocation();
-            }
-        }, 3000);
 
     }
 
