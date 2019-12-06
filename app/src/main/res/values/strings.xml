@@ -1,5 +1,25 @@
 <resources>
 
+    <!-- TODO: Remove or change this placeholder text -->
+
+
+    <!--	Tour Group-->
+    <!-- TODO: Remove or change this placeholder text -->
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+
+    <string name="txt_finding_location_friend">Đang tìm vị trí của\u0020</string>
+    <string name="txt_finding_location_group_friends">Đang tìm vị trí mọi người trong nhóm\u0020</string>
+    <string name="txt_label_finding">Đang tìm\u0020</string>
+    <string name="txt_label_recently">\u0020 gần đây</string>
+    <string name="txt_label_not_founding">Không tìm thấy\u0020</string>
+    <string name="txt_label_follow_direction">Chỉ đường tới \u0020</string>
+    <string name="txt_finding_direction">Đang tìm tuyến đường tốt nhất, vui lòng chờ </string>
+
+    <string name="txt_label_walking">Đi bộ/xe đạp</string>
+    <string name="txt_label_driving">Lái xe</string>
+
     <string name="app_name">Phượt Chung</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -80,13 +100,6 @@
     <string name="refuse_status">Từ chối yêu câu</string>
     <string name="confirm_status">Đồng ý yêu câu</string>
     <string name="txt_label_loading">Vui lòng chờ</string>
-    <string name="txt_finding_location_friend">Đang tìm vị trí của\u0020</string>
-    <string name="txt_finding_location_group_friends">Đang tìm vị trí mọi người trong nhóm\u0020</string>
-    <string name="txt_label_finding">Đang tìm\u0020</string>
-    <string name="txt_label_recently">\u0020 gần đây</string>
-    <string name="txt_label_not_founding">Không tìm thấy\u0020</string>
-    <string name="txt_label_follow_direction">Chỉ đường tới \u0020</string>
-    <string name="txt_finding_direction">Đang tìm tuyến đường tốt nhất, vui lòng chờ </string>
 
 
     <!--    sos-->
@@ -106,8 +119,6 @@
     <string name="txt_error_phonesos2">Số điện thoại không đúng</string>
     <string name="txt_hint_contentsos">Vui lòng nhập nội dung tin nhắn</string>
     <string name="txt_label_success_info_sos">Lưu thông tin thành công</string>
-    <string name="txt_label_error_info_sos">Vui lòng thêm thông tin liên lạc</string>
-    <string name="txt_label_sendding_sos">Đang gửi tin nhắn SOS</string>
     <string name="them_thanh_vien">Thêm thành viên</string>
     <string name="xoa_nhom">Xóa nhóm</string>
     <string name="thong_bao">Thông báo</string>
@@ -117,8 +128,8 @@
     <string name="ed_tieu_de">Tiêu đề</string>
     <string name="vi_tri">Vị Trí</string>
     <string name="sua_tt">Sửa thông tin</string>
-    <string name="txt_label_walking">Đi bộ/xe đạp</string>
-    <string name="txt_label_driving">Lái xe</string>
+    <string name="txt_label_error_info_sos">Vui lòng thêm thông tin liên lạc</string>
+    <string name="txt_label_sendding_sos">Đang gửi tin nhắn SOS</string>
 
 
 </resources>

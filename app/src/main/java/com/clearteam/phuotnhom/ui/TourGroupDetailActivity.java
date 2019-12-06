@@ -54,6 +54,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,6 +63,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -69,10 +71,14 @@ import retrofit2.Response;
 
 public class TourGroupDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, ClickDetailMember, View.OnClickListener {
 
-
     private TextView tvNameGroup;
     private ImageView imgAvataGroup, imgMenu, imgBack, imgMessage;
-    private String nameGroup, imageG, addressStart, addressEnd, dateStart, keyID, keyRemove, title, content;
+    //<<<<<<< HEAD
+//    private String nameGroup, imageG, addressStart, addressEnd, dateStart, keyID, keyRemove, title, content;
+//=======
+    private String nameGroup, imageG, addressStart, addressEnd, dateStart;
+    private String keyID, keyRemove, title, content, idUserGroup, time, nameSender, saveCurrentDate, saveCurrentTime;
+
     private DatabaseReference reference;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseAuth auth;
@@ -91,7 +97,9 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
     private RecyclerView mRecyclerView;
     private List<String> keyRemoveMember = new ArrayList<>();
     private List<String> myListMember = new ArrayList<>();
+    private List<String> myListMember1 = new ArrayList<>();
     private List<String> listUpdateMember = new ArrayList<>();
+    private List<String> listUserIds = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +112,6 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
         FirebaseUser firebaseUser = auth.getCurrentUser();
         assert firebaseUser != null;
         id = firebaseUser.getUid();
-
         reference = database.getReference(Const.KEY_TOUR).child(id);
     }
 
@@ -114,7 +121,6 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
         mRecyclerView.setLayoutManager(manager);
         userList = new ArrayList<>();
         mRecyclerView.setAdapter(adapter);
-
     }
 
     private void getData() {
@@ -123,8 +129,10 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
         tour = ((TourMe) bundle.getSerializable(Const.KEY_DATA));
         nameGroup = tour.getName();
         id2 = tour.getId();
-        String idUserGroup = tour.getUserGroupId();
-        if (idUserGroup.contains(tour.getKeyId())) {
+        idUserGroup = tour.getUserGroupId();
+
+        listUpdateMember = Arrays.asList(tour.getKeyId().split(","));
+        if (listUpdateMember.contains(idUserGroup)) {
             keyID = tour.getKeyId();
         } else {
             keyID = tour.getKeyId() + "," + tour.getUserGroupId();
@@ -145,7 +153,6 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
     }
 
     public void readUsers(String key) {
-        keyID = key;
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
@@ -166,7 +173,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
                         }
                     }
                 }
-                adapter = new ListUserAdapter(TourGroupDetailActivity.this, userList, TourGroupDetailActivity.this, true);
+                adapter = new ListUserAdapter(TourGroupDetailActivity.this, userList, TourGroupDetailActivity.this, true, tour.getUserGroupId());
                 mRecyclerView.setAdapter(adapter);
             }
 
@@ -188,7 +195,6 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
         ll_location = findViewById(R.id.ll_location);
         llEdit = findViewById(R.id.ll_edit);
         imgAvataGroup = findViewById(R.id.img_avata_group);
-//        imgMenu = findViewById(R.id.img_menu_group);
         apiService = Client.getClient("https://fcm.googleapis.com").create(APIService.class);
 
         onDateSetListener1 = this;
@@ -199,9 +205,9 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
         ll_location.setOnClickListener(this);
         llDelete.setOnClickListener(this);
         llAddMember.setOnClickListener(this);
-//        imgMenu.setOnClickListener(this);
-
         getData();
+        creatDateHourNotify();
+
     }
 
     @Override
@@ -225,10 +231,18 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
                 startActivityForResult(intent1, Const.REQUEST_CODE);
                 break;
             case R.id.ll_notify:
-                pushNotifyForMember();
+                if (id.equals(tour.getUserGroupId())) {
+                    pushNotifyForMember();
+                } else {
+                    Toast.makeText(this, "Bạn không có quyền sửa", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.ll_edit:
-                updateGroup();
+                if (id.equals(tour.getUserGroupId())) {
+                    updateGroup();
+                } else {
+                    Toast.makeText(this, "Bạn không có quyền sửa", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.ll_location:
                 if (userList != null) {
@@ -238,9 +252,22 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
                 }
                 break;
             case R.id.ll_delete:
-                deleteGroup();
+                if (id.equals(tour.getUserGroupId())) {
+                    deleteGroup();
+                } else {
+                    Toast.makeText(this, "Bạn không có xóa", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
+    }
+
+    private void creatDateHourNotify() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
+        saveCurrentDate = currentDate.format(calendar.getTime());
+
+        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm");
+        saveCurrentTime = currentTime.format(calendar.getTime());
     }
 
     private void pushNotifyForMember() {
@@ -252,12 +279,9 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
 
         edTitle = dialogView.findViewById(R.id.ed_title);
         edContent = dialogView.findViewById(R.id.ed_content);
-
-
         final Button btnCancel = dialogView.findViewById(R.id.btnCancel);
         final Button btnOk = dialogView.findViewById(R.id.btnOk);
         alertDialog = builder.create();
-
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -268,13 +292,14 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pushNotify();
+                SendNotify();
+                alertDialog.dismiss();
             }
         });
         alertDialog.show();
     }
 
-    private void pushNotify() {
+    private void SendNotify() {
         title = edTitle.getText().toString().trim();
         content = edContent.getText().toString().trim();
         if (title.isEmpty()) {
@@ -297,18 +322,24 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
         hashMap.put("message", message);
 
 
-        //mReference.child("Notify").push().setValue(hashMap);
-        mReference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    //  Toast.makeText(getActivity(), "Đăng ký thành công !", Toast.LENGTH_SHORT).show();
-                }
+        myListMember1 = Arrays.asList(keyID.split("," + tour.getUserGroupId()));
+        for (String temp : myListMember1) {
+            listUserIds = Arrays.asList(temp.split(","));
+            for (String idMember : listUserIds) {
+                notify = true;
+                sendMessage(auth.getUid(), idMember, content, title);
             }
-        });
+
+        }
+
+    }
+
+
+    public void sendMessage(String sender, String receiver, String message, String title) {
+
         final DatabaseReference chatR = FirebaseDatabase.getInstance().getReference("ListNotify")
                 .child(auth.getUid())
-                .child(keyID);
+                .child(receiver);
 
         chatR.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -330,11 +361,9 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                if (notify) {
 
-                    sendNotification(user.getUsername(), receiver, msg);
-                }
-                notify = false;
+                sendNotification(user.getUsername(), receiver, msg, title);
+                nameSender = user.getUsername();
             }
 
             @Override
@@ -342,9 +371,50 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
 
             }
         });
+
+        pushNotify(sender, receiver, message, title);
     }
 
-    private void sendNotification(final String username, String receiver, final String message) {
+    public JSONObject getDataJson() {
+        try {
+            JSONObject user = new JSONObject();
+            user.put("title", title);
+            user.put("content", content);
+            user.put("nameSender", nameSender);
+            return user;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void pushNotify(String sender, String receiver, String message, String title) {
+        time = String.valueOf(new Random().nextInt(1000000000));
+
+        DatabaseReference mReference = FirebaseDatabase.getInstance().getReference("Notify").child(time);
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("id", time);
+        hashMap.put("sender", sender);
+        hashMap.put("receiver", receiver);
+        hashMap.put("message", message);
+        hashMap.put("date", saveCurrentDate);
+        hashMap.put("hour", saveCurrentTime);
+        hashMap.put("nameSender", nameSender);
+        hashMap.put("status", title);
+
+        mReference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(TourGroupDetailActivity.this, "Thông báo thành công !", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
+
+    private void sendNotification(final String username, String receiver,
+                                  final String message, String title) {
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
         Query query = tokens.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
@@ -352,7 +422,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(id, R.mipmap.ic_launcher, username + ": " + message, title, keyID);
+                    Data data = new Data(id, R.drawable.logo_group, username + ": " + message, title, receiver, getDataJson().toString());
                     Sender sender = new Sender(data, token.getToken());
                     apiService.sendNotifycation(sender)
                             .enqueue(new Callback<MyResponse>() {
@@ -605,3 +675,5 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
         }
     }
 }
+
+
