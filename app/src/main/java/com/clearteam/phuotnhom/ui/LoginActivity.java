@@ -76,7 +76,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initView();
-        checkAndroidVersion();
         reQuestPermission();
     }
 
@@ -306,7 +305,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .getBoolean("request_permissions", true) &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             startActivity(new Intent(this, PermissionActivity.class));
-            finish();
             return;
         }
     }
