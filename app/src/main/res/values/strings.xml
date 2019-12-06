@@ -110,6 +110,13 @@
 	<string name="sua_tt">Sửa thông tin</string>
 	<string name="txt_label_error_info_sos">Vui lòng thêm thông tin liên lạc</string>
 	<string name="txt_label_sendding_sos">Đang gửi tin nhắn SOS</string>
+	<string name="name_tour">Clear team</string>
+	<string name="chi_tiet_lt">Chi tiết lịch trình di chuyển</string>
+	<string name="address_start">Hà Nội</string>
+	<string name="khoi_hanh">Khời hành: </string>
+	<string name="them_tram_dung_chan">Thêm trạm dừng chân</string>
+	<string name="btn_them">Thêm</string>
+	<string name="dia_chi_dung_chan">Địa chỉ dừng chân</string>
 
 
 </resources>

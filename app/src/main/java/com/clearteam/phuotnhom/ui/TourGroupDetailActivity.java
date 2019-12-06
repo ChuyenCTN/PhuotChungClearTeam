@@ -436,7 +436,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
 
     private void updateGroup() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Tạo nhóm");
+        builder.setTitle("Thay đổi thông tin");
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         final View dialogView = layoutInflater.inflate(R.layout.item_dialog_add_tour_me, null);
         builder.setView(dialogView);

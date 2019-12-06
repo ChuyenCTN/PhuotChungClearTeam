@@ -23,7 +23,8 @@
 			android:theme="@style/AppTheme.NoActionBar" />
 		<activity android:name=".ui.setting.SOSSettingActivity" />
 		<activity android:name=".ui.setting.SettingFragment" />
-		<activity android:name=".ui.scheduler.SchedulerDetailActivity" />
+		<activity android:name=".ui.SchedulerDetailActivity"
+			android:theme="@style/AppTheme.NoActionBar"/>
 		<activity
 			android:name=".ui.DetailNotify"
 			android:theme="@style/AppTheme.NoActionBar" />

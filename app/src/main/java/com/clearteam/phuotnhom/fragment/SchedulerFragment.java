@@ -1,5 +1,6 @@
-package com.clearteam.phuotnhom.ui.scheduler;
+package com.clearteam.phuotnhom.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.adapter.TourAllAdapter;
 import com.clearteam.phuotnhom.model.TourMe;
+import com.clearteam.phuotnhom.ui.SchedulerDetailActivity;
+import com.clearteam.phuotnhom.ui.TourGroupDetailActivity;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,13 +34,13 @@ import java.util.List;
 public class SchedulerFragment extends Fragment {
     private RecyclerView rcvTourMe;
     private FirebaseAuth auth;
-    private DatabaseReference reference;
     private String keyAllUser, id;
     private TextView tvCheck;
     private List<TourMe> list;
     private List<String> listUserIds;
     private TourMe mTourMe;
     private TourAllAdapter mTourAllAdapter;
+    private DatabaseReference reference;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static SchedulerFragment INSTANCE;
 
@@ -61,6 +64,7 @@ public class SchedulerFragment extends Fragment {
         initRecyclerView();
         return view;
     }
+
     private void initRecyclerView() {
         mTourAllAdapter = new TourAllAdapter(list, getActivity());
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
@@ -70,7 +74,11 @@ public class SchedulerFragment extends Fragment {
         mTourAllAdapter.setClickDetailTourGroup(new TourAllAdapter.clickDetailTourGroup() {
             @Override
             public void onClickDetail(int position, TourMe response) {
-
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Const.KEY_DATA, response);
+                Intent intent = new Intent(getActivity(), SchedulerDetailActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
         initData();
@@ -104,14 +112,14 @@ public class SchedulerFragment extends Fragment {
                         } else if (listUserIds.contains(id) == true) {
                             mTourMe.setTvAdd("Bạn đã tham gia");
                             mTourMe.setMyTour(true);
-                        }else {
-                           list.remove(mTourMe);
+                        } else {
+                            list.remove(mTourMe);
                         }
                     }
                 }
-                if (list.size() == 0){
+                if (list.size() == 0) {
                     tvCheck.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     tvCheck.setVisibility(View.GONE);
                 }
                 mTourAllAdapter.setData(list);
