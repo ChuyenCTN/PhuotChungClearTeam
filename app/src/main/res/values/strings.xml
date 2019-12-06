@@ -119,5 +119,14 @@
     <string name="ed_tieu_de">Tiêu đề</string>
     <string name="vi_tri">Vị Trí</string>
     <string name="sua_tt">Sửa thông tin</string>
+	<string name="ho_ten">Họ và tên:</string>
+	<string name="email">Email:</string>
+	<string name="pass">Mật khẩu:</string>
+	<string name="nhap_mk">Nhập mật khẩu</string>
+	<string name="xn_mk">Xác nhận mật khẩu:</string>
+	<string name="nl_mk">Nhập lại mật khẩu</string>
+	<string name="sdt">Số điện thoại:</string>
+	<string name="nh_sdt">Nhập số điện thoại</string>
+	<string name="nh_email">Nhập email</string>
 
 </resources>

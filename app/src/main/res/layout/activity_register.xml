@@ -10,181 +10,246 @@
 		android:id="@+id/relay_1"
 		android:layout_width="match_parent"
 		android:layout_height="?attr/actionBarSize"
-		android:background="@color/bg_toolbar"
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintTop_toTopOf="parent">
 
 		<ImageButton
 			android:id="@+id/img_open_main1"
-			android:layout_width="@dimen/dp_25"
-			android:layout_height="@dimen/dp_25"
+			android:layout_width="@dimen/dp_30"
+			android:layout_height="@dimen/dp_30"
 			android:layout_centerVertical="true"
 			android:layout_marginLeft="@dimen/dp_16"
-			android:background="@drawable/bg_back" />
+			android:background="@drawable/back_arrow" />
 
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerInParent="true"
 			android:text="@string/register"
-			android:textColor="@color/white"
+			android:textColor="@color/text"
 			android:textSize="@dimen/size_20"
 			android:textStyle="bold" />
 	</RelativeLayout>
 
-	<ImageView
-		android:id="@+id/imageView2"
-		android:layout_width="@dimen/dp_150"
-		android:layout_height="@dimen/dp_150"
-		android:layout_centerHorizontal="true"
-		android:layout_marginStart="8dp"
-		android:layout_marginTop="@dimen/dp_40"
-		android:layout_marginEnd="8dp"
-		android:src="@drawable/logo"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/relay_1" />
-
-	<LinearLayout
-		android:id="@+id/linearLayout"
+	<androidx.core.widget.NestedScrollView
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
+		android:layout_height="match_parent"
 		android:layout_below="@+id/relay_1"
-		android:layout_centerVertical="true"
-		android:layout_marginTop="@dimen/dp_30"
-		android:layout_marginLeft="@dimen/size_20"
-		android:layout_marginRight="@dimen/size_20"
-		android:orientation="vertical"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/imageView2">
+		android:layout_marginTop="@dimen/dp_70">
 
 		<LinearLayout
+			android:id="@+id/linearLayout"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="@dimen/dp_10"
-			android:orientation="horizontal">
+			android:layout_centerVertical="true"
+			android:layout_marginLeft="@dimen/size_20"
+			android:layout_marginRight="@dimen/size_20"
+			android:orientation="vertical"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/relay_1">
 
-			<com.google.android.material.textfield.TextInputEditText
-				android:id="@+id/ed_name"
-				android:layout_width="0dp"
+			<LinearLayout
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_weight="1"
-				android:background="@drawable/bg_edit_text"
-				android:cursorVisible="true"
-				android:drawableLeft="@drawable/ic_person"
-				android:drawablePadding="@dimen/dp_8"
-				android:hint="Full Name"
-				android:inputType="text"
-				android:maxLength="50"
-				android:padding="@dimen/dp_10"
-				android:paddingBottom="@dimen/dp_10"
-				android:textColor="@color/text"
-				android:textColorHint="@color/text_hint"
-				android:textSize="@dimen/size_18" />
+				android:layout_marginBottom="@dimen/dp_10"
+				android:orientation="vertical">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="@dimen/dp_5"
+					android:text="@string/ho_ten"
+					android:textColor="@color/text"
+					android:textSize="@dimen/size_14" />
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/ed_name"
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/dp_45"
+					android:layout_weight="1"
+					android:background="@drawable/bg_editext"
+					android:cursorVisible="true"
+					android:drawablePadding="@dimen/dp_8"
+					android:hint="Nhập họ tên"
+					android:inputType="text"
+					android:maxLength="50"
+					android:padding="@dimen/dp_10"
+					android:paddingBottom="@dimen/dp_10"
+					android:textColor="@color/text"
+					android:textColorHint="@color/text_hint"
+					android:textSize="@dimen/size_14" />
 
 
-		</LinearLayout>
+			</LinearLayout>
 
-		<com.google.android.material.textfield.TextInputEditText
-			android:id="@+id/edEmail"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:background="@drawable/bg_edit_text"
-			android:cursorVisible="true"
-			android:drawableLeft="@drawable/ic_email"
-			android:drawablePadding="@dimen/dp_8"
-			android:hint="Email"
-			android:inputType="textEmailAddress"
-			android:padding="@dimen/dp_10"
-			android:textColor="@color/text"
-			android:textColorHint="@color/text_hint"
-			android:textSize="@dimen/size_18" />
-
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center"
-			android:layout_marginTop="10dp"
-			android:background="@drawable/bg_edit_text"
-			android:orientation="horizontal">
-
-			<androidx.appcompat.widget.AppCompatEditText
-				android:id="@+id/edPassword"
-				android:layout_width="0dp"
+			<LinearLayout
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_weight="3"
-				android:background="@null"
-				android:cursorVisible="true"
-				android:drawableLeft="@drawable/ic_lock"
-				android:drawablePadding="@dimen/dp_8"
-				android:hint="Password"
-				android:inputType="textPassword"
-				android:padding="@dimen/dp_10"
-				android:paddingBottom="@dimen/dp_10"
-				android:textColor="@color/text"
-				android:textColorHint="@color/text_hint"
-				android:textSize="@dimen/size_18" />
+				android:layout_marginBottom="@dimen/dp_10"
+				android:orientation="vertical">
 
-			<ToggleButton
-				android:id="@+id/toggle_pass"
-				android:layout_width="@dimen/dp_25"
-				android:layout_height="@dimen/dp_25"
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="@dimen/dp_5"
+					android:text="@string/email"
+					android:textColor="@color/text"
+					android:textSize="@dimen/size_14" />
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/edEmail"
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/dp_45"
+					android:background="@drawable/bg_editext"
+					android:cursorVisible="true"
+					android:hint="@string/nh_email"
+					android:inputType="textEmailAddress"
+					android:padding="@dimen/dp_10"
+					android:textColor="@color/text"
+					android:textColorHint="@color/text_hint"
+					android:textSize="@dimen/size_14" />
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/dp_10"
+				android:orientation="vertical">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="@dimen/dp_5"
+					android:text="@string/sdt"
+					android:textColor="@color/text"
+					android:textSize="@dimen/size_14" />
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/edNumberPhone"
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/dp_45"
+					android:background="@drawable/bg_editext"
+					android:cursorVisible="true"
+					android:hint="@string/nh_sdt"
+					android:inputType="number"
+					android:padding="@dimen/dp_10"
+					android:textColor="@color/text"
+					android:textColorHint="@color/text_hint"
+					android:textSize="@dimen/size_14" />
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/dp_10"
+				android:orientation="vertical">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="@dimen/dp_5"
+					android:text="@string/pass"
+					android:textColor="@color/text"
+					android:textSize="@dimen/size_14" />
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center"
+					android:background="@drawable/bg_editext"
+					android:orientation="horizontal">
+
+					<androidx.appcompat.widget.AppCompatEditText
+						android:id="@+id/edPassword"
+						android:layout_width="0dp"
+						android:layout_height="@dimen/dp_45"
+						android:layout_weight="3"
+						android:background="@null"
+						android:cursorVisible="true"
+						android:hint="@string/nhap_mk"
+						android:inputType="textPassword"
+						android:padding="@dimen/dp_10"
+						android:paddingBottom="@dimen/dp_10"
+						android:textColor="@color/text"
+						android:textColorHint="@color/text_hint"
+						android:textSize="@dimen/size_14" />
+
+					<ToggleButton
+						android:id="@+id/toggle_pass"
+						android:layout_width="@dimen/dp_25"
+						android:layout_height="@dimen/dp_25"
+						android:layout_gravity="center"
+						android:layout_marginRight="@dimen/dp_10"
+						android:background="@drawable/icon_eye"
+						android:textOff=""
+						android:textOn="" />
+				</LinearLayout>
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="@dimen/dp_10"
+				android:orientation="vertical">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="@dimen/dp_5"
+					android:text="@string/xn_mk"
+					android:textColor="@color/text"
+					android:textSize="@dimen/size_14" />
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center"
+					android:background="@drawable/bg_editext"
+					android:orientation="horizontal">
+
+					<androidx.appcompat.widget.AppCompatEditText
+						android:id="@+id/ed_confirm_password"
+						android:layout_width="0dp"
+						android:layout_height="@dimen/dp_45"
+						android:layout_weight="3"
+						android:background="@null"
+						android:cursorVisible="true"
+						android:hint="@string/nl_mk"
+						android:inputType="textPassword"
+						android:maxLength="50"
+						android:padding="10dp"
+						android:textColor="@color/text"
+						android:textColorHint="@color/text_hint"
+						android:textSize="@dimen/size_14" />
+
+					<ToggleButton
+						android:id="@+id/toggle_confi_pass"
+						android:layout_width="@dimen/dp_25"
+						android:layout_height="@dimen/dp_25"
+						android:layout_gravity="center"
+						android:layout_marginRight="@dimen/dp_10"
+						android:background="@drawable/icon_eye"
+						android:textOff=""
+						android:textOn="" />
+
+				</LinearLayout>
+			</LinearLayout>
+
+			<Button
+				android:id="@+id/btnRegister"
+				android:layout_width="match_parent"
+				android:layout_height="@dimen/dp_45"
 				android:layout_gravity="center"
-				android:layout_marginRight="@dimen/dp_10"
-				android:background="@drawable/icon_eye"
-				android:textOff=""
-				android:textOn="" />
+				android:layout_marginLeft="@dimen/dp_20"
+				android:layout_marginTop="15dp"
+				android:layout_marginRight="@dimen/dp_20"
+				android:layout_marginBottom="@dimen/dp_30"
+				android:background="@drawable/color_buttom"
+				android:text="@string/register"
+				android:textAllCaps="false"
+				android:textColor="@color/white"
+				android:textSize="@dimen/size_18" />
 		</LinearLayout>
 
-		<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center"
-			android:layout_marginTop="10dp"
-			android:background="@drawable/bg_edit_text"
-			android:orientation="horizontal">
-
-			<androidx.appcompat.widget.AppCompatEditText
-				android:id="@+id/ed_confirm_password"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_weight="3"
-				android:background="@null"
-				android:cursorVisible="true"
-				android:drawableLeft="@drawable/ic_lock"
-				android:drawablePadding="@dimen/dp_8"
-				android:hint="Confirm Password"
-				android:inputType="textPassword"
-				android:maxLength="50"
-				android:padding="10dp"
-				android:textColor="@color/text"
-				android:textColorHint="@color/text_hint"
-				android:textSize="18sp" />
-
-			<ToggleButton
-				android:id="@+id/toggle_confi_pass"
-				android:layout_width="@dimen/dp_25"
-				android:layout_height="@dimen/dp_25"
-				android:layout_gravity="center"
-				android:layout_marginRight="@dimen/dp_10"
-				android:background="@drawable/icon_eye"
-				android:textOff=""
-				android:textOn="" />
-
-		</LinearLayout>
-
-		<Button
-			android:id="@+id/btnRegister"
-			android:layout_width="match_parent"
-			android:layout_height="40dp"
-			android:layout_gravity="center"
-			android:layout_marginTop="15dp"
-			android:background="@drawable/color_buttom"
-			android:text="@string/register"
-			android:textAllCaps="false"
-			android:textColor="@color/white"
-			android:textSize="@dimen/size_18" />
-	</LinearLayout>
-
-
+	</androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
