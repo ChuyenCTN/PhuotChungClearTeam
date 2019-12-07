@@ -33,6 +33,7 @@ import com.clearteam.phuotnhom.MainActivity;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.adapter.ListUserAdapter;
 import com.clearteam.phuotnhom.listener.ClickDetailMember;
+import com.clearteam.phuotnhom.model.TourGroupLocation;
 import com.clearteam.phuotnhom.model.TourMe;
 import com.clearteam.phuotnhom.model.User;
 import com.clearteam.phuotnhom.notification.APIService;
@@ -53,10 +54,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
 import org.json.JSONObject;
 import org.greenrobot.eventbus.EventBus;
-
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
@@ -246,9 +245,12 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
                 break;
             case R.id.ll_location:
                 if (userList != null) {
-                    EventBus.getDefault().postSticky(userList);
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                    finish();
+                    if (userList.size() > 0) {
+                        TourGroupLocation groupLocation = new TourGroupLocation(userList, keyID);
+                        EventBus.getDefault().postSticky(groupLocation);
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        finish();
+                    }
                 }
                 break;
             case R.id.ll_delete:

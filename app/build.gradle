@@ -18,10 +18,15 @@ android {
 
     }
     buildTypes {
+        debug {
+            resValue("string", "google_maps_key", "AIzaSyBDQ8nTYI2H6ds1tA66zBogO2FqhXwFFKE")
+        }
         release {
+            resValue("string", "google_maps_key", "AIzaSyBDQ8nTYI2H6ds1tA66zBogO2FqhXwFFKE")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
     }
     compileOptions {
         sourceCompatibility = 1.8

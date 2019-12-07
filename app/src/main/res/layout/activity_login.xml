@@ -120,7 +120,7 @@
 				android:layout_gravity="center"
 				android:layout_marginTop="15dp"
 				android:background="@drawable/color_buttom"
-				android:text="Login"
+				android:text="Đăng nhập"
 				android:textAllCaps="false"
 				android:textColor="@color/white"
 				android:textSize="@dimen/size_18"

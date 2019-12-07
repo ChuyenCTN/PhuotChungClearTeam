@@ -60,6 +60,7 @@ public class Const {
     public static String TYPE = "type";
     public static String TYPE_SOS = "type_sos";
     public static String TYPE_CHAT = "type_chat";
+    public static String TYPE_REGISTER_SOS = "type_register_sos";
 
 
     public static String MODE_DRIVING = "driving";

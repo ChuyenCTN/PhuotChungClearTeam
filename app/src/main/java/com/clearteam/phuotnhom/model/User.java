@@ -18,6 +18,14 @@ public class User implements Serializable {
     private String latitude;
     private String longitude;
 
+    private String phone1sos;
+    private String phone2sos;
+    private String phone3sos;
+    private String name1sos;
+    private String name2sos;
+    private String name3sos;
+    private String contentsos;
+
 
     public User() {
     }
@@ -152,5 +160,61 @@ public class User implements Serializable {
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
+    }
+
+    public String getPhone1sos() {
+        return phone1sos;
+    }
+
+    public void setPhone1sos(String phone1sos) {
+        this.phone1sos = phone1sos;
+    }
+
+    public String getPhone2sos() {
+        return phone2sos;
+    }
+
+    public void setPhone2sos(String phone2sos) {
+        this.phone2sos = phone2sos;
+    }
+
+    public String getPhone3sos() {
+        return phone3sos;
+    }
+
+    public void setPhone3sos(String phone3sos) {
+        this.phone3sos = phone3sos;
+    }
+
+    public String getName1sos() {
+        return name1sos;
+    }
+
+    public void setName1sos(String name1sos) {
+        this.name1sos = name1sos;
+    }
+
+    public String getName2sos() {
+        return name2sos;
+    }
+
+    public void setName2sos(String name2sos) {
+        this.name2sos = name2sos;
+    }
+
+    public String getName3sos() {
+        return name3sos;
+    }
+
+    public void setName3sos(String name3sos) {
+        this.name3sos = name3sos;
+    }
+
+    public String getContentsos() {
+        return contentsos;
+    }
+
+    public void setContentsos(String contentsos) {
+        this.contentsos = contentsos;
     }
 }

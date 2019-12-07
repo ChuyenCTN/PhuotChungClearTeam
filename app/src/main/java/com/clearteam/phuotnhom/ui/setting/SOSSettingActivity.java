@@ -1,7 +1,8 @@
 package com.clearteam.phuotnhom.ui.setting;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.SmsManager;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.clearteam.phuotnhom.MainActivity;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.notification.Token;
 import com.clearteam.phuotnhom.ui.setting.model.InfoSOS;
@@ -46,6 +48,8 @@ public class SOSSettingActivity extends AppCompatActivity {
     private String name3;
     private String content;
 
+    private String mode = "";
+
     //firebase
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
@@ -55,10 +59,23 @@ public class SOSSettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sossetting);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getResources().getString(R.string.txt_label_sos));
         mapping();
-        genInfo();
+        Intent intent = getIntent();
+        if (intent != null) {
+            mode = intent.getStringExtra(Const.TYPE);
+            if (mode.equalsIgnoreCase(Const.TYPE_SOS)) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                genInfo();
+            } else {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+            }
+        }
+
+
+        getSupportActionBar().setTitle(getResources().getString(R.string.txt_label_sos));
+
+
     }
 
     @Override
@@ -86,13 +103,27 @@ public class SOSSettingActivity extends AppCompatActivity {
     private void genInfo() {
         mInfoSOS = PrefUtils.getInfoSOS(getApplicationContext());
         if (mInfoSOS != null) {
-            edTinnhansos.setText(mInfoSOS.getContent() + "");
-            edTenlienhe1.setText(mInfoSOS.getName1() + "");
-            edTenlienhe2.setText(mInfoSOS.getName2() + "");
-            edTenlienhe3.setText(mInfoSOS.getName3() + "");
-            edPhonelienhe1.setText(mInfoSOS.getNumberphone1() + "");
-            edPhonelienhe2.setText(mInfoSOS.getNumberphone2() + "");
-            edPhonelienhe3.setText(mInfoSOS.getNumberphone3() + "");
+            if (mInfoSOS.getContent() != null) {
+                edTinnhansos.setText(mInfoSOS.getContent() + "");
+            }
+            if (mInfoSOS.getName1() != null) {
+                edTenlienhe1.setText(mInfoSOS.getName1() + "");
+            }
+            if (mInfoSOS.getName2() != null) {
+                edTenlienhe2.setText(mInfoSOS.getName2() + "");
+            }
+            if (mInfoSOS.getName3() != null) {
+                edTenlienhe3.setText(mInfoSOS.getName3() + "");
+            }
+            if (mInfoSOS.getNumberphone1() != null) {
+                edPhonelienhe1.setText(mInfoSOS.getNumberphone1() + "");
+            }
+            if (mInfoSOS.getNumberphone2() != null) {
+                edPhonelienhe2.setText(mInfoSOS.getNumberphone2() + "");
+            }
+            if (mInfoSOS.getName3() != null) {
+                edPhonelienhe3.setText(mInfoSOS.getNumberphone3() + "");
+            }
         }
 
 
@@ -168,11 +199,13 @@ public class SOSSettingActivity extends AppCompatActivity {
         hashMap.put(Const.CONTENT_SOS, content);
         reference.updateChildren(hashMap);
         Toast.makeText(this, getResources().getString(R.string.txt_label_success_info_sos), Toast.LENGTH_SHORT).show();
-
-        finish();
+        if (mode.equalsIgnoreCase(Const.TYPE_SOS)) {
+            finish();
+        } else {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
+        }
     }
-
-
 
 
 }

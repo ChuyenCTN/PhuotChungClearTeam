@@ -29,8 +29,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.clearteam.phuotnhom.MainActivity;
 import com.clearteam.phuotnhom.R;
+import com.clearteam.phuotnhom.ui.setting.SOSSettingActivity;
 import com.clearteam.phuotnhom.utils.CommonUtils;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.android.gms.tasks.Continuation;
@@ -208,15 +208,30 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             hashMap.put("search", username.toLowerCase());
                             hashMap.put("latitude", String.valueOf(latitude));
                             hashMap.put("longitude", String.valueOf(longitude));
+                            //sos
+                            hashMap.put(Const.CONTENT_SOS, "");
+                            hashMap.put(Const.NAME1_SOS, "");
+                            hashMap.put(Const.NAME2_SOS, "");
+                            hashMap.put(Const.NAME3_SOS, "");
+                            hashMap.put(Const.PHONE1_SOS, "");
+                            hashMap.put(Const.PHONE2_SOS, "");
+                            hashMap.put(Const.PHONE3_SOS, "");
+
 
                             mReference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+//                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                        startActivity(intent);
+//                                        Toast.makeText(RegisterActivity.this, "Đăng ký thành công !", Toast.LENGTH_SHORT).show();
+//                                        finish();
+
+                                        Toast.makeText(RegisterActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(getApplicationContext(), SOSSettingActivity.class);
+                                        intent.putExtra(Const.TYPE, Const.TYPE_REGISTER_SOS);
                                         startActivity(intent);
-                                        Toast.makeText(RegisterActivity.this, "Đăng ký thành công !", Toast.LENGTH_SHORT).show();
                                         finish();
                                     }
                                 }
