@@ -65,8 +65,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private LocationManager locationManager;
     protected double latitude;
     protected double longitude;
-    protected boolean gps_enabled, network_enabled;
-    protected LocationListener locationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +80,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
     }
-
 
     private void initView() {
         edName = findViewById(R.id.ed_name);
@@ -103,7 +100,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         toggleConfiPass.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
         btnRow.setOnClickListener(this);
-//        imgAvata.setOnClickListener(this);
 
     }
 
@@ -123,54 +119,67 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toggle_pass:
-                if (togglePass.isChecked()) {
-                    edPass.setInputType(InputType.TYPE_CLASS_TEXT);
-                    edPass.setSelection(edPass.getText().length());
-                } else {
-                    edPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    edPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    edPass.setSelection(edPass.getText().length());
-                    edPass.setSelection(edPass.getText().length());
-                }
+                showPass();
                 break;
             case R.id.toggle_confi_pass:
-                if (toggleConfiPass.isChecked()) {
-                    edConfiPass.setInputType(InputType.TYPE_CLASS_TEXT);
-                    edConfiPass.setSelection(edConfiPass.getText().length());
-                } else {
-                    edConfiPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    edConfiPass.setSelection(edConfiPass.getText().length());
-                }
+                checkConfiPass();
                 break;
             case R.id.img_open_main1:
                 finish();
                 break;
             case R.id.btnRegister:
-                String txt_name = edName.getText().toString().trim();
-                String txt_email = edEmail.getText().toString().trim();
-                String txt_password = edPass.getText().toString().trim();
-                String txt_confirm_pass = edConfiPass.getText().toString().trim();
-                String txt_number_phone = edNumberPhone.getText().toString().trim();
-
-                if (TextUtils.isEmpty(txt_name) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password) || TextUtils.isEmpty(txt_confirm_pass)) {
-                    Toast.makeText(RegisterActivity.this, "Chưa nhập đủ thông tin, Mời nhập lại!", Toast.LENGTH_SHORT).show();
-                } else if (isEmail(edEmail) == false) {
-                    edEmail.setError("Chưa đúng định dạng");
-                    Toast.makeText(RegisterActivity.this, "Chưa đúng định dạng", Toast.LENGTH_SHORT).show();
-                } else if (txt_number_phone.length() > 10 && txt_number_phone.length() < 12) {
-                    edNumberPhone.setError("số điện thoại phải 10 hoặc 11 số");
-                    Toast.makeText(RegisterActivity.this, "số điện thoại phải 10 hoặc 11 số", Toast.LENGTH_SHORT).show();
-                } else if (txt_password.length() < 6) {
-                    edPass.setError("mật khẩu trên 6 ký tự");
-                    Toast.makeText(RegisterActivity.this, "mật khẩu trên 6 ký tự", Toast.LENGTH_SHORT).show();
-                } else if (!txt_confirm_pass.equals(txt_password)) {
-                    edConfiPass.setError("không trùng mật khẩu");
-                    Toast.makeText(RegisterActivity.this, "không trùng mật khẩu", Toast.LENGTH_SHORT).show();
-                } else {
-                    register(txt_name, txt_email, txt_password, txt_number_phone);
-                }
+                getRegister();
                 break;
         }
+    }
+
+    private void checkConfiPass() {
+        if (toggleConfiPass.isChecked()) {
+            edConfiPass.setInputType(InputType.TYPE_CLASS_TEXT);
+            edConfiPass.setSelection(edConfiPass.getText().length());
+        } else {
+            edConfiPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            edConfiPass.setSelection(edConfiPass.getText().length());
+        }
+    }
+
+    private void showPass() {
+        if (togglePass.isChecked()) {
+            edPass.setInputType(InputType.TYPE_CLASS_TEXT);
+            edPass.setSelection(edPass.getText().length());
+        } else {
+            edPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            edPass.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            edPass.setSelection(edPass.getText().length());
+            edPass.setSelection(edPass.getText().length());
+        }
+    }
+
+    private void getRegister() {
+        String txt_name = edName.getText().toString().trim();
+        String txt_email = edEmail.getText().toString().trim();
+        String txt_password = edPass.getText().toString().trim();
+        String txt_confirm_pass = edConfiPass.getText().toString().trim();
+        String txt_number_phone = edNumberPhone.getText().toString().trim();
+
+        if (TextUtils.isEmpty(txt_name) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password) || TextUtils.isEmpty(txt_confirm_pass)) {
+            Toast.makeText(RegisterActivity.this, "Chưa nhập đủ thông tin, Mời nhập lại!", Toast.LENGTH_SHORT).show();
+        } else if (isEmail(edEmail) == false) {
+            edEmail.setError("Chưa đúng định dạng");
+            Toast.makeText(RegisterActivity.this, "Chưa đúng định dạng", Toast.LENGTH_SHORT).show();
+        } else if (txt_number_phone.length() > 10 && txt_number_phone.length() < 12) {
+            edNumberPhone.setError("số điện thoại phải 10 hoặc 11 số");
+            Toast.makeText(RegisterActivity.this, "số điện thoại phải 10 hoặc 11 số", Toast.LENGTH_SHORT).show();
+        } else if (txt_password.length() < 6) {
+            edPass.setError("mật khẩu trên 6 ký tự");
+            Toast.makeText(RegisterActivity.this, "mật khẩu trên 6 ký tự", Toast.LENGTH_SHORT).show();
+        } else if (!txt_confirm_pass.equals(txt_password)) {
+            edConfiPass.setError("không trùng mật khẩu");
+            Toast.makeText(RegisterActivity.this, "không trùng mật khẩu", Toast.LENGTH_SHORT).show();
+        } else {
+            register(txt_name, txt_email, txt_password, txt_number_phone);
+        }
+
     }
 
     private void register(final String username, final String email, String password, String numberPhone) {
@@ -261,35 +270,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     }
                     return fileReference.getDownloadUrl();
                 }
-//            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-//                @Override
-//                public void onComplete(@NonNull Task<Uri> task) {
-//                    if (task.isSuccessful()) {
-//
-//                        fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                            @Override
-//                            public void onSuccess(Uri uri) {
-//                                final String downloadUrl = uri.toString();
-//                                mReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("imageURL");
-//                                mReference.setValue(downloadUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<Void> task) {
-//                                        if (task.isSuccessful()) {
-//                                            progressDialog.dismiss();
-//                                            Toast.makeText(RegisterActivity.this, "Your picture Saved successfully", Toast.LENGTH_SHORT).show();
-//
-//                                        } else {
-//                                            Toast.makeText(RegisterActivity.this, "Problem occurred while tryng to save your picture..", Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    }
-//                                });
-//                            }
-//                        });
-//
-//                    } else {
-//                        Toast.makeText(RegisterActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {

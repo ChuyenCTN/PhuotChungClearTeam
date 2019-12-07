@@ -53,8 +53,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHoder> {
         String url = list.get(position).getImageURL();
         Glide.with(mContext)
                 .load(url)
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.mipmap.ic_launcher)
+                .placeholder(R.drawable.default_user)
+                .error(R.drawable.default_user)
                 .into(holder.imgAvata);
 
         if (isChat) {

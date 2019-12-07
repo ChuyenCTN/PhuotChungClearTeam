@@ -489,7 +489,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
     }
 
-
     private void getCurrentLocation() {
         if (isContinue) {
             mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
@@ -504,7 +503,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
                     mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
                 }
             });
-
         }
     }
 

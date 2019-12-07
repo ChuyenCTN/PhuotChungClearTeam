@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment selectedFragment = null;
         switch (item.getItemId()) {
             case R.id.nav_home:
-                setTitle("Home");
+                setTitle("Trang chủ");
                 replaceFragment(MapFragment.getInstance(), mFragmentManager);
                 break;
             case R.id.nav_group:
@@ -291,13 +291,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onPause();
         status("offline");
     }
-
-
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        status("offline");
-//    }
-
-
 }

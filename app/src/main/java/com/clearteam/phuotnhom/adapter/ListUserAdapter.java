@@ -29,7 +29,7 @@ public class ListUserAdapter extends RecyclerView.Adapter<ListUserAdapter.ViewHo
     private boolean isChat;
     private String idUserGroup;
 
-    public ListUserAdapter(Context mContext, List<User> userList, ClickDetailMember mListener, boolean isChat,String idUserGroup) {
+    public ListUserAdapter(Context mContext, List<User> userList, ClickDetailMember mListener, boolean isChat, String idUserGroup) {
         this.mContext = mContext;
         this.userList = userList;
         this.isChat = isChat;
@@ -73,19 +73,14 @@ public class ListUserAdapter extends RecyclerView.Adapter<ListUserAdapter.ViewHo
         }
 
         public void bindData(User user) {
-            if (user.getId().equals(idUserGroup)){
+            if (user.getId().equals(idUserGroup)) {
                 tvTV.setText("Người tạo");
-            }else {
+            } else {
                 tvTV.setText("Thành viên");
             }
 
             tvName.setText(user.getUsername());
-            String url = user.getImageURL();
-            Glide.with(mContext)
-                    .load(url)
-                    .placeholder(R.drawable.ic_launcher_background)
-                    .error(R.mipmap.ic_launcher)
-                    .into(imgAvata);
+
             if (isChat) {
                 if (user.getStatus().equals("online")) {
                     img_on.setVisibility(View.VISIBLE);
@@ -98,7 +93,18 @@ public class ListUserAdapter extends RecyclerView.Adapter<ListUserAdapter.ViewHo
                 img_on.setVisibility(View.GONE);
                 img_off.setVisibility(View.GONE);
             }
-
+            String url = user.getImageURL();
+            if (url.equals("default")) {
+                Glide.with(mContext)
+                        .load(R.drawable.default_user)
+                        .into(imgAvata);
+            } else {
+                Glide.with(mContext)
+                        .load(url)
+                        .placeholder(R.drawable.default_user)
+                        .error(R.drawable.default_user)
+                        .into(imgAvata);
+            }
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

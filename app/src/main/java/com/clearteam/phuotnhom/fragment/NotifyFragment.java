@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.adapter.NotifyAdapter;
@@ -22,6 +23,8 @@ import com.clearteam.phuotnhom.model.Notifi;
 import com.clearteam.phuotnhom.model.TourMe;
 import com.clearteam.phuotnhom.model.User;
 import com.clearteam.phuotnhom.ui.DetailNotify;
+import com.clearteam.phuotnhom.ui.LoginActivity;
+import com.clearteam.phuotnhom.utils.CommonUtils;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,8 +47,8 @@ public class NotifyFragment extends Fragment {
     private RecyclerView recyclerView;
     private FirebaseAuth auth;
     private Notifi notifi;
-    FirebaseUser firebaseUser;
     private String userId;
+    private TextView tvCheck;
     private static NotifyFragment INSTANCE;
 
     public static NotifyFragment getInstance() {
@@ -71,6 +74,13 @@ public class NotifyFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notify, container, false);
 
+        initView(view);
+        initData();
+        return view;
+    }
+
+    private void initView(View view) {
+        tvCheck = view.findViewById(R.id.tv_check);
         list = new ArrayList<>();
         adapter = new NotifyAdapter(list, getContext());
         recyclerView = view.findViewById(R.id.rcv_list_notify);
@@ -83,20 +93,18 @@ public class NotifyFragment extends Fragment {
         assert firebaseUser != null;
         userId = firebaseUser.getUid();
 
-        initData();
         adapter.setClickDetailTourGroup(new NotifyAdapter.clickDetailTourGroup() {
             @Override
             public void onClickDetail(int position, Notifi response) {
                 Intent intent = new Intent(getActivity(), DetailNotify.class);
-                intent.putExtra(Const.KEY_NOTIFYCATION,response);
+                intent.putExtra(Const.KEY_NOTIFYCATION, response);
                 startActivity(intent);
             }
         });
-        return view;
     }
 
     private void initData() {
-
+        CommonUtils.showLoading(getActivity());
         reference = database.getReference().child("Notify");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -104,12 +112,17 @@ public class NotifyFragment extends Fragment {
                 list.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     notifi = dataSnapshot1.getValue(Notifi.class);
-
                     if (notifi.getReceiver().equals(userId)) {
                         list.add(notifi);
                     }
                 }
+                if (list.size() == 0) {
+                    tvCheck.setVisibility(View.VISIBLE);
+                } else {
+                    tvCheck.setVisibility(View.GONE);
+                }
                 adapter.setData(list);
+                CommonUtils.hideLoading();
             }
 
             @Override

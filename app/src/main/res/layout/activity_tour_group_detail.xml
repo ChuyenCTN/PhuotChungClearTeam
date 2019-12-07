@@ -65,8 +65,9 @@
 		android:layout_height="wrap_content"
 		android:layout_marginTop="@dimen/dp_20"
 		android:orientation="horizontal"
-		android:paddingLeft="@dimen/dp_40"
-		android:paddingRight="@dimen/dp_40">
+		android:paddingLeft="@dimen/dp_20"
+		android:paddingRight="@dimen/dp_20">
+
 		<LinearLayout
 			android:id="@+id/ll_edit"
 			android:layout_width="0dp"
@@ -75,38 +76,24 @@
 			android:gravity="center"
 			android:orientation="vertical">
 
-			<ImageView
-				android:layout_width="@dimen/dp_30"
-				android:layout_height="@dimen/dp_30"
-				android:src="@mipmap/ic_launcher" />
+			<RelativeLayout
+				android:layout_width="@dimen/dp_40"
+				android:layout_height="@dimen/dp_40"
+
+				android:background="@drawable/bg_icon_detail_tour">
+
+				<ImageView
+					android:layout_width="@dimen/dp_20"
+					android:layout_height="@dimen/dp_20"
+					android:layout_centerInParent="true"
+					android:src="@drawable/writing" />
+			</RelativeLayout>
 
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="@dimen/dp_3"
 				android:text="@string/sua_tt"
-				android:textAlignment="center"
-				android:textColor="@color/text"
-				android:textSize="12sp" />
-		</LinearLayout>
-		<LinearLayout
-			android:id="@+id/ll_location"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:gravity="center"
-			android:orientation="vertical">
-
-			<ImageView
-				android:layout_width="@dimen/dp_30"
-				android:layout_height="@dimen/dp_30"
-				android:src="@mipmap/ic_launcher" />
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="@dimen/dp_3"
-				android:text="@string/vi_tri"
 				android:textAlignment="center"
 				android:textColor="@color/text"
 				android:textSize="12sp" />
@@ -120,10 +107,17 @@
 			android:gravity="center"
 			android:orientation="vertical">
 
-			<ImageView
-				android:layout_width="@dimen/dp_30"
-				android:layout_height="@dimen/dp_30"
-				android:src="@mipmap/ic_launcher" />
+			<RelativeLayout
+				android:layout_width="@dimen/dp_40"
+				android:layout_height="@dimen/dp_40"
+				android:background="@drawable/bg_icon_detail_tour">
+
+				<ImageView
+					android:layout_width="@dimen/dp_20"
+					android:layout_height="@dimen/dp_20"
+					android:layout_centerInParent="true"
+					android:src="@drawable/delete" />
+			</RelativeLayout>
 
 			<TextView
 				android:layout_width="wrap_content"
@@ -134,9 +128,6 @@
 				android:textSize="12sp" />
 		</LinearLayout>
 
-
-
-
 		<LinearLayout
 			android:id="@+id/ll_notify"
 			android:layout_width="0dp"
@@ -145,19 +136,59 @@
 			android:gravity="center"
 			android:orientation="vertical">
 
-			<ImageView
-				android:layout_width="@dimen/dp_30"
-				android:layout_height="@dimen/dp_30"
-				android:src="@mipmap/ic_launcher" />
+			<RelativeLayout
+				android:layout_width="@dimen/dp_40"
+				android:layout_height="@dimen/dp_40"
+
+				android:background="@drawable/bg_icon_detail_tour">
+
+				<ImageView
+					android:layout_width="@dimen/dp_20"
+					android:layout_height="@dimen/dp_20"
+					android:layout_centerInParent="true"
+					android:src="@drawable/notify" />
+			</RelativeLayout>
 
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="@dimen/dp_3"
-				android:text="@string/thong_bao"
+				android:text="@string/phat_thong_bao"
+				android:textAlignment="center"
 				android:textColor="@color/text"
 				android:textSize="12sp" />
 		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/ll_location"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:gravity="center"
+			android:orientation="vertical">
+
+			<RelativeLayout
+				android:layout_width="@dimen/dp_40"
+				android:layout_height="@dimen/dp_40"
+				android:background="@drawable/bg_icon_detail_tour">
+
+				<ImageView
+					android:layout_width="@dimen/dp_20"
+					android:layout_height="@dimen/dp_20"
+					android:layout_centerInParent="true"
+					android:src="@drawable/placeholder" />
+			</RelativeLayout>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/dp_3"
+				android:text="@string/vi_tri"
+				android:textAlignment="center"
+				android:textColor="@color/text"
+				android:textSize="12sp" />
+		</LinearLayout>
+
 
 		<LinearLayout
 			android:id="@+id/ll_add_member"
@@ -167,10 +198,18 @@
 			android:gravity="center"
 			android:orientation="vertical">
 
-			<ImageView
-				android:layout_width="@dimen/dp_30"
-				android:layout_height="@dimen/dp_30"
-				android:src="@mipmap/ic_launcher" />
+			<RelativeLayout
+				android:layout_width="@dimen/dp_40"
+				android:layout_height="@dimen/dp_40"
+
+				android:background="@drawable/bg_icon_detail_tour">
+
+				<ImageView
+					android:layout_width="@dimen/dp_20"
+					android:layout_height="@dimen/dp_20"
+					android:layout_centerInParent="true"
+					android:src="@drawable/ic_person_add_black_24dp" />
+			</RelativeLayout>
 
 			<TextView
 				android:layout_width="wrap_content"

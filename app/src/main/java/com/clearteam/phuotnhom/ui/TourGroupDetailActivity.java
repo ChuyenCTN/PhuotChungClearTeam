@@ -41,6 +41,7 @@ import com.clearteam.phuotnhom.notification.Data;
 import com.clearteam.phuotnhom.notification.MyResponse;
 import com.clearteam.phuotnhom.notification.Sender;
 import com.clearteam.phuotnhom.notification.Token;
+import com.clearteam.phuotnhom.utils.CommonUtils;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -52,6 +53,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
 import org.json.JSONObject;
 import org.greenrobot.eventbus.EventBus;
 
@@ -76,7 +78,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
     private TextView tvNameGroup;
     private ImageView imgAvataGroup, imgMenu, imgBack, imgMessage;
     private String nameGroup, imageG, addressStart, addressEnd, dateStart;
-    private String keyID, keyRemove, title, content, idUserGroup, time, nameSender,saveCurrentDate,saveCurrentTime;
+    private String keyID, keyRemove, title, content, idUserGroup, time, nameSender, saveCurrentDate, saveCurrentTime;
     private DatabaseReference reference;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseAuth auth;
@@ -253,7 +255,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
                 if (id.equals(tour.getUserGroupId())) {
                     deleteGroup();
                 } else {
-                    Toast.makeText(this, "Bạn không có xóa", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Bạn không có quyền xóa", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -270,7 +272,6 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
 
     private void pushNotifyForMember() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Thông báo cho các thành viên");
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         final View dialogView = layoutInflater.inflate(R.layout.item_dialog_push_notify, null);
         builder.setView(dialogView);
@@ -318,7 +319,8 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
             }
         }
     }
-    public void sendMessage(String sender, final String receiver, String message,String title) {
+
+    public void sendMessage(String sender, final String receiver, String message, String title) {
         // DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference mReference = FirebaseDatabase.getInstance().getReference("Notify").child(id2);
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -457,11 +459,12 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
 
     private void updateGroup() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Tạo nhóm");
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         final View dialogView = layoutInflater.inflate(R.layout.item_dialog_add_tour_me, null);
         builder.setView(dialogView);
 
+       TextView tv_title = dialogView.findViewById(R.id.tv_title);
+       tv_title.setText("Thay đổi thông tin nhóm");
         edName = dialogView.findViewById(R.id.edNameGroup);
         edAddressStart = dialogView.findViewById(R.id.edStart);
         edAddressEnd = dialogView.findViewById(R.id.edEnd);
@@ -475,6 +478,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
 
         final Button btnCancel = dialogView.findViewById(R.id.btnCancel);
         final Button btnOk = dialogView.findViewById(R.id.btnOk);
+        btnOk.setText("Lưu");
         alertDialog = builder.create();
 
         img.setOnClickListener(new View.OnClickListener() {
@@ -523,13 +527,29 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
 
     @Override
     public void onLongClick(int adapterPosition, User user) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Xóa nhóm");
-        builder.setMessage("Bạn có muốn xóa không ?");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
 
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View dialogView = layoutInflater.inflate(R.layout.item_dialog_delete, null);
+        builder.setView(dialogView);
+        TextView tv_title = dialogView.findViewById(R.id.tv_title);
+        TextView tv_status = dialogView.findViewById(R.id.tv_status);
+        tv_title.setText("Xóa thành viên");
+        tv_status.setText("Bạn có muốn xóa thành viên này không ?");
+        final Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+        final Button btnOk = dialogView.findViewById(R.id.btnOk);
+        final AlertDialog alertDialog = builder.create();
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommonUtils.showLoading(TourGroupDetailActivity.this);
                 keyRemoveMember = Arrays.asList(keyID.split(user.getId()));
                 keyRemove = TextUtils.join(",", keyRemoveMember);
                 reference = FirebaseDatabase.getInstance().getReference();
@@ -539,19 +559,15 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
                         if (task.isSuccessful()) {
                             readUsers(keyRemove);
                             Toast.makeText(TourGroupDetailActivity.this, "Xóa thành công", Toast.LENGTH_SHORT).show();
+                            CommonUtils.hideLoading();
+                            alertDialog.dismiss();
                         }
                     }
                 });
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        builder.show();
 
+        alertDialog.show();
     }
 
 
@@ -597,25 +613,34 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
     }
 
     private void deleteGroup() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Xóa nhóm");
-        builder.setMessage("Bạn có muốn xóa không ?");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View dialogView = layoutInflater.inflate(R.layout.item_dialog_delete, null);
+        builder.setView(dialogView);
+
+        final Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+        final Button btnOk = dialogView.findViewById(R.id.btnOk);
+        final AlertDialog alertDialog = builder.create();
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference(Const.KEY_TOUR).child(id).child(id2);
                 reference.removeValue();
-                finish();
                 Toast.makeText(TourGroupDetailActivity.this, "Xóa thành công", Toast.LENGTH_SHORT).show();
+                finish();
+                alertDialog.dismiss();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        builder.show();
+
+        alertDialog.show();
+
     }
 
 

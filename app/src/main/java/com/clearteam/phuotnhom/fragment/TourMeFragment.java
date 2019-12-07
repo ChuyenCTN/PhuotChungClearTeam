@@ -30,6 +30,7 @@ import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.adapter.TourMeAdapter;
 import com.clearteam.phuotnhom.model.TourMe;
 import com.clearteam.phuotnhom.ui.TourGroupDetailActivity;
+import com.clearteam.phuotnhom.utils.CommonUtils;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -127,30 +128,42 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
 
             @Override
             public void onLongClick(int adapterPosition, TourMe response) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Xóa nhóm");
-                builder.setMessage("Bạn có muốn xóa không ?");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(LAYOUT_INFLATER_SERVICE);
+                final View dialogView = layoutInflater.inflate(R.layout.item_dialog_delete, null);
+                builder.setView(dialogView);
+
+                final Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+                final Button btnOk = dialogView.findViewById(R.id.btnOk);
+                final AlertDialog alertDialog = builder.create();
+
+
+                btnCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+                btnOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         reference.child(response.getId()).removeValue();
                         tourMeAdapter.notifyDataSetChanged();
                         Toast.makeText(getActivity(), "Xóa thành công", Toast.LENGTH_SHORT).show();
+                        alertDialog.dismiss();
                     }
                 });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder.show();
+
+                alertDialog.show();
+
             }
 
         });
     }
 
     private void initData() {
+        CommonUtils.showLoading(getActivity());
         reference = database.getReference(Const.KEY_TOUR).child(id);
         list = new ArrayList<>();
         reference.addValueEventListener(new ValueEventListener() {
@@ -168,6 +181,7 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
                 }
                 tourMeAdapter.setData(list);
                 tourMeAdapter.notifyDataSetChanged();
+                CommonUtils.hideLoading();
             }
 
             @Override
@@ -197,7 +211,7 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
 
     private void showDialogCreat() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Tạo nhóm");
+
         LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(LAYOUT_INFLATER_SERVICE);
         final View dialogView = layoutInflater.inflate(R.layout.item_dialog_add_tour_me, null);
         builder.setView(dialogView);
@@ -254,7 +268,7 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
     }
 
     private void createGroup(String nameGoup, String addressStart, String addressEnd, String dateStart) {
-
+        CommonUtils.showLoading(getActivity());
         TourMe tourMe = new TourMe();
         tourMe.setId(time);
         tourMe.setName(nameGoup);
@@ -270,6 +284,7 @@ public class TourMeFragment extends Fragment implements DatePickerDialog.OnDateS
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(getActivity(), "Thêm thành công", Toast.LENGTH_SHORT).show();
+                    CommonUtils.hideLoading();
                 }
             }
         });

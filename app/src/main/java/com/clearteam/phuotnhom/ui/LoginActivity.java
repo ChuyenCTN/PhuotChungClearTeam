@@ -163,7 +163,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
-                                // Log.v("LoginActivity", response.toString());
                                 String id = null;
                                 try {
                                     id = object.getString("id");
