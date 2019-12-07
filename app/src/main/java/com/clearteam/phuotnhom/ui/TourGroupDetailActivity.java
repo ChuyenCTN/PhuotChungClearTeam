@@ -52,9 +52,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
 import org.json.JSONObject;
 import org.greenrobot.eventbus.EventBus;
+
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -256,6 +258,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
                 break;
         }
     }
+
     private void creatDateHourNotify() {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
@@ -264,6 +267,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
         SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm");
         saveCurrentTime = currentTime.format(calendar.getTime());
     }
+
     private void pushNotifyForMember() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Thông báo cho các thành viên");
@@ -302,6 +306,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
             Toast.makeText(this, "Nội dung đang trống", Toast.LENGTH_SHORT).show();
         } else {
 
+
             myListMember1 = Arrays.asList(keyID.split("," + tour.getUserGroupId()));
             for (String temp : myListMember1) {
                 listUserIds = Arrays.asList(temp.split(","));
@@ -311,11 +316,8 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
                 }
 
             }
-
         }
     }
-
-
     public void sendMessage(String sender, final String receiver, String message,String title) {
         // DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference mReference = FirebaseDatabase.getInstance().getReference("Notify").child(id2);
@@ -360,8 +362,9 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
             }
         });
 
-        pushNotify(sender,receiver,message,title);
+        pushNotify(sender, receiver, message, title);
     }
+
     public JSONObject getDataJson() {
         try {
             JSONObject user = new JSONObject();
@@ -369,36 +372,38 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
             user.put("content", content);
             user.put("nameSender", nameSender);
             return user;
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
-        private void pushNotify(String sender, String receiver, String message, String title) {
-            time = String.valueOf(new Random().nextInt(1000000000));
 
-            DatabaseReference mReference = FirebaseDatabase.getInstance().getReference("Notify").child(time);
-            HashMap<String, Object> hashMap = new HashMap<>();
-            hashMap.put("id", time);
-            hashMap.put("sender", sender);
-            hashMap.put("receiver", receiver);
-            hashMap.put("message", message);
-            hashMap.put("date", saveCurrentDate);
-            hashMap.put("hour", saveCurrentTime);
-            hashMap.put("nameSender", nameSender);
-            hashMap.put("status", title);
 
-            mReference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(TourGroupDetailActivity.this, "Thông báo thành công !", Toast.LENGTH_SHORT).show();
-                    }
+    private void pushNotify(String sender, String receiver, String message, String title) {
+        time = String.valueOf(new Random().nextInt(1000000000));
+
+        DatabaseReference mReference = FirebaseDatabase.getInstance().getReference("Notify").child(time);
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("id", time);
+        hashMap.put("sender", sender);
+        hashMap.put("receiver", receiver);
+        hashMap.put("message", message);
+        hashMap.put("date", saveCurrentDate);
+        hashMap.put("hour", saveCurrentTime);
+        hashMap.put("nameSender", nameSender);
+        hashMap.put("status", title);
+
+        mReference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(TourGroupDetailActivity.this, "Thông báo thành công !", Toast.LENGTH_SHORT).show();
+
                 }
-            });
+            }
+        });
 
-        }
+    }
 
     private void sendNotification(final String username, String receiver, final String message, String title) {
 
@@ -421,6 +426,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
                                         }
                                     }
                                 }
+
                                 @Override
                                 public void onFailure(Call<MyResponse> call, Throwable t) {
 
@@ -661,4 +667,5 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
         }
     }
 }
+
 

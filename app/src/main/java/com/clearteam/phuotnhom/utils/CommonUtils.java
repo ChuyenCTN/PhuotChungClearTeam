@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
@@ -15,6 +16,8 @@ import com.clearteam.phuotnhom.R;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -118,11 +121,40 @@ public class CommonUtils {
         return BitmapDescriptorFactory.fromBitmap(smallMarker);
     }
 
+    public static BitmapDescriptor bitmapDescriptorFromVectorFriend(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        Bitmap smallMarker = Bitmap.createScaledBitmap(bitmap, Const.WIDTH_MARKER_FRIEND, Const.HEIGHT_MARKER_FRIEND, false);
+        return BitmapDescriptorFactory.fromBitmap(smallMarker);
+    }
+
 
     public static BitmapDescriptor getBitmapFromURL(Bitmap bitmap) {
 
         return BitmapDescriptorFactory.fromBitmap(bitmap);
 
+    }
+
+    public static String formatKM(double data) {
+        try {
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setDecimalSeparator('.');
+            DecimalFormat decimalFormat = new DecimalFormat("###,###,###,###,###", symbols);
+            return decimalFormat.format(data);
+        } catch (Exception ex) {
+            Log.e("formatKM: ", ex.getMessage());
+        }
+
+        return (String.valueOf(data) + " đ");
+
+    }
+
+    public static String formatTimeDirection(String text) {
+        String s = text;
+        return text.replace("hours", "giờ").replace("mins", "phút").replace("hour", "giờ").replace("min", "phút");
     }
 
 }

@@ -32,7 +32,6 @@ import com.clearteam.phuotnhom.fragment.ProfileFragment;
 import com.clearteam.phuotnhom.fragment.TourGroupFragment;
 import com.clearteam.phuotnhom.model.User;
 import com.clearteam.phuotnhom.notification.Token;
-import com.clearteam.phuotnhom.ui.ChatGroupActivity;
 import com.clearteam.phuotnhom.ui.LoginActivity;
 import com.clearteam.phuotnhom.ui.map.MapFragment;
 import com.clearteam.phuotnhom.fragment.SchedulerFragment;
@@ -107,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tvName = view.findViewById(R.id.tv_name);
         tvEmail = view.findViewById(R.id.tv_email);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
         reference.addValueEventListener(new ValueEventListener() {

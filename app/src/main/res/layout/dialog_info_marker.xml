@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog_info"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dp_6"
+    android:paddingTop="@dimen/dp_16"
+    android:paddingRight="@dimen/dp_6"
+    android:paddingBottom="@dimen/dp_20">
+
+
+    <TextView
+        android:id="@+id/tv_name_info_dialog"
+        style="@style/font_bold_medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/tv_address_info_dialog"
+        style="@style/font_normal_medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_name_info_dialog"
+        android:layout_marginTop="@dimen/dp_8" />
+
+    <TextView
+
+        android:id="@+id/tv_info1_info_dialog"
+        style="@style/font_normal_small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_address_info_dialog"
+        android:layout_marginTop="@dimen/dp_8"
+        android:textColor="@color/gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_info1_info_dialog"
+        android:layout_marginTop="@dimen/dp_2"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_driving_info_dialog"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginRight="@dimen/dp_8"
+            android:layout_weight="1"
+            android:text="Lái xe" />
+
+        <Button
+            android:id="@+id/btn_walking_info_dialog"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginRight="@dimen/dp_4"
+            android:layout_weight="1"
+            android:text="Đi bộ" />
+
+        <Button
+            android:id="@+id/btn_share_location_info_dialog"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginLeft="@dimen/dp_8"
+            android:layout_weight="1"
+            android:text="share vị trí" />
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -26,6 +26,7 @@ import android.preference.PreferenceManager;
 import androidx.annotation.RequiresApi;
 
 import com.clearteam.phuotnhom.MainActivity;
+import com.clearteam.phuotnhom.ui.LoginActivity;
 
 public class PermissionActivity extends Activity {
 
@@ -48,8 +49,6 @@ public class PermissionActivity extends Activity {
         PreferenceManager.getDefaultSharedPreferences(this).edit()
                 .putBoolean("request_permissions", false)
                 .commit();
-
-        startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 
