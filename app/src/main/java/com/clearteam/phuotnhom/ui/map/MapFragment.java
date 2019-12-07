@@ -265,7 +265,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         getAutocompletePlace();
 
         listUser = new ArrayList<>();
-//
+
         initfirebase();
 
 //        initRequestLocation();

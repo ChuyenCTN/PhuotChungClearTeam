@@ -34,7 +34,7 @@ import com.clearteam.phuotnhom.model.User;
 import com.clearteam.phuotnhom.notification.Token;
 import com.clearteam.phuotnhom.ui.LoginActivity;
 import com.clearteam.phuotnhom.ui.map.MapFragment;
-import com.clearteam.phuotnhom.ui.scheduler.SchedulerFragment;
+import com.clearteam.phuotnhom.fragment.SchedulerFragment;
 import com.clearteam.phuotnhom.ui.setting.SettingFragment;
 import com.clearteam.phuotnhom.ui.setting.model.InfoSOS;
 import com.clearteam.phuotnhom.utils.Const;

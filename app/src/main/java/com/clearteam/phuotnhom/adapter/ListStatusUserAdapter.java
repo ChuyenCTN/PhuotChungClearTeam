@@ -101,18 +101,18 @@ public class ListStatusUserAdapter extends RecyclerView.Adapter<ListStatusUserAd
                 }
             });
 //            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    mListener.onClickDetail(getAdapterPosition(), user);
-//                }
-//            });
-//            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View v) {
-//                    mListener.onLongClick(getAdapterPosition(), user);
-//                    return true;
-//                }
-//            });
+////                @Override
+////                public void onClick(View view) {
+////                    mListener.onClickDetail(getAdapterPosition(), user);
+////                }
+////            });
+////            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+////                @Override
+////                public boolean onLongClick(View v) {
+////                    mListener.onLongClick(getAdapterPosition(), user);
+////                    return true;
+////                }
+////            });
         }
     }
 
