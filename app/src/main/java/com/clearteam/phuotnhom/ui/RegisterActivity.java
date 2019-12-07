@@ -89,6 +89,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         edEmail = findViewById(R.id.edEmail);
         edPass = findViewById(R.id.edPassword);
         edConfiPass = findViewById(R.id.ed_confirm_password);
+        edNumberPhone = findViewById(R.id.edNumberPhone);
         togglePass = findViewById(R.id.toggle_pass);
         toggleConfiPass = findViewById(R.id.toggle_confi_pass);
         btnRegister = findViewById(R.id.btnRegister);
@@ -149,26 +150,30 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 String txt_email = edEmail.getText().toString().trim();
                 String txt_password = edPass.getText().toString().trim();
                 String txt_confirm_pass = edConfiPass.getText().toString().trim();
+                String txt_number_phone = edNumberPhone.getText().toString().trim();
 
                 if (TextUtils.isEmpty(txt_name) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password) || TextUtils.isEmpty(txt_confirm_pass)) {
                     Toast.makeText(RegisterActivity.this, "Chưa nhập đủ thông tin, Mời nhập lại!", Toast.LENGTH_SHORT).show();
                 } else if (isEmail(edEmail) == false) {
                     edEmail.setError("Chưa đúng định dạng");
                     Toast.makeText(RegisterActivity.this, "Chưa đúng định dạng", Toast.LENGTH_SHORT).show();
+                } else if (txt_number_phone.length() > 10 && txt_number_phone.length() < 12) {
+                    edNumberPhone.setError("số điện thoại phải 10 hoặc 11 số");
+                    Toast.makeText(RegisterActivity.this, "số điện thoại phải 10 hoặc 11 số", Toast.LENGTH_SHORT).show();
                 } else if (txt_password.length() < 6) {
-                    edPass.setError("password trên 6 ký tự");
-                    Toast.makeText(RegisterActivity.this, "password trên 6 ký tự", Toast.LENGTH_SHORT).show();
+                    edPass.setError("mật khẩu trên 6 ký tự");
+                    Toast.makeText(RegisterActivity.this, "mật khẩu trên 6 ký tự", Toast.LENGTH_SHORT).show();
                 } else if (!txt_confirm_pass.equals(txt_password)) {
-                    edConfiPass.setError("không trùng password");
-                    Toast.makeText(RegisterActivity.this, "không trùng password", Toast.LENGTH_SHORT).show();
+                    edConfiPass.setError("không trùng mật khẩu");
+                    Toast.makeText(RegisterActivity.this, "không trùng mật khẩu", Toast.LENGTH_SHORT).show();
                 } else {
-                    register(txt_name, txt_email, txt_password);
+                    register(txt_name, txt_email, txt_password, txt_number_phone);
                 }
                 break;
         }
     }
 
-    private void register(final String username, final String email, String password) {
+    private void register(final String username, final String email, String password, String numberPhone) {
         CommonUtils.showLoading(RegisterActivity.this);
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -186,7 +191,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             hashMap.put("email", email);
                             hashMap.put("imageURL", "default");
                             hashMap.put("address", "chưa có thông tin");
-                            hashMap.put("numberPhone", "chưa có thông tin");
+                            hashMap.put("numberPhone", numberPhone);
                             hashMap.put("numberPhoneRelatives", "chưa có thông tin");
                             hashMap.put("sex", "chưa có thông tin");
                             hashMap.put("status", "offline");
@@ -223,7 +228,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 }
                             });
                         } else {
-                            Toast.makeText(RegisterActivity.this, "You can't register woth this email or password", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "Bạn không thể đăng ký với email hoặc mật khẩu này !", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

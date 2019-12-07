@@ -52,6 +52,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import org.json.JSONObject;
+import org.greenrobot.eventbus.EventBus;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
@@ -73,12 +75,8 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
 
     private TextView tvNameGroup;
     private ImageView imgAvataGroup, imgMenu, imgBack, imgMessage;
-    //<<<<<<< HEAD
-//    private String nameGroup, imageG, addressStart, addressEnd, dateStart, keyID, keyRemove, title, content;
-//=======
     private String nameGroup, imageG, addressStart, addressEnd, dateStart;
-    private String keyID, keyRemove, title, content, idUserGroup, time, nameSender, saveCurrentDate, saveCurrentTime;
-
+    private String keyID, keyRemove, title, content, idUserGroup, time, nameSender,saveCurrentDate,saveCurrentTime;
     private DatabaseReference reference;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseAuth auth;
@@ -308,11 +306,19 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
             Toast.makeText(this, "Nội dung đang trống", Toast.LENGTH_SHORT).show();
         } else {
 
-            sendMessage(id, keyID, content);
+
+            myListMember1 = Arrays.asList(keyID.split("," + tour.getUserGroupId()));
+            for (String temp : myListMember1) {
+                listUserIds = Arrays.asList(temp.split(","));
+                for (String idMember : listUserIds) {
+                    notify = true;
+                    sendMessage(auth.getUid(), idMember, content, title);
+                }
+
+            }
         }
     }
-
-    public void sendMessage(String sender, final String receiver, String message) {
+    public void sendMessage(String sender, final String receiver, String message,String title) {
         // DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         DatabaseReference mReference = FirebaseDatabase.getInstance().getReference("Notify").child(id2);
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -320,22 +326,6 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
         hashMap.put("sender", sender);
         hashMap.put("receiver", receiver);
         hashMap.put("message", message);
-
-
-        myListMember1 = Arrays.asList(keyID.split("," + tour.getUserGroupId()));
-        for (String temp : myListMember1) {
-            listUserIds = Arrays.asList(temp.split(","));
-            for (String idMember : listUserIds) {
-                notify = true;
-                sendMessage(auth.getUid(), idMember, content, title);
-            }
-
-        }
-
-    }
-
-
-    public void sendMessage(String sender, String receiver, String message, String title) {
 
         final DatabaseReference chatR = FirebaseDatabase.getInstance().getReference("ListNotify")
                 .child(auth.getUid())
@@ -388,6 +378,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
         }
     }
 
+
     private void pushNotify(String sender, String receiver, String message, String title) {
         time = String.valueOf(new Random().nextInt(1000000000));
 
@@ -407,14 +398,15 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(TourGroupDetailActivity.this, "Thông báo thành công !", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
 
     }
 
-    private void sendNotification(final String username, String receiver,
-                                  final String message, String title) {
+    private void sendNotification(final String username, String receiver, final String message, String title) {
+
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
         Query query = tokens.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
@@ -465,7 +457,7 @@ public class TourGroupDetailActivity extends AppCompatActivity implements DatePi
 
     private void updateGroup() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Thay đổi thông tin");
+        builder.setTitle("Tạo nhóm");
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         final View dialogView = layoutInflater.inflate(R.layout.item_dialog_add_tour_me, null);
         builder.setView(dialogView);
