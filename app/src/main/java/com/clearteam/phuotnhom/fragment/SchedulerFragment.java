@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.clearteam.phuotnhom.R;
+import com.clearteam.phuotnhom.adapter.SchedulerAdapter;
 import com.clearteam.phuotnhom.adapter.TourAllAdapter;
 import com.clearteam.phuotnhom.model.TourMe;
 import com.clearteam.phuotnhom.ui.SchedulerDetailActivity;
@@ -39,7 +40,7 @@ public class SchedulerFragment extends Fragment {
     private List<TourMe> list;
     private List<String> listUserIds;
     private TourMe mTourMe;
-    private TourAllAdapter mTourAllAdapter;
+    private SchedulerAdapter mTourAllAdapter;
     private DatabaseReference reference;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private static SchedulerFragment INSTANCE;
@@ -66,14 +67,15 @@ public class SchedulerFragment extends Fragment {
     }
 
     private void initRecyclerView() {
-        mTourAllAdapter = new TourAllAdapter(list, getActivity());
+        mTourAllAdapter = new SchedulerAdapter(list, getActivity());
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(RecyclerView.VERTICAL);
         rcvTourMe.setLayoutManager(manager);
         rcvTourMe.setAdapter(mTourAllAdapter);
-        mTourAllAdapter.setClickDetailTourGroup(new TourAllAdapter.clickDetailTourGroup() {
+
+        mTourAllAdapter.setIClick(new SchedulerAdapter.itemClick() {
             @Override
-            public void onClickDetail(int position, TourMe response) {
+            public void onIClick(int position, TourMe response) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Const.KEY_DATA, response);
                 Intent intent = new Intent(getActivity(), SchedulerDetailActivity.class);

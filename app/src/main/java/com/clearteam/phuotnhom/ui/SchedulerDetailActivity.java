@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.adapter.AddressStopAdapter;
 import com.clearteam.phuotnhom.model.AddressStop;
 import com.clearteam.phuotnhom.model.TourMe;
+import com.clearteam.phuotnhom.utils.CommonUtils;
 import com.clearteam.phuotnhom.utils.Const;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,13 +43,14 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
 public class SchedulerDetailActivity extends AppCompatActivity implements View.OnClickListener {
     private TourMe tour;
-    private String nameGroup, addressStart, addressEnd, dateStart, imageG, keyIdGroup, id,idAddress;
+    private String nameGroup, addressStart, addressEnd, dateStart, imageG, keyIdGroup, id, idAddress;
     private TextView tvNameGroup, tvAddressStrart, tvAdressEnd, tvDate;
     private FirebaseAuth auth;
     private ImageButton imgBack;
@@ -132,7 +135,7 @@ public class SchedulerDetailActivity extends AppCompatActivity implements View.O
         Bundle bundle = intent.getExtras();
         tour = ((TourMe) bundle.getSerializable(Const.KEY_DATA));
         nameGroup = tour.getName();
-       idAddress = tour.getUserGroupId();
+        idAddress = tour.getUserGroupId();
         addressStart = tour.getAddressStart();
         addressEnd = tour.getAddressEnd();
         dateStart = tour.getDate();
@@ -173,38 +176,56 @@ public class SchedulerDetailActivity extends AppCompatActivity implements View.O
     }
 
     private void deleteItem(AddressStop addressStop) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(SchedulerDetailActivity.this);
-        builder.setTitle("Xóa nhóm");
-        builder.setMessage("Bạn có muốn xóa không ?");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View dialogView = layoutInflater.inflate(R.layout.item_dialog_delete, null);
+        builder.setView(dialogView);
+        TextView tv_title = dialogView.findViewById(R.id.tv_title);
+        TextView tv_status = dialogView.findViewById(R.id.tv_status);
+        tv_title.setText("Xóa địa điểm dừng chân");
+        tv_status.setText("Bạn có muốn xóa địa điểm này không ?");
+        final Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+        final Button btnOk = dialogView.findViewById(R.id.btnOk);
+        final AlertDialog alertDialog = builder.create();
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 DatabaseReference reference = FirebaseDatabase.getInstance().getReference("AddressStop").child(tour.getUserGroupId()).child(addressStop.getId());
                 reference.removeValue();
                 Toast.makeText(SchedulerDetailActivity.this, "Xóa thành công", Toast.LENGTH_SHORT).show();
+                alertDialog.dismiss();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        builder.show();
+
+        alertDialog.show();
     }
 
     private void editAddressStop(AddressStop addressStop) {
+
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Thay đổi điểm dừng chân");
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        View dialogView = layoutInflater.inflate(R.layout.item_dialog_add_stop, null);
+        final View dialogView = layoutInflater.inflate(R.layout.item_dialog_push_notify, null);
         builder.setView(dialogView);
 
-        edStop = dialogView.findViewById(R.id.ed_address_stop);
-        edStop.setText(addressStop.getAddressStrop());
+        TextView tv_title = dialogView.findViewById(R.id.tv_title);
+        edStop = dialogView.findViewById(R.id.ed_title);
+        EditText edContent = dialogView.findViewById(R.id.ed_content);
+        final Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+        final Button btnOk = dialogView.findViewById(R.id.btnOk);
 
-        Button btnCancel = dialogView.findViewById(R.id.btnCancel);
-        Button btnOk = dialogView.findViewById(R.id.btnOk);
+        edStop.setText(addressStop.getAddressStrop());
+        tv_title.setText("Thay đổi địa chỉ dừng chân");
+        edContent.setVisibility(View.GONE);
+        edStop.setHint("Địa chỉ dừng chân");
+        btnOk.setText("Lưu");
         AlertDialog alertDialog = builder.create();
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -226,14 +247,14 @@ public class SchedulerDetailActivity extends AppCompatActivity implements View.O
 
     private void updateData(AddressStop addressStop) {
         String address = edStop.getText().toString();
-        FirebaseDatabase  database = FirebaseDatabase.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference mDatabaseRef = database.getReference();
 
         mDatabaseRef.child("AddressStop").child(idAddress).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    if (addressStop.getId().equals(dataSnapshot1.getKey())){
+                    if (addressStop.getId().equals(dataSnapshot1.getKey())) {
                         dataSnapshot1.getRef().child("addressStrop").setValue(address);
                     }
 
@@ -245,24 +266,6 @@ public class SchedulerDetailActivity extends AppCompatActivity implements View.O
 
             }
         });
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference reference = database.getReference("AddressStop");
-//        Query query = reference.child(idAddress).orderByChild("addressStrop").equalTo(address);
-//        query.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-//                    dataSnapshot1.getRef().child("addressStrop").setValue(address);
-//                }
-//                Toast.makeText(SchedulerDetailActivity.this, "sửa thành công", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Toast.makeText(SchedulerDetailActivity.this, "Lỗi", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
     }
 
 
@@ -284,15 +287,20 @@ public class SchedulerDetailActivity extends AppCompatActivity implements View.O
 
     private void addStopPoint() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Thêm điểm dừng chân");
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        View dialogView = layoutInflater.inflate(R.layout.item_dialog_add_stop, null);
+        final View dialogView = layoutInflater.inflate(R.layout.item_dialog_push_notify, null);
         builder.setView(dialogView);
 
-        edStop = dialogView.findViewById(R.id.ed_address_stop);
+        TextView tv_title = dialogView.findViewById(R.id.tv_title);
+        EditText edTitle = dialogView.findViewById(R.id.ed_title);
+        EditText edContent = dialogView.findViewById(R.id.ed_content);
+        final Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+        final Button btnOk = dialogView.findViewById(R.id.btnOk);
 
-        Button btnCancel = dialogView.findViewById(R.id.btnCancel);
-        Button btnOk = dialogView.findViewById(R.id.btnOk);
+        tv_title.setText("Thêm điểm dừng chân");
+        edContent.setVisibility(View.GONE);
+        edTitle.setHint("Địa chỉ dừng chân");
+        btnOk.setText("Thêm");
         AlertDialog alertDialog = builder.create();
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -304,16 +312,18 @@ public class SchedulerDetailActivity extends AppCompatActivity implements View.O
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String addressStop = edStop.getText().toString().trim();
+                String addressStop = edTitle.getText().toString().trim();
                 if (addressStop.isEmpty()) {
                     Toast.makeText(SchedulerDetailActivity.this, "Địa chỉ dừng chân đang trống", Toast.LENGTH_SHORT).show();
                 } else {
                     addData(addressStop);
                     alertDialog.dismiss();
                 }
+                alertDialog.dismiss();
             }
         });
         alertDialog.show();
+
     }
 
     private void addData(String addressStop) {

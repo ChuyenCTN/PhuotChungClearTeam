@@ -323,13 +323,12 @@ public class TourAllFragment extends Fragment {
     }
 
     private void initData() {
-        CommonUtils.showLoading(getContext());
+
         list = new ArrayList<>();
         reference = database.getReference().child(Const.KEY_TOUR);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                CommonUtils.hideLoading();
                 list.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     for (DataSnapshot dta1 : dataSnapshot1.getChildren()) {
@@ -356,6 +355,7 @@ public class TourAllFragment extends Fragment {
                     }
                 }
                 mTourAllAdapter.setData(list);
+
             }
 
             @Override

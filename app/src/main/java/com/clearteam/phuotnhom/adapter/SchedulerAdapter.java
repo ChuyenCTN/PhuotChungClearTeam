@@ -12,27 +12,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.model.TourMe;
 
-import org.json.JSONException;
-
 import java.util.List;
 
-public class TourAllAdapter extends RecyclerView.Adapter<TourAllAdapter.ViewHolder> {
+public class SchedulerAdapter extends RecyclerView.Adapter<SchedulerAdapter.ViewHolder> {
 
     private List<TourMe> mGroupResponseList;
     private Context mContext;
     private clickDetailTourGroup clickDetailTourGroup;
     private itemClick itemClick;
 
-    public TourAllAdapter(List<TourMe> mGroupResponseList, Context mContext) {
+    public SchedulerAdapter(List<TourMe> mGroupResponseList, Context mContext) {
         this.mGroupResponseList = mGroupResponseList;
         this.mContext = mContext;
     }
 
-    public void setClickDetailTourGroup(TourAllAdapter.clickDetailTourGroup clickDetailTourGroup) {
+    public void setClickDetailTourGroup(SchedulerAdapter.clickDetailTourGroup clickDetailTourGroup) {
         this.clickDetailTourGroup = clickDetailTourGroup;
     }
 
-    public void setIClick(TourAllAdapter.itemClick clickDetailTourGroup) {
+    public void setIClick(SchedulerAdapter.itemClick clickDetailTourGroup) {
         this.itemClick = clickDetailTourGroup;
     }
 
@@ -85,20 +83,20 @@ public class TourAllAdapter extends RecyclerView.Adapter<TourAllAdapter.ViewHold
             }
 
 
-            tvAdd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    tvAdd.setText("Đợi phê duyệt");
-                    clickDetailTourGroup.onClickDetail(getAdapterPosition(), tourMe);
-                }
-            });
-
-//            itemView.setOnClickListener(new View.OnClickListener() {
+//            tvAdd.setOnClickListener(new View.OnClickListener() {
 //                @Override
-//                public void onClick(View v) {
-//                    itemClick.onIClick(getAdapterPosition(), tourMe);
+//                public void onClick(View view) {
+//                    tvAdd.setText("Đợi phê duyệt");
+//                    clickDetailTourGroup.onClickDetail(getAdapterPosition(), tourMe);
 //                }
 //            });
+//
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClick.onIClick(getAdapterPosition(), tourMe);
+                }
+            });
         }
     }
 
