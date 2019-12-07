@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.ui.ChangepassActivity;
+import com.clearteam.phuotnhom.utils.Const;
 
 public class SettingFragment extends Fragment implements View.OnClickListener {
     private static SettingFragment INSTANCE;
@@ -48,7 +49,7 @@ public class SettingFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_sos_setting:
-                startActivity(new Intent(getContext(), SOSSettingActivity.class));
+                startActivity(new Intent(getContext(), SOSSettingActivity.class).putExtra(Const.TYPE, Const.TYPE_SOS));
                 break;
             case R.id.layout_change_pass_setting:
                 startActivity(new Intent(getActivity(), ChangepassActivity.class));

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -227,6 +228,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             sms.sendTextMessage(infoSOS.getNumberphone1(), null, contentSOS, null, null);
             sms.sendTextMessage(infoSOS.getNumberphone2(), null, contentSOS, null, null);
             sms.sendTextMessage(infoSOS.getNumberphone3(), null, contentSOS, null, null);
+
 //            Intent intent = new Intent(getApplicationContext(), ChatGroupActivity.class);
 //            intent.putExtra(Const.TYPE, Const.TYPE_SOS);
 //            intent.putExtra(Const.KEY_DATA, contentSOS);

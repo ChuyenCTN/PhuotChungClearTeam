@@ -2,6 +2,7 @@ package com.clearteam.phuotnhom.ui.setting;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,20 +59,22 @@ public class SOSSettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sossetting);
+        mapping();
         Intent intent = getIntent();
         if (intent != null) {
             mode = intent.getStringExtra(Const.TYPE);
             if (mode.equalsIgnoreCase(Const.TYPE_SOS)) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                genInfo();
             } else {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                genInfo();
+
             }
         }
 
 
         getSupportActionBar().setTitle(getResources().getString(R.string.txt_label_sos));
-        mapping();
+
 
     }
 

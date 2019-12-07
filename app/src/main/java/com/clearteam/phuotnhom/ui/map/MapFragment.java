@@ -35,6 +35,7 @@ import androidx.fragment.app.Fragment;
 
 import com.clearteam.phuotnhom.R;
 import com.clearteam.phuotnhom.model.ServiceAround;
+import com.clearteam.phuotnhom.model.TourGroupLocation;
 import com.clearteam.phuotnhom.model.User;
 import com.clearteam.phuotnhom.model.direction.DirectionFinder;
 import com.clearteam.phuotnhom.model.direction.DirectionFinderListener;
@@ -78,8 +79,11 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -182,6 +186,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     //firebase
     private FirebaseUser firebaseUser;
     private DatabaseReference reference;
+    private String keyGroup = "";
 
 
     //    direction
@@ -268,7 +273,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
         initfirebase();
 
-//        initRequestLocation();
+        initRequestLocation();
 
         return view;
     }
@@ -491,7 +496,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
 
     private void getCurrentLocation() {
-        Toast.makeText(getContext(), "hdfhfhfdhfg", Toast.LENGTH_SHORT).show();
         if (isContinue) {
             mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
         } else {
@@ -558,21 +562,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
 //            cai nay de update vi tri cua minh len firebase
             updateLatlng(String.valueOf(latitude), String.valueOf(longitude));
+            if (getContext() != null) {
+                LatLng latLng = new LatLng(latitude, longitude);
+                mGeocoder = new Geocoder(getContext());
+                List<Address> addresses = mGeocoder.getFromLocation(latitude, longitude, 1);
+                address = addresses.get(0).getAdminArea() + " - " + addresses.get(0).getAddressLine(0);
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                markerOptions.title(addresses.get(0).getAdminArea()).snippet(addresses.get(0).getAddressLine(0)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                currentLocationmMarker = mMap.addMarker(markerOptions);
+                currentLocationmMarker.setTag(0);
 
-            LatLng latLng = new LatLng(latitude, longitude);
-            mGeocoder = new Geocoder(getContext());
-            List<Address> addresses = mGeocoder.getFromLocation(latitude, longitude, 1);
-            address = addresses.get(0).getAdminArea() + " - " + addresses.get(0).getAddressLine(0);
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latLng);
-            markerOptions.title(addresses.get(0).getAdminArea()).snippet(addresses.get(0).getAddressLine(0)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-            currentLocationmMarker = mMap.addMarker(markerOptions);
-            currentLocationmMarker.setTag(0);
-
-
-            if (moveCamMy) {
-                moveCamMy = false;
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f));
+                if (moveCamMy) {
+                    moveCamMy = false;
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12f));
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -649,51 +653,50 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
     public void showMarkerNearby(double latitude, double longitude) {
         try {
+            if (getContext() != null) {
+                LatLng latLng = new LatLng(latitude, longitude);
+                mGeocoder = new Geocoder(getContext());
+                List<Address> addresses = mGeocoder.getFromLocation(latitude, longitude, 1);
 
-            LatLng latLng = new LatLng(latitude, longitude);
-            mGeocoder = new Geocoder(getContext());
-            List<Address> addresses = mGeocoder.getFromLocation(latitude, longitude, 1);
+                markerOptions.position(latLng);
+                markerOptions.title(addresses.get(0).getAdminArea()).snippet(addresses.get(0).getAddressLine(0));
+                if (mNamePlace.equalsIgnoreCase(Const.ATM_PLACE)) {
+                    markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.atm));
+                } else if (mNamePlace.equalsIgnoreCase(Const.RESTAURANT_PLACE)) {
+                    markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.restaurant));
+                } else if (mNamePlace.equalsIgnoreCase(Const.PETROLEUM_PLACE)) {
+                    markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.gas));
+                } else if (mNamePlace.equalsIgnoreCase(Const.GROCERY_PLACE)) {
+                    markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.grocery));
+                } else if (mNamePlace.equalsIgnoreCase(Const.HOTEL_PLACE)) {
+                    markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.hotel));
+                } else if (mNamePlace.equalsIgnoreCase(Const.HOSPITAL_PLACE)) {
+                    markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.hospital));
+                } else if (mNamePlace.equalsIgnoreCase(Const.PHARMACIES_PLACE)) {
+                    markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.pharmacy));
+                } else if (mNamePlace.equalsIgnoreCase(Const.TOURIES_PLACE)) {
+                    markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.placename));
+                } else {
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                }
+                markerNearby = mMap.addMarker(markerOptions);
+                mMap.addMarker(markerOptions);
+                if (moveCamNearby) {
+                    moveCamNearby = false;
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                    mMap.moveCamera(CameraUpdateFactory.zoomTo(14f));
+                }
 
-            markerOptions.position(latLng);
-            markerOptions.title(addresses.get(0).getAdminArea()).snippet(addresses.get(0).getAddressLine(0));
-            if (mNamePlace.equalsIgnoreCase(Const.ATM_PLACE)) {
-                markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.atm));
-            } else if (mNamePlace.equalsIgnoreCase(Const.RESTAURANT_PLACE)) {
-                markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.restaurant));
-            } else if (mNamePlace.equalsIgnoreCase(Const.PETROLEUM_PLACE)) {
-                markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.gas));
-            } else if (mNamePlace.equalsIgnoreCase(Const.GROCERY_PLACE)) {
-                markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.grocery));
-            } else if (mNamePlace.equalsIgnoreCase(Const.HOTEL_PLACE)) {
-                markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.hotel));
-            } else if (mNamePlace.equalsIgnoreCase(Const.HOSPITAL_PLACE)) {
-                markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.hospital));
-            } else if (mNamePlace.equalsIgnoreCase(Const.PHARMACIES_PLACE)) {
-                markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.pharmacy));
-            } else if (mNamePlace.equalsIgnoreCase(Const.TOURIES_PLACE)) {
-                markerOptions.icon(CommonUtils.bitmapDescriptorFromVector(getContext(), R.drawable.placename));
-            } else {
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-            }
-            markerNearby = mMap.addMarker(markerOptions);
-            mMap.addMarker(markerOptions);
-            if (moveCamNearby) {
-                moveCamNearby = false;
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                mMap.moveCamera(CameraUpdateFactory.zoomTo(14f));
-            }
-
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(Marker marker) {
-                    showDataBottomSheet(getAddress(latLng)[0], marker.getPosition(), marker.getPosition().latitude + "," + marker.getPosition().longitude);
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        showDataBottomSheet(getAddress(latLng)[0], marker.getPosition(), marker.getPosition().latitude + "," + marker.getPosition().longitude);
 
 //                    showDialogInfo(getAddress(latLng)[0], getAddress(latLng)[1], marker.getPosition().latitude + "," + marker.getPosition().longitude);
-                    return true;
-                }
-            });
-
-
+                        return true;
+                    }
+                });
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -701,50 +704,51 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
 
     public void showMarkerFriend(String name, String imageUrl, double latitude, double longitude) {
         try {
-            LatLng latLng = new LatLng(latitude, longitude);
-            mGeocoder = new Geocoder(getContext());
-            List<Address> addresses = mGeocoder.getFromLocation(latitude, longitude, 1);
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latLng);
-            markerOptions.title(name).snippet(addresses.get(0).getAddressLine(0));
-            if (imageUrl.equalsIgnoreCase("default")) {
-                markerOptions.icon(CommonUtils.bitmapDescriptorFromVectorFriend(getContext(), R.drawable.avatar));
-            } else {
-                Picasso.get().load(imageUrl).into(new Target() {
+            if (getContext() != null) {
+                LatLng latLng = new LatLng(latitude, longitude);
+                mGeocoder = new Geocoder(getContext());
+                List<Address> addresses = mGeocoder.getFromLocation(latitude, longitude, 1);
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                markerOptions.title(name).snippet(addresses.get(0).getAddressLine(0));
+                if (imageUrl.equalsIgnoreCase("default")) {
+                    markerOptions.icon(CommonUtils.bitmapDescriptorFromVectorFriend(getContext(), R.drawable.avatar));
+                } else {
+                    Picasso.get().load(imageUrl).into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            Bitmap bitmapSmall = Bitmap.createScaledBitmap(bitmap, Const.WIDTH_MARKER_FRIEND, Const.HEIGHT_MARKER_FRIEND, false);
+                            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmapSmall));
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                        }
+                    });
+                }
+
+                mMap.addMarker(markerOptions);
+                if (moveCamFriend) {
+                    moveCamFriend = false;
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(12f));
+                }
+
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        Bitmap bitmapSmall = Bitmap.createScaledBitmap(bitmap, Const.WIDTH_MARKER_FRIEND, Const.HEIGHT_MARKER_FRIEND, false);
-                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(bitmapSmall));
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
+                    public boolean onMarkerClick(Marker marker) {
+                        showDataBottomSheet(name, marker.getPosition(), marker.getPosition().latitude + "," + marker.getPosition().longitude);
+//                    showDialogInfo(name, addresses.get(0).getAddressLine(0), latitude + "," + longitude);
+                        return true;
                     }
                 });
             }
-
-            mMap.addMarker(markerOptions);
-            if (moveCamFriend) {
-                moveCamFriend = false;
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(12f));
-            }
-
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(Marker marker) {
-                    showDataBottomSheet(name, marker.getPosition(), marker.getPosition().latitude + "," + marker.getPosition().longitude);
-//                    showDialogInfo(name, addresses.get(0).getAddressLine(0), latitude + "," + longitude);
-                    return true;
-                }
-            });
-
         } catch (IOException e) {
             e.printStackTrace();
             Log.e("zxcvbn", e.getMessage());
@@ -771,6 +775,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("latitude", latitude);
         hashMap.put("longitude", longitude);
+        readUsers(keyGroup);
         reference.updateChildren(hashMap);
     }
 
@@ -872,17 +877,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void ReceiverUserList(List<User> userList) {
-        if (userList != null) {
-            listUser = userList;
+    public void ReceiverUserList(TourGroupLocation groupLocation) {
+        if (groupLocation != null) {
+            keyGroup = groupLocation.getKey();
+            listUser = new ArrayList<>();
+            listUser = groupLocation.getUserList();
             Toast.makeText(getActivity(), getResources().getString(R.string.txt_finding_location_group_friends), Toast.LENGTH_SHORT).show();
             moveCamFriend = true;
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    for (int i = 0; i < userList.size(); i++) {
-                        showMarkerFriend(userList.get(i).getUsername(), userList.get(i).getImageURL(), Double.parseDouble(userList.get(i).getLatitude()), Double.parseDouble(userList.get(i).getLongitude()));
+                    for (int i = 0; i < listUser.size(); i++) {
+                        showMarkerFriend(listUser.get(i).getUsername(), listUser.get(i).getImageURL(), Double.parseDouble(listUser.get(i).getLatitude()), Double.parseDouble(listUser.get(i).getLongitude()));
                     }
                 }
             }, 1000);
@@ -1007,5 +1014,40 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, View.On
         });
 
 
+    }
+
+    public void readUsers(String key) {
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+        List<String> myListMember = Arrays.asList(key.split(","));
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                listUser.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    User user = snapshot.getValue(User.class);
+                    assert user != null;
+                    assert firebaseUser != null;
+
+                    for (String temp : myListMember) {
+                        if (!user.getId().equals(firebaseUser.getUid()) && temp.equals(user.getId())) {
+                            listUser.add(user);
+                        }
+                    }
+                }
+
+                for (int i = 0; i < listUser.size(); i++) {
+                    showMarkerFriend(listUser.get(i).getUsername(), listUser.get(i).getImageURL(), Double.parseDouble(listUser.get(i).getLatitude()), Double.parseDouble(listUser.get(i).getLongitude()));
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

@@ -57,7 +57,11 @@ public class CommonUtils {
     }
 
     public static void hideLoading() {
-        progressDialog.dismiss();
+        if (progressDialog != null) {
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
+            }
+        }
     }
 
     public static boolean isEmailValid(String email) {
